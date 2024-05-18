@@ -1,3 +1,81 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* GLOBAL STYLE */
+
+/* common alert message style */
+.msg--success {
+    @apply bg-green-700 text-white rounded-lg py-3 text-center;
+}
+.msg--warning {
+    @apply bg-red-500 text-white py-3 rounded-lg text-center;
+}
+
+/* header button for navigation */
+/* data table customization  */
+.header--button {
+    @apply bg-blue-600 flex items-center justify-center gap-2 focus:ring  focus:ring-offset-2 focus:ring-blue-500 focus:ring-opacity-40 outline-none py-2 px-8 rounded-lg shadow text-white;
+}
+
+.text--header {
+    @apply font-bold text-2xl;
+}
+
+/* data tables */
+.table--wrapper--dev {
+    @apply bg-white p-6 rounded-lg shadow animate-fade-in-down overflow-auto;
+}
+
+.animate-fade-in-down {
+}
+
+/* part forms customization */
+
+.form--padding--top {
+    @apply mt-8 mb-6 w-full;
+}
+
+.footer--button--submit {
+    @apply bg-indigo-600 mr-10 text-white focus:ring focus:ring-offset-2 focus:ring-indigo-400 focus:ring-opacity-40 py-2 px-10 cursor-pointer rounded-lg;
+}
+.footer--button--cancel {
+    @apply bg-gray-400 text-white py-2 px-8 focus:ring focus:ring-offset-2 focus:ring-red-500 focus:ring-opacity-40 cursor-pointer rounded-lg;
+}
+
+.wrapper--dev--form {
+    @apply w-full py-8 bg-white  shadow mt-6 px-4;
+}
+
+.wrapper--dev--input {
+    @apply md:flex md:items-center md:justify-center;
+}
+
+.form--label {
+    @apply block text-gray-500 md:text-left mb-1 md:mb-0;
+}
+.label--prefix {
+    @apply text-red-500 px-2;
+}
+.label--dev--width {
+    @apply md:w-2/12;
+}
+.input--dev--width {
+    @apply md:w-6/12;
+}
+
+/* active button */
+.header--button {
+    display: flex !important;
+}
+.header--button.router-link-exact-active {
+    @apply bg-blue-700 rounded-lg;
+    display: none !important;
+}
+
+.sidebar-item {
+    @apply rounded-lg py-2 px-4 transition-all duration-100;
+}
+.sidebar-item.router-link-exact-active {
+    @apply bg-indigo-800;
+}

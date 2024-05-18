@@ -5,13 +5,15 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\FacultyController;
 use App\Http\Controllers\PDC\ArchiveController;
 use App\Http\Controllers\PDC\PlanController;
-use App\Http\Controllers\PDC\ReceivedController;
-use App\Http\Controllers\PDC\SendDocumentController;
+use App\Http\Controllers\PDC\CommitController;
+use App\Http\Controllers\PDC\TeacherInCommitController;
+use App\Http\Controllers\PDC\TeacherInSchalarshipController;
+use App\Http\Controllers\PDC\TeacherInWorkshopController;
+use App\Http\Controllers\PDC\WorkshopController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\UserController;
 use App\Models\Department;
-use App\Models\ReceivedDocument;
-use App\Models\SendDocument;
+
 use App\Models\Teacher;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Http\Request;
@@ -49,35 +51,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/user/current/permission', [AuthController::class, 'getCurrentPermission']);
 
 
-    // pdc received Documents
-    Route::middleware(['auth:sanctum', 'view_document'])->group(function () {
-        Route::get('/receivedDocument', [ReceivedController::class, 'index']);
-    });
-    Route::middleware(['auth:sanctum', 'edit_document'])->group(function () {
-        Route::get('/pdc/received_document/edit/{id}', [ReceivedController::class, 'edit']);
-        Route::post('/pdc/received_document/update', [ReceivedController::class, 'update']);
-    });
-    Route::middleware(['auth:sanctum', 'create_document'])->group(function () {
-        Route::post('/pdc/received_document/store', [ReceivedController::class, 'store']);
-    });
-    Route::middleware(['auth:sanctum', 'delete_document'])->group(function () {
-        Route::get('/pdc/received_document/delete/{id}', [ReceivedController::class, 'destroy']);
-    });
+    // get all the department
+    Route::get('/get_all_departments', [DepartmentController::class, 'getAllDepartments']);
 
-    // pdc send Documents
-    Route::middleware(['auth:sanctum', 'create_document'])->group(function () {
-        Route::post('/pdc/send_document/store', [SendDocumentController::class, 'store']);
-    });
-    Route::middleware(['auth:sanctum', 'view_document'])->group(function () {
-        Route::get('/sendDocument', [SendDocumentController::class, 'index']);
-    });
-    Route::middleware(['auth:sanctum', 'edit_document'])->group(function () {
-        Route::get('/pdc/send_document/edit/{id}', [SendDocumentController::class, 'edit']);
-        Route::post('/pdc/send_document/update', [SendDocumentController::class, 'update']);
-    });
-    Route::middleware(['auth:sanctum', 'delete_document'])->group(function () {
-        Route::get('/pdc/send_document/delete/{id}', [SendDocumentController::class, 'destroy']);
-    });
 
     // pdc plan
     Route::middleware(['auth:sanctum', 'create_plan'])->group(function () {
@@ -102,6 +78,48 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/pdc/archive/edit/{id}', [ArchiveController::class, 'edit']);
         Route::post('/pdc/archive/update', [ArchiveController::class, 'update']);
         Route::get('/pdc/archive/delete/{id}', [ArchiveController::class, 'destroy']);
+
+
+        // pdc commites
+        Route::get('pdc/commit', [CommitController::class, 'index']);
+        Route::post('/pdc/commit/create', [CommitController::class, 'store']);
+        Route::get('/pdc/commit/edit/{id}', [CommitController::class, 'edit']);
+        Route::post('/pdc/commit/update', [CommitController::class, 'update']);
+        Route::get('/pdc/commit/delete/{id}', [CommitController::class, 'destroy']);
+
+
+        // pdc teacher in commit
+        Route::get('pdc/teacher_in_commit', [TeacherInCommitController::class, 'index']);
+        Route::get('/pdc/get_teachers', [TeacherInCommitController::class, 'getTeacher']);
+        Route::get('/pdc/get_commits', [TeacherInCommitController::class, 'getCommit']);
+        Route::post('/pdc/teacher_in_commit/create', [TeacherInCommitController::class, 'store']);
+        Route::get('/pdc/teacher_in_commit/edit/{id}', [TeacherInCommitController::class, 'edit']);
+        Route::post('/pdc/teacher_in_commit/update', [TeacherInCommitController::class, 'update']);
+        Route::get('/pdc/teacher_in_commit/delete/{id}', [TeacherInCommitController::class, 'destroy']);
+
+
+        // pdc schalaship
+        Route::get('pdc/teacher_in_scholarship', [TeacherInSchalarshipController::class, 'index']);
+        Route::post('/pdc/teacher_in_scholarship/create', [TeacherInSchalarshipController::class, 'store']);
+        Route::get('/pdc/teacher_in_scholarship/edit/{id}', [TeacherInSchalarshipController::class, 'edit']);
+        Route::post('/pdc/teacher_in_scholarship/update', [TeacherInSchalarshipController::class, 'update']);
+        Route::get('/pdc/teacher_in_scholarship/delete/{id}', [TeacherInSchalarshipController::class, 'destroy']);
+
+
+        // pdc workshops
+        Route::get('pdc/workshop', [WorkshopController::class, 'index']);
+        Route::post('/pdc/workshop/create', [WorkshopController::class, 'store']);
+        Route::get('/pdc/workshop/edit/{id}', [WorkshopController::class, 'edit']);
+        Route::post('/pdc/workshop/update', [WorkshopController::class, 'update']);
+        Route::get('/pdc/workshop/delete/{id}', [WorkshopController::class, 'destroy']);
+
+        //pdc teacher in workshop
+        Route::get('/teacher_in_workshop', [TeacherInWorkshopController::class, 'index']);
+        Route::get('/get_workshop', [TeacherInWorkshopController::class, 'getAllWorkshops']);
+        Route::post('/pdc/teacher_in_workshop/create', [TeacherInWorkshopController::class, 'store']);
+        Route::get('/pdc/teacher_in_workshop/edit/{id}', [TeacherInWorkshopController::class, 'edit']);
+        Route::post('/pdc/teacher_in_workshop/update', [TeacherInWorkshopController::class, 'update']);
+        Route::get('/pdc/teacher_in_workshop/delete/{id}', [TeacherInWorkshopController::class, 'destroy']);
     });
 
     // faculty
@@ -127,23 +145,37 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::middleware(['auth:sanctum', 'create_teacher'])->group(function () {
         Route::get('/teacher', [TeacherController::class, 'index']);
         Route::post('/teacher/create', [TeacherController::class, 'store']);
+        Route::get('/teacher/edit/{id}', [TeacherController::class, 'edit']);
+        Route::post('/teacher/update', [TeacherController::class, 'update']);
+        Route::get('/teacher/delete/{id}', [TeacherController::class, 'destroy']);
         Route::get('/faculty/department/get', [TeacherController::class, 'getFacultyDepartment']);
         Route::get('/teacher/details/{id}', [TeacherController::class, 'getTeacher']);
+
         // qualification
         Route::post('/teacher/qualification/create/{id}', [TeacherController::class, 'storeQualification']);
-        Route::get('/teacher/qualification/{id}', [TeacherController::class, 'getQualify']);
+        Route::get('/teacher/qualification', [TeacherController::class, 'getQualify']);
+        Route::get('/teacher/qualification/edit/{id}', [TeacherController::class, 'editQualification']);
         Route::post('/teacher/qualification/update/{id}', [TeacherController::class, 'updateQualification']);
         Route::get('/teacher/qualification/delete/{id}', [TeacherController::class, 'destroyQualification']);
         // documents
         Route::post('/teacher/document/create/{id}', [TeacherController::class, 'storeDocument']);
-        Route::get('/teacher/document/{id}', [TeacherController::class, 'getDocument']);
+        Route::get('/teacher/document', [TeacherController::class, 'getDocument']);
+        Route::get('/teacher/document/edit/{id}', [TeacherController::class, 'editDocument']);
         Route::post('/teacher/document/update/{id}', [TeacherController::class, 'updateDocument']);
         Route::get('/teacher/document/delete/{id}', [TeacherController::class, 'destroyDocument']);
         // article
         Route::post('/teacher/article/create/{id}', [TeacherController::class, 'storeArticle']);
-        Route::get('/teacher/article/{id}', [TeacherController::class, 'getArticle']);
+        Route::get('/teacher/article', [TeacherController::class, 'getArticle']);
+        Route::get('/teacher/article/edit/{id}', [TeacherController::class, 'editArticle']);
         Route::post('/teacher/article/update/{id}', [TeacherController::class, 'updateArticle']);
         Route::get('/teacher/article/delete/{id}', [TeacherController::class, 'destroyArticle']);
+
+        // literatures
+        Route::post('/teacher/literature/create/{id}', [TeacherController::class, 'storeLiterature']);
+        Route::get('/teacher/literature', [TeacherController::class, 'getLiterature']);
+        Route::get('/teacher/literature/edit/{id}', [TeacherController::class, 'editLiterature']);
+        Route::post('/teacher/literature/update/{id}', [TeacherController::class, 'updateLiterature']);
+        Route::get('/teacher/literature/delete/{id}', [TeacherController::class, 'destroyLiterature']);
     });
 
     Route::middleware(['auth:sanctum', 'edit_teacher'])->group(function () {

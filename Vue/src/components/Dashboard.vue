@@ -8,7 +8,7 @@
             <div>
                 <svg xmlns="http://www.w3.org/2000/svg" @click="msg_welcome = false" fill="none" viewBox="0 0 24 24"
                     stroke-width="1.5" stroke="currentColor"
-                    class="w-8 h-8 cursor-pointer  hover:bg-gray-100 rounded-full shadow">
+                    class="w-8 h-8 cursor-pointer  hover:bg-gray-100 rounded-full ">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
 
@@ -22,34 +22,16 @@
             </div>
         </div>
 
-        <div class="w-full mb-10 bg-white rounded shadow py-3 ">
-            <RadarChart />
-        </div>
 
-        <div class="w-full mb-10 bg-blue-400 rounded shadow py-3 ">
-            <LinerChart />
-        </div>
-
-        <div class="w-full mb-10 bg-white rounded shadow py-3 ">
-            <PieChart />
-        </div>
-
-        <div class="w-full mb-10 bg-white rounded shadow py-3 ">
-            <BarChart />
-        </div>
-
-        <div class="w-full mb-10 bg-white rounded shadow py-3 ">
-            <SectureChart />
-        </div>
 
     </div>
 </template>
 <script setup>
-import LinerChart from '../views/liner.vue';
-import BarChart from '../views/Bar.vue';
-import PieChart from '../views/pie.vue';
-import RadarChart from '../views/rader.vue';
-import SectureChart from '../views/sectur.vue';
+// import LinerChart from '../views/liner.vue';
+// import BarChart from '../views/Bar.vue';
+// import PieChart from '../views/pie.vue';
+// import RadarChart from '../views/rader.vue';
+// import SectureChart from '../views/sectur.vue';
 
 import { computed, onMounted, ref } from 'vue';
 import { useAuthStore } from '../stores/auth';

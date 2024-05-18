@@ -63,11 +63,44 @@ return [
             'root' => storage_path('app/public/pdc/archive'),
         ],
 
+        // pdc commites
+        'pdc/commit' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/pdc/commit'),
+        ],
+
+        // teacher attachments in commits
+        'pdc/teacher_in_commit' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/pdc/teacher_in_commit'),
+        ],
+
+        // pdc teacher in commit
+        'pdc/commit' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/pdc/teacher_in_commit'),
+        ],
+
+
+        //   teacher in scholarship
+        'pdc/teacher_in_schalarship' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/pdc/teacher_in_schalarship'),
+        ],
+
+        //   teacher in workshops
+        'pdc/teacher_in_workshop' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/pdc/teacher_in_workshop'),
+        ],
+
+
         // teachers
         'teacher_photo' => [
             'driver' => 'local',
             'root' => storage_path('app/public/teacher_photo'),
         ],
+
 
 
         // teachers documents

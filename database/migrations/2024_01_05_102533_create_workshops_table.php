@@ -19,6 +19,8 @@ return new class extends Migration
             $table->text('description');
             $table->string('document');
             $table->string('document_path');
+            $table->bigInteger('user_id')->unsigned()->index();
+            $table->foreign('user_id')->references('id')->on("users");
             $table->timestamps();
         });
     }

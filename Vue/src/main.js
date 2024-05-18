@@ -1,13 +1,12 @@
-import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import router from './routes/index.js'
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import CKEditor from "@ckeditor/ckeditor5-vue";
+import router from "./routes/index.js";
 
-import './style.css'
-import App from './App.vue'
+import "./style.css";
+import App from "./App.vue";
 
 const pinia = createPinia();
 
-createApp(App)
-    .use(pinia)
-    .use(router)
-    .mount('#app')
+const app = createApp(App);
+app.use(CKEditor).use(pinia).use(router).mount("#app");

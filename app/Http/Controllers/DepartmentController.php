@@ -62,6 +62,13 @@ class DepartmentController extends Controller
         }
     }
 
+    public function getAllDepartments()
+    {
+        $data = Department::all();
+        return $data;
+    }
+
+
     public function getDepartments($id = '')
     {
         $data = Department::query()

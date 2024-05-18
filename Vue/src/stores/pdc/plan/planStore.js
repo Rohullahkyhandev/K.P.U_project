@@ -13,9 +13,9 @@ export const usePlanStore = defineStore('plan', () => {
         links: [],
         from: null,
         to: null,
-        page: 1,
+        page: 10,
         limit: null,
-        total: null
+        total: null,
     });
     let plan = ref({
         id: '',

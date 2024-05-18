@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('teacher_qualifications', function (Blueprint $table) {
             $table->id();
+            $table->string('education_', 100);
             $table->string('graduated_year', 100);
             $table->string('university', 100);
             $table->string('country', 100);
