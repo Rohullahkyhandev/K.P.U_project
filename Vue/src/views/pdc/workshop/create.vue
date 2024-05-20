@@ -27,7 +27,7 @@
                 <h1 class="text--header">فورم ثبت ورکشاپ جدید</h1>
             </div>
         </div>
-        <form @submit.prevent="onSubmit">
+        <form @submit.prevent="onSubmit" enctype="multipart/form-data">
             <div class="wrapper--dev--form">
                 <!-- display message area -->
                 <div class="msg--success" v-if="workshopStore.msg_success">
@@ -169,6 +169,93 @@
                         </div>
                     </div>
                 </div>
+
+                <div>
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label for="" class="form--label">
+                                موضوع
+                                <span class="label--prefix">*</span>
+                            </label>
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                type="text"
+                                v-model="workshop.topic"
+                                class="mb-2"
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label for="" class="form--label">
+                                تایم شروع
+                                <span class="label--prefix">*</span>
+                            </label>
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                type="time"
+                                v-model="workshop.start_time"
+                                class="mb-2"
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label for="" class="form--label">
+                                تایم ختم
+                                <span class="label--prefix">*</span>
+                            </label>
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                type="time"
+                                v-model="workshop.end_time"
+                                class="mb-2"
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label for="" class="form--label">
+                                توضیحات
+                                <span class="label--prefix">*</span>
+                            </label>
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                type="textarea"
+                                v-model="workshop.description"
+                                class="mb-2"
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label for="" class="form--label">
+                                sآپلود فایل<span class="label--prefix"></span
+                            ></label>
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                multipart
+                                type="file"
+                                size="multi"
+                                @change="(file) => (selectFiles = file)"
+                                class="mb-2"
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
             <footer class="bg-gray-100 py-4 md:flex gap-5">
                 <button
@@ -221,6 +308,13 @@ import useWorkShopStore from "../../../stores/pdc/workshop/workshopStore";
 const workshopStore = useWorkShopStore();
 
 const workshop = computed(() => workshopStore.workshop);
+const selectFiles = ref([]);
+function uploadFile() {
+    let form = new FormData();
+    console.log(selectFiles.value.files);
+}
+
+uploadFile();
 
 function onSubmit() {
     workshopStore.createWorkshop(workshop.value);

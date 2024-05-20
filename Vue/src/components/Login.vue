@@ -1,11 +1,21 @@
 <template>
     <div
-        class="w-full min-h-screen flex flex-col  gap-6 items-center justify-center"
+        style="
+            background-image: linear-gradient(
+                    rgba(0, 0, 0, 0.5),
+                    rgba(0, 0, 0, 0.5)
+                ),
+                url('Login--background.jpg');
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+        "
+        class="w-full min-h-screen flex flex-col gap-6 items-center justify-center"
     >
         <div
             v-if="authStore.msg_wrang"
-            class="bg-red-500 rounded  text-white py-4  px-4 flex items-center justify-between gap-9"
-            style="width: 750px;"
+            class="bg-red-500 rounded text-white py-4 px-4 flex items-center justify-between gap-9"
+            style="width: 750px"
         >
             {{ authStore.msg_wrang }}
             <svg
@@ -15,7 +25,7 @@
                 viewBox="0 0 24 24"
                 stroke-width="1.5"
                 stroke="currentColor"
-                class="w-8 h-8 cursor-pointer hover:bg-red-400 rounded-full "
+                class="w-8 h-8 cursor-pointer hover:bg-red-400 rounded-full"
             >
                 <path
                     stroke-linecap="round"
@@ -25,7 +35,7 @@
             </svg>
         </div>
         <div
-            class="rounded-lg overflow-hidden shadow border flex items-center justify-center gap-10"
+            class="rounded-lg overflow-hidden shadow bg-white border flex items-center justify-center gap-10"
         >
             <div class="">
                 <div
@@ -71,11 +81,23 @@
                             />
                         </div>
                         <div
-                            class="w-fullc flex items-center justify-between gap-2" dir="ltr"
+                            class="w-fullc flex items-center justify-between gap-2"
+                            dir="ltr"
                         >
                             <button
                                 type="submit"
-                                class="bg-blue-600 w-80 text-white flex rounded shadow px-3 py-2 items-center justify-between"
+                                :class="
+                                    authStore.loading == true
+                                        ? [
+                                              'bg-blue-400 w-80 text-white flex rounded cursor-not-allowed shadow px-3 py-2 items-center justify-between',
+                                          ]
+                                        : [
+                                              'bg-blue-600 w-80 text-white flex rounded shadow px-3 py-2 items-center justify-between',
+                                          ]
+                                "
+                                :disabled="
+                                    authStore.loading == true ? true : false
+                                "
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +114,7 @@
                                     />
                                 </svg>
 
-                                <div class="flex items-center gap-5" >
+                                <div class="flex items-center gap-5">
                                     <span> ورد به سیستم </span>
                                     <span v-if="authStore.loading">
                                         <svg

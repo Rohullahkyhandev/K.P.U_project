@@ -1,7 +1,9 @@
 <?php
 
+use App\Exports\TeachersExport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\FlareClient\View;
 use Symfony\Component\CssSelector\Node\FunctionNode;
 use Symfony\Component\Routing\Route as RoutingRoute;
@@ -19,7 +21,7 @@ use Symfony\Component\Routing\Route as RoutingRoute;
 
 
 
+Route::get("/download", function () {
 
-Route::get('/', function () {
-    return "test";
+    return Excel::download(new TeachersExport, 'teachers.xlsx');
 });

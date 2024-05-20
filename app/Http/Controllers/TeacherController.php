@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\TeachersExport;
 use App\Http\Resources\FacultyDepartmentRsource;
 use App\Http\Resources\TeacherArticleResource;
 use App\Http\Resources\TeacherDocumentResource;
@@ -21,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Excel;
 use Mpdf\Tag\U;
 use Validator;
 
@@ -579,3 +581,12 @@ class TeacherController extends Controller
         return $result;
     }
 }
+
+
+
+
+// download all the teacher information
+// function downloadTeacher()
+// {
+//     return Excel::download(new TeachersExport, 'teacher.xls');
+// }
