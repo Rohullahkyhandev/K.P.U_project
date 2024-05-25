@@ -28,6 +28,8 @@ return new class extends Migration
             $table->string('blood_group', 100);
             $table->bigInteger('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->bigInteger('program_id')->unsigned()->index();
+            $table->foreign('program_id')->references('id')->on('post_graduated_programs');
             $table->timestamps();
         });
     }

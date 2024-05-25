@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->bigInteger('dep_id')->unsigned()->index();
+            $table->foreign('dep_id')->references('id')->on('chance__amiryats')->onDelete("cascade");
             $table->rememberToken();
             $table->timestamps();
         });

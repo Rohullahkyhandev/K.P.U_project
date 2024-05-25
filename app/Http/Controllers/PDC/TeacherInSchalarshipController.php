@@ -3,16 +3,30 @@
 namespace App\Http\Controllers\PDC;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ScholarshipResource;
 use App\Http\Resources\TeacherInSchalarshipResource;
 use App\Models\Department;
+use App\Models\Scholarship;
+use App\Models\Teacher;
 use App\Models\Teacher_in_Scholarship;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class TeacherInSchalarshipController extends Controller
 {
 
+
+    /*
+     # --------------------------------
+        if teacher status be 1 is teaching
+        if teacher status be 2 is scholarship
+        if teacher status be 3 is come bac
+        if teacher status be 4 is retaired
+     #
+    */
     public function index()
     {
         $per_page = request('perPage', 10);
@@ -20,19 +34,19 @@ class TeacherInSchalarshipController extends Controller
         $sortDirection = request('sortDirection', 'DESC');
         $search = request('search', '');
 
-        $data = Teacher_in_Scholarship::query()
-            ->where('teacher_in__scholarships.name', 'like', "%{$search}%")
-            ->orWhere('teacher_in__scholarships.lname', 'like', "%{$search}%")
-            ->orWhere('teacher_in__scholarships.send_date', 'like', "%{$search}%")
-            ->join('users', 'teacher_in__scholarships.user_id', 'users.id')
-            ->join('teachers', 'teacher_in__scholarships.teacher_id', 'teachers.id')
-            ->join('faculties', 'teacher_in_scholarships.faculty_id', 'faculties.id')
-            ->join('departments', 'teacher_in_scholarships.department_id', 'departments.id')
-            ->select("teacher_in_scholarships.*", 'faculties.name as fname', 'departments.name as dname', 'teachers.name as tanme', 'teachers.lname as lname', 'teachers.email as email')
-            ->orderBy("teacher_in_scholaships.$sortField", $sortDirection)
+        $data = Scholarship::query()
+            ->where('scholarships.country_name', 'like', "%{$search}%")
+            ->orWhere('scholarships.edu_degree', 'like', "%{$search}%")
+            ->orWhere('scholarships.sent_date', 'like', "%{$search}%")
+            ->join('users', 'scholarships.user_id', 'users.id')
+            ->join('teachers', 'scholarships.teacher_id', 'teachers.id')
+            ->join('faculties', 'scholarships.faculty_id', 'faculties.id')
+            ->join('departments', 'scholarships.department_id', 'departments.id')
+            ->select("scholarships.*", "users.name as uname ", 'faculties.name as faculty', 'faculties.id as faculty_id', 'departments.name as department', 'teachers.name as name', 'teachers.lname as lname', 'teachers.email as email')
+            ->orderBy("scholarships.$sortField", $sortDirection)
             ->paginate($per_page);
 
-        return TeacherInSchalarshipResource::collection($data);
+        return ScholarshipResource::collection($data);
     }
 
 
@@ -57,51 +71,62 @@ class TeacherInSchalarshipController extends Controller
 
         $request->validate([
             "country_name" => 'required',
-            "edu_degree" => 'required',
+            // "edu_degree" => 'required',
             "edu_maqta" => 'required',
-            "send_date" => 'required',
+            "sent_date" => 'required',
             "back_date" => 'required',
             "faculty_id" => 'required',
             "department_id" => 'required',
             "teacher_id" => 'required',
-            "attachment" => 'nullable|mimes:png,jpg,mp3,mp4,pdf,docx"',
-
+            "document" => 'required|mimes:png,jpg,mp3,mp4,pdf,docx',
         ], [
-            'country_name.required' => 'فلد کشور مقصد الزامی می باشد',
-            'edu_degree.required' => 'فلد درجه تحصیل الزامی می باشد',
-            'edu_maqta.required' => 'فلد مقطع تحصیلی  الزامی می باشد',
-            'send_date.required' => 'فلد درجه تحصیل الزامی می باشد',
-            'back_date.required' => 'فلد  تاریخ برگشت الزامی می باشد',
-            'faculty_id.required' => 'فلد درجه فاکولته الزامی می باشد',
-            'department_id.required' => 'فلد درجه دیپارتمنت الزامی می باشد',
-            'teacher_id.required' => 'فلد نام استاد  الزامی می باشد',
-            'attachment' => "فارمت فایل باید شامل این فارمت ها باشد png,jpg,mp3,mp4,pdf,docx"
-
+            'country_name.required' => 'فلید کشور مقصد الزامی می باشد',
+            // 'edu_degree.required' => 'فلید درجه تحصیل الزامی می باشد',
+            'edu_maqta.required' => 'فلید مقطع تحصیلی  الزامی می باشد',
+            'sent_date.required' => 'فلید درجه تحصیل الزامی می باشد',
+            'back_date.required' => 'فلید  تاریخ برگشت الزامی می باشد',
+            'faculty_id.required' => 'فلید درجه فاکولته الزامی می باشد',
+            'department_id.required' => 'فلید درجه دیپارتمنت الزامی می باشد',
+            'teacher_id.required' => 'فلید نام استاد  الزامی می باشد',
+            'document.mimes' => "فارمت فایل باید شامل این فارمت ها باشد png,jpg,mp3,mp4,pdf,docx"
         ]);
+        // return $request->edu_degree;
 
-        $attachment = null;
-        $attachment_path = null;
 
-        if ($request->attachment != '') {
-            $attachment = $request->attachment->store('', 'pdc/teacher_in_scholarship' . $attachment);
-            $attachment_path = asset(Storage::url('/pdc/teacher_in_scholarship/' . $attachment));
+        DB::beginTransaction();
+        try {
+
+            $attachment = null;
+            $attachment_path = null;
+
+            if ($request->document != '') {
+                $attachment = $request->document->store('', 'pdc/teacher_in_scholarship' . $attachment);
+                $attachment_path = asset(Storage::url('/pdc/teacher_in_scholarship/' . $attachment));
+            }
+
+            // change the teacher status
+            $teacher =  Teacher::find($request->teacher_id);
+            $teacher->status = '2';
+            $user_id = Auth::id();
+            $teacher_in_scholarship = new Scholarship();
+            $teacher_in_scholarship->country_name = $request->country_name;
+            $teacher_in_scholarship->edu_degree = $request->edu_degree;
+            $teacher_in_scholarship->sent_date = $request->sent_date;
+            $teacher_in_scholarship->back_date = $request->back_date;
+            $teacher_in_scholarship->edu_maqta = $request->edu_maqta;
+            $teacher_in_scholarship->faculty_id = $request->faculty_id;
+            $teacher_in_scholarship->department_id = $request->department_id;
+            $teacher_in_scholarship->teacher_id = $request->teacher_id;
+            $teacher_in_scholarship->documents = $attachment;
+            $teacher_in_scholarship->document_path = $attachment_path;
+            $teacher_in_scholarship->user_id = $user_id;
+            $result = $teacher_in_scholarship->save();
+            $teacher->save();
+            DB::commit();
+        } catch (Exception $e) {
+            $result = $e;
+            DB::rollBack();
         }
-
-        $user_id = Auth::id();
-        $teacher_in_scholarship = new Teacher_in_Scholarship();
-        $teacher_in_scholarship->country_name = $request->country_name;
-        $teacher_in_scholarship->edu_degree = $request->edu_degree;
-        $teacher_in_scholarship->send_date = $request->send_date;
-        $teacher_in_scholarship->back_date = $request->back_date;
-        $teacher_in_scholarship->edu_maqta = $request->edu_maqta;
-        $teacher_in_scholarship->faculty_id = $request->faculty_id;
-        $teacher_in_scholarship->department_id = $request->department_id;
-        $teacher_in_scholarship->teacher_id = $request->teacher_id;
-        $teacher_in_scholarship->attachment = $attachment;
-        $teacher_in_scholarship->attachment_path = $attachment_path;
-        $teacher_in_scholarship->user_id = $user_id;
-        $result = $teacher_in_scholarship->save();
-
         if ($result) {
             return response([
                 'message' => 'اطلاعات موفقانه راچستر گردید '
@@ -115,18 +140,20 @@ class TeacherInSchalarshipController extends Controller
 
     public function edit($id = '')
     {
-        $data  =  Teacher_in_Scholarship::find($id);
+        $data  =  Scholarship::find($id);
         return $data;
     }
 
     public function update(Request $request)
     {
 
+
+
         $request->validate([
             "country_name" => 'required',
-            "edu_degree" => 'required',
+            // "edu_degree" => 'required',
             "edu_maqta" => 'required',
-            "send_date" => 'required',
+            "sent_date" => 'required',
             "back_date" => 'required',
             "faculty_id" => 'required',
             "department_id" => 'required',
@@ -135,9 +162,9 @@ class TeacherInSchalarshipController extends Controller
 
         ], [
             'country_name.required' => 'فلد کشور مقصد الزامی می باشد',
-            'edu_degree.required' => 'فلد درجه تحصیل الزامی می باشد',
+            // 'edu_degree.required' => 'فلد درجه تحصیل الزامی می باشد',
             'edu_maqta.required' => 'فلد مقطع تحصیلی  الزامی می باشد',
-            'send_date.required' => 'فلد درجه تحصیل الزامی می باشد',
+            'sent_date.required' => 'فلد تاریخ رفت الزامی می باشد',
             'back_date.required' => 'فلد  تاریخ برگشت الزامی می باشد',
             'faculty_id.required' => 'فلد درجه فاکولته الزامی می باشد',
             'department_id.required' => 'فلد درجه دیپارتمنت الزامی می باشد',
@@ -147,9 +174,9 @@ class TeacherInSchalarshipController extends Controller
         ]);
 
         $id = $request->id;
-        $teacher_in_scholaship = Teacher_in_Scholarship::find($id);
-        $attachment = $teacher_in_scholaship->attachment;
-        $attachment_path = $teacher_in_scholaship->attachment_path;
+        $teacher_in_scholaship = Scholarship::find($id);
+        $attachment = $teacher_in_scholaship->documents;
+        $attachment_path = $teacher_in_scholaship->document_path;
         if ($request->attachment != '') {
             if (is_file(storage_path('app/public/pdc/teacher_in_scholarship/' . $teacher_in_scholaship->attachment))) {
                 unlink(storage_path('app/public/pdc/teacher_in_scholarship/' . $teacher_in_scholaship->attachment));
@@ -159,31 +186,37 @@ class TeacherInSchalarshipController extends Controller
         }
         $user_id = Auth::id();
 
+        $teacher_in_scholaship->country_name = $request->country_name;
+        $teacher_in_scholaship->edu_degree = $request->edu_degree;
+        $teacher_in_scholaship->sent_date = $request->sent_date;
+        $teacher_in_scholaship->back_date = $request->back_date;
+        $teacher_in_scholaship->edu_maqta = $request->edu_maqta;
+        $teacher_in_scholaship->faculty_id = $request->faculty_id;
+        $teacher_in_scholaship->department_id = $request->department_id;
         $teacher_in_scholaship->teacher_id = $request->teacher_id;
-        $teacher_in_scholaship->commit_id = $request->commit_id;
-        $teacher_in_scholaship->attachment = $attachment;
-        $teacher_in_scholaship->attachment_path = $attachment_path;
+        $teacher_in_scholaship->documents = $attachment;
+        $teacher_in_scholaship->document_path = $attachment_path;
         $teacher_in_scholaship->user_id = $user_id;
         $result = $teacher_in_scholaship->save();
 
         if ($result) {
             return response([
-                'message' => 'دیتا در آرشیف موفقانه ویرایش گردید'
+                'message' => 'دیتا   موفقانه ویرایش گردید'
             ], 200);
         } else {
             return response([
-                'message' => 'دیتا در آرشیف  ویرایش نشد دوباره تلاش نماید'
+                'message' => 'دیتا    ویرایش نشد دوباره تلاش نماید'
             ], 304);
         }
     }
 
     public function destroy($id = '')
     {
-        $teacher_in_scholarship = Teacher_in_Scholarship::find($id);
+        $teacher_in_scholarship = Scholarship::find($id);
         if (is_file(storage_path('/app/public/pdc/teacher_in_scholarship/' . $teacher_in_scholarship->attachment_path))) {
             unlink(storage_path('/app/public/pdc/teacher_in_scholarship/' . $teacher_in_scholarship->attachment_path));
         }
-        $result = Teacher_in_Scholarship::destroy($id);
+        $result = Scholarship::destroy($id);
         return $result;
     }
 }

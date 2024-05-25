@@ -15,7 +15,7 @@
 /* header button for navigation */
 /* data table customization  */
 .header--button {
-    @apply bg-blue-600 flex items-center justify-center gap-2 focus:ring  focus:ring-offset-2 focus:ring-blue-500 focus:ring-opacity-40 outline-none py-2 px-8 rounded-lg shadow text-white;
+    @apply bg-blue-600 flex items-center justify-center gap-2 focus:ring  focus:ring-offset-2 focus:ring-blue-500 focus:ring-opacity-40 outline-none py-2 px-4 rounded-lg shadow text-white;
 }
 
 .text--header {
@@ -37,10 +37,10 @@
 }
 
 .footer--button--submit {
-    @apply bg-indigo-600 mr-10 text-white focus:ring focus:ring-offset-2 focus:ring-indigo-400 focus:ring-opacity-40 py-2 px-10 cursor-pointer rounded-lg;
+    @apply bg-indigo-500 mr-10 text-white  hover:bg-indigo-600 focus:ring focus:ring-offset-2 focus:ring-indigo-300 focus:ring-opacity-40 py-2 px-8 cursor-pointer rounded-lg;
 }
 .footer--button--cancel {
-    @apply bg-gray-400 text-white py-2 px-8 focus:ring focus:ring-offset-2 focus:ring-red-500 focus:ring-opacity-40 cursor-pointer rounded-lg;
+    @apply bg-gray-400 text-white py-2 px-6 focus:ring focus:ring-offset-2 focus:ring-red-500 focus:ring-opacity-40 cursor-pointer rounded-lg;
 }
 
 .wrapper--dev--form {
@@ -69,7 +69,7 @@
     display: flex !important;
 }
 .header--button.router-link-exact-active {
-    @apply bg-blue-700 rounded-lg;
+    @apply bg-blue-600 rounded-lg;
     display: none !important;
 }
 

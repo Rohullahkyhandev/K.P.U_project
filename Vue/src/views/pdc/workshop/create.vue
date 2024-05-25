@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between w-full">
             <div>
                 <router-link
-                    :to="{ name: 'app.pdc.plan.list' }"
+                    :to="{ name: 'app.pdc.workshop.list' }"
                     class="header--button"
                 >
                     <svg
@@ -85,7 +85,7 @@
                 </div>
                 <!-- end of display message area -->
 
-                <div>
+                <!-- <div>
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
                             <label for="" class="form--label">
@@ -168,7 +168,7 @@
                             />
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <div>
                     <div class="wrapper--dev--input">
@@ -221,7 +221,6 @@
                             />
                         </div>
                     </div>
-
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
                             <label for="" class="form--label">
@@ -242,15 +241,18 @@
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
                             <label for="" class="form--label">
-                                sآپلود فایل<span class="label--prefix"></span
+                                آپلود فایل<span class="label--prefix"></span
                             ></label>
                         </div>
                         <div class="input--dev--width">
+                            <!-- <input type="file" multiple @change="handelFiles" /> -->
                             <CustomInput
-                                multipart
                                 type="file"
-                                size="multi"
-                                @change="(file) => (selectFiles = file)"
+                                @change="
+                                    (file) => {
+                                        workshop.document = file;
+                                    }
+                                "
                                 class="mb-2"
                             />
                         </div>
@@ -309,14 +311,15 @@ const workshopStore = useWorkShopStore();
 
 const workshop = computed(() => workshopStore.workshop);
 const selectFiles = ref([]);
-function uploadFile() {
-    let form = new FormData();
-    console.log(selectFiles.value.files);
-}
-
-uploadFile();
 
 function onSubmit() {
+    let formData = new FormData();
+
+    selectFiles.value.forEach((item) => formData.append("files[]", item));
     workshopStore.createWorkshop(workshop.value);
+}
+
+function handelFiles(event) {
+    selectFiles.value = Array.from(event.target.files);
 }
 </script>

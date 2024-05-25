@@ -14,6 +14,22 @@ class GraduatedStudentResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'name' => $this->name,
+            'lname' => $this->lname,
+            'fname' => $this->fname,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'address' => $this->address,
+            'program_id' => $this->program_id,
+            'nic' => $this->nic,
+            'kankor_id' => $this->kankor_id,
+            'kankor_mark' => $this->kankor_mark,
+            'bachelor_field' => $this->bachelor_field,
+            'status' => $this->status,
+            'admission_year' => $this->admission_year,
+            'blood_group' => $this->blood_group,
+            'uname' => $this->uname,
+        ];
     }
 }

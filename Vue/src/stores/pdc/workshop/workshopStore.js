@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axiosClient from "../../../axios";
 import { ref } from "vue";
+import router from "../../../routes";
 
 const useWorkShopStore = defineStore("workshop", () => {
     let msg_success = ref("");
@@ -107,7 +108,7 @@ const useWorkShopStore = defineStore("workshop", () => {
         });
     }
 
-    function updateWorkshop(data) {
+    function updateWorkshop(data, id) {
         loading.value = true;
         let document = "";
         if (data.document instanceof File) {
@@ -131,6 +132,7 @@ const useWorkShopStore = defineStore("workshop", () => {
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
+                router.push({ name: "app.pdc.workshop.list" });
                 workshop.value = "";
             })
             .catch((err) => {

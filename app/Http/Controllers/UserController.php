@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\PermissionResource;
 use App\Http\Resources\UserResource;
+use App\Models\Chance_Amiryat;
 use App\Models\permission;
 use App\Models\User;
 use App\Models\userpermission;
@@ -25,7 +26,7 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|string|confirmed',
             'position' => 'required|string|max:100',
-            'user_type' => 'required',
+            // 'user_type' => 'required',
 
         ];
 
@@ -41,6 +42,8 @@ class UserController extends Controller
         $search = request('search', '');
         $data = User::query()
             ->where('users.name', 'like', "%{$search}%")
+            ->join("chance__amiryats", "users.dep_id", "chance__amiryats.id")
+            ->select("users.*", "chance__amiryats.display_name as dname")
             ->orderBy("users.$sortField", $sortDirection)
             ->paginate($per_page);
 
@@ -59,6 +62,7 @@ class UserController extends Controller
         $rules = $this->validation();
         Validator::make($request->all(), $rules)->validate();
         $path = '';
+        $photo_path = '';
         if ($request->file('photo')) {
             $path = $request->file('photo')->store('/', 'users');
             $photo_path = asset(Storage::url('users/' . $path));
@@ -69,7 +73,8 @@ class UserController extends Controller
         $user->position = $request->position;
         $user->photo = $path;
         $user->photo_path = $photo_path;
-        $user->user_type = $request->user_type;
+        $user->user_type = $request->dep_id;
+        $user->dep_id = $request->dep_id;
         $user->password = $request->password;
         $result = $user->save();
         if ($result) {
@@ -82,6 +87,11 @@ class UserController extends Controller
     public function edit($id = '')
     {
         return User::find($id);
+    }
+
+    public function getChanceDepartment()
+    {
+        return Chance_Amiryat::all();
     }
 
     public function update(Request $request)
@@ -114,7 +124,8 @@ class UserController extends Controller
                 'position' => $request->position,
                 'photo' => $photo,
                 'photo_path' => $photo_path,
-                'user_type' => $request->user_type,
+                'user_type' => $request->dep_id,
+                'dep_id' => $request->dep_id,
                 'password' => $request->password,
             ]);
             DB::commit();

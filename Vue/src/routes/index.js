@@ -34,8 +34,20 @@ import createTeacherInCommit from "../views/pdc/teacherInCommit/create.vue";
 import listTeacherInCommit from "../views/pdc/teacherInCommit/index.vue";
 import editTeacherInCommit from "../views/pdc/teacherInCommit/edit.vue";
 
-// pdc pdc
+// pdc workshops
 import createWorkshop from "../views/pdc/workshop/create.vue";
+import listWorkshop from "../views/pdc/workshop/index.vue";
+import editWorkshop from "../views/pdc/workshop/edit.vue";
+
+// pdc teacher in workshp
+import createTeacherInWorkshop from "../views/pdc/teacherInworkshop/create.vue";
+import listTeacherInWorkshop from "../views/pdc/teacherInworkshop/index.vue";
+import editTeacherInWorkshop from "../views/pdc/teacherInworkshop/edit.vue";
+
+// pdc teacher in scholarships
+import createTeacherInScholarship from "../views/pdc/teacher_in_scholarship/create.vue";
+import listTeacherInScholarship from "../views/pdc/teacher_in_scholarship/index.vue";
+import editTeacherInScholarship from "../views/pdc/teacher_in_scholarship/edit.vue";
 
 // pdc archive
 import CreateArchive from "../views/pdc/pdcArchives/create.vue";
@@ -194,6 +206,69 @@ const routes = [
                 name: "app.pdc.workshop.create",
                 component: createWorkshop,
             },
+
+            {
+                path: "workshop/list",
+                name: "app.pdc.workshop.list",
+                component: listWorkshop,
+            },
+
+            {
+                path: "workshop/edit/:id",
+                name: "app.pdc.workshop.edit",
+                component: editWorkshop,
+            },
+
+            // pdc teacher in workshops
+            {
+                path: "teacher_in_workshop/create",
+                name: "app.pdc.teacher_in_workshop.create",
+                component: createTeacherInWorkshop,
+            },
+
+            {
+                path: "teacher_in_workshop/list",
+                name: "app.pdc.teacher_in_workshop.list",
+                component: listTeacherInWorkshop,
+            },
+
+            {
+                path: "teacher_in_workshop/edit/:id",
+                name: "app.pdc.teacher_in_workshop.edit",
+                component: editTeacherInWorkshop,
+            },
+
+            // teachers in scholarships
+
+            {
+                path: "teacher_in_scholarship/create",
+                name: "app.pdc.teacher_in_scholarship.create",
+                component: createTeacherInScholarship,
+            },
+
+            {
+                path: "teacher_in_scholarship/list",
+                name: "app.pdc.teacher_in_scholarship.list",
+                component: listTeacherInScholarship,
+            },
+
+            {
+                path: "teacher_in_scholarship/:id/edit/:f_id",
+                name: "app.pdc.teacher_in_scholarship.edit",
+                component: editTeacherInScholarship,
+            },
+
+            // {
+            //     path: "teacher_in_workshop/list",
+            //     name: "app.pdc.teacher_in_workshop.list",
+            //     component: listTeacherInWorkshop,
+            // },
+
+            // {
+            //     path: "teacher_in_workshop/edit/:id",
+            //     name: "app.pdc.teacher_in_workshop.edit",
+            //     component: editTeacherInWorkshop,
+            // },
 
             // {
             //     path: "teacher_in_commit/list",

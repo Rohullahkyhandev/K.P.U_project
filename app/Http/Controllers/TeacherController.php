@@ -22,9 +22,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Excel;
 use Mpdf\Tag\U;
 use Validator;
+use Excel;
 
 use function PHPUnit\Framework\returnValueMap;
 
@@ -69,6 +69,7 @@ class TeacherController extends Controller
             ->orWhere('teachers.lname', 'like', "%{$search}%")
             ->join('departments', 'teachers.department_id', 'departments.id')
             ->join('users', 'teachers.user_id', 'users.id')
+            // ->join('teacher_qualifications', 'teachers.id', 'teacher_qualifications.teacher_id')
             ->join('faculties', 'teachers.faculty_id', 'faculties.id')
             ->select('teachers.*', 'faculties.name as faculty', 'departments.name as department', 'users.name as uname')
             ->orderBy("teachers.$sortField", $sortDirection)
@@ -580,13 +581,16 @@ class TeacherController extends Controller
         $result = Teacher_literature::find($id)->delete();
         return $result;
     }
+
+
+    public function downloadTeacher()
+    {
+        $data = Teacher::all();
+        return Excel::download(new TeachersExport($data), 'reports.teacherReport.xls');
+    }
 }
 
 
 
 
 // download all the teacher information
-// function downloadTeacher()
-// {
-//     return Excel::download(new TeachersExport, 'teacher.xls');
-// }

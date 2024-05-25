@@ -292,13 +292,17 @@
                     </div>
                     <div class="input--dev--width">
                         <!-- <EMDatePicker v-model="teacher.hire_date" /> -->
-                        <CustomInput
+                        <!-- <DatePicker /> -->
+
+                        <!-- <CustomInput
                             type="date"
                             v-model="teacher.hire_date"
                             class="mb-2"
                             required="required"
                             label="تاریخ استخدام"
-                        />
+                        /> -->
+
+                        <!-- <date-picker v-model="teacher.hire_date"></date-picker> -->
                     </div>
                 </div>
 
@@ -429,10 +433,9 @@ import { computed, onMounted, ref, useSlots } from "vue";
 import { useRoute } from "vue-router";
 import CustomInput from "../../components/core/CustomInput.vue";
 import { useTeacherStore } from "../../stores/teachers/teacherStore";
-// import { EMDatePicker } from '@cafebazaar/emrooz';
+// import DatePicker from "vue3-persian-datetime-picker";
 const teacherStore = useTeacherStore();
 const route = useRoute();
-
 const teacher = computed(() => teacherStore.teacher);
 
 onMounted(() => {

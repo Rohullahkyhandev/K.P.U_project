@@ -17,8 +17,10 @@ return new class extends Migration
             $table->string('document_path');
             $table->bigInteger('teacher_id')->unsigned()->index();
             $table->bigInteger('workshop_id')->unsigned()->index();
+            $table->bigInteger('user_id')->unsigned()->index();
             $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
             $table->foreign('workshop_id')->references('id')->on('workshops')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

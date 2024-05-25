@@ -1,13 +1,13 @@
 <template>
-    <aside class="bg-indigo-900 shadow w-64 hidden sm:block">
+    <aside class="bg-blue-800 shadow w-64 hidden sm:block">
         <div
-            class="flex items-center justify-center mt-1 py-2 border-gray-500 border-b"
+            class="flex items-center bg-blue-800 justify-center py-2 border-gray-500 border-b"
         >
             <img src="../../public/logo.jpg" class="w-20" alt="" />
         </div>
-        <nav class="flex items-start justify-start flex-col">
+        <nav class="mt-3 flex items-start justify-start flex-col">
             <!-- <p class="font-semibold  text-gray-500 text-center mt-2 w-full ml-6">پنل مدیریت</p> -->
-            <ul class="mt-3 w-64">
+            <ul class="mt-2 w-64">
                 <li
                     class="transition-colors cursor-pointer w-full px-4 py-2 text-white"
                 >
@@ -16,7 +16,7 @@
                         class="sidebar-item flex items-center justify-start gap-3"
                     >
                         <svg
-                            class="fill-stroke h-5 w-5"
+                            class="fill-stroke h-6 w-6"
                             width="24"
                             height="24"
                             viewBox="0 0 24 24"
@@ -57,14 +57,14 @@
                 </li>
                 <li
                     v-if="admin"
-                    class="mt-3 transition-colors cursor-pointer w-full px-4 py-2 text-white"
+                    class="transition-colors cursor-pointer w-full px-4 py-2 text-white"
                 >
                     <router-link
                         :to="{ name: 'app.user.create' }"
                         class="sidebar-item flex items-center justify-start gap-3"
                     >
                         <svg
-                            class="fill-stroke w-5 h-5"
+                            class="fill-stroke w-6 h-6"
                             width="24"
                             height="24"
                             viewBox="0 0 24 24"
@@ -89,7 +89,7 @@
                         <span>استفاده کننده ها</span>
                     </router-link>
                 </li>
-                <li class="mb-2 text-white transition-colors py-2 px-4">
+                <li class="text-white transition-colors py-2 px-4">
                     <router-link
                         :to="{ name: 'app.dashboard' }"
                         class="sidebar-item flex items-center justify-start gap-3"
@@ -100,7 +100,7 @@
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
                             stroke="currentColor"
-                            class="w-5 h-5"
+                            class="w-6 h-6"
                         >
                             <path
                                 stroke-linecap="round"
@@ -112,7 +112,7 @@
                     </router-link>
                 </li>
                 <li
-                    class="transition-colors mt-3 cursor-pointer w-full px-4 py-2 text-white"
+                    class="transition-colors cursor-pointer w-full px-4 py-2 text-white"
                 >
                     <a
                         href="#"
@@ -123,8 +123,8 @@
                             id="icon1"
                             :class="[
                                 pdcToggle == true
-                                    ? 'rotate-180 transform w-5 h-5 transition'
-                                    : 'transform w-5 h-5',
+                                    ? 'rotate-180 transform w-6 h-6 transition'
+                                    : 'transform w-6 h-6',
                             ]"
                             width="24"
                             height="24"
@@ -143,7 +143,7 @@
                         <span>آمریت P.D.C</span>
                     </a>
 
-                    <ul class="mt-3 mr-3 transition-all" v-if="pdcToggle">
+                    <ul class="mr-3 transition-all" v-if="pdcToggle">
                         <li class="mt-3 transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.pdc.plan.list' }"
@@ -155,7 +155,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-5 h-5"
+                                    class="w-6 h-6"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -166,7 +166,7 @@
                                 <span>پلان ها</span>
                             </router-link>
                         </li>
-                        <li class="mt-3 transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.pdc.commit.list' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -177,7 +177,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-5 h-5"
+                                    class="w-6 h-6"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -189,7 +189,7 @@
                             </router-link>
                         </li>
 
-                        <li class="mt-3 transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.pdc.workshop.create' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -200,7 +200,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-5 h-5"
+                                    class="w-6 h-6"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -212,9 +212,11 @@
                             </router-link>
                         </li>
 
-                        <li class="mt-3 transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
-                                :to="{ name: 'app.dashboard' }"
+                                :to="{
+                                    name: 'app.pdc.teacher_in_scholarship.create',
+                                }"
                                 class="sidebar-item flex items-center justify-start gap-3"
                             >
                                 <svg
@@ -238,7 +240,7 @@
                     </ul>
                 </li>
                 <li
-                    class="transition-colors cursor-pointer mt-3 w-full px-3 py-2 text-white"
+                    class="transition-colors cursor-pointer w-full px-3 py-2 text-white"
                 >
                     <a
                         to="#"
@@ -249,8 +251,8 @@
                             id="icon1"
                             :class="[
                                 teacherToggle == true
-                                    ? 'rotate-180 transform w-5 h-5 transition'
-                                    : 'transform w-5 h-5',
+                                    ? 'rotate-180 transform w-6 h-6 transition'
+                                    : 'transform w-6 h-6',
                             ]"
                             width="24"
                             height="24"
@@ -268,8 +270,8 @@
                         </svg>
                         <span>آمریت استادان</span>
                     </a>
-                    <ul class="mt-3 mr-3 transition-all" v-if="teacherToggle">
-                        <li class="mb-2 transition-colors py-2 px-4 rounded">
+                    <ul class="mr-3 transition-all" v-if="teacherToggle">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.teacher.list' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -280,7 +282,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-5 h-5"
+                                    class="w-6 h-6"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -291,7 +293,7 @@
                                 <span>استادان</span>
                             </router-link>
                         </li>
-                        <li class="mt-2 transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.faculty.list' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -302,7 +304,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-5 h-5"
+                                    class="w-6 h-6"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -316,7 +318,7 @@
                     </ul>
                 </li>
                 <li
-                    class="mt-3 transition-colors cursor-pointer w-full px-3 py-2 text-white"
+                    class="transition-colors cursor-pointer w-full px-3 py-2 text-white"
                 >
                     <router-link
                         :to="{ name: 'app.dashboard' }"
@@ -327,8 +329,8 @@
                             id="icon3"
                             :class="[
                                 qualityToggle == true
-                                    ? 'rotate-180 transform w-5 h-5 transition'
-                                    : 'transform w-5 h-5',
+                                    ? 'rotate-180 transform w-6 h-6 transition'
+                                    : 'transform w-6 h-6',
                             ]"
                             width="24"
                             height="24"
@@ -346,8 +348,8 @@
                         </svg>
                         <span>آمریت تضمین کیفیت</span>
                     </router-link>
-                    <ul class="mt-3 mr-3 transition-all" v-if="qualityToggle">
-                        <li class="mt-2 transition-colors py-2 px-4 rounded">
+                    <ul class="mr-3 transition-all" v-if="qualityToggle">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.dashboard' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -358,7 +360,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-5 h-5"
+                                    class="w-6 h-6"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -373,7 +375,7 @@
                 </li>
 
                 <li
-                    class="mt-3 transition-colors cursor-pointer w-full px-3 py-2 text-white"
+                    class="transition-colors cursor-pointer w-full px-3 py-2 text-white"
                 >
                     <router-link
                         :to="{ name: 'app.dashboard' }"
@@ -384,8 +386,8 @@
                             id="icon4"
                             :class="[
                                 postToggle == true
-                                    ? 'rotate-180 transform w-5 h-5 transition'
-                                    : 'transform w-5 h-5',
+                                    ? 'rotate-180 transform w-6 h-6 transition'
+                                    : 'transform w-6 h-6',
                             ]"
                             width="24"
                             height="24"
@@ -403,8 +405,8 @@
                         </svg>
                         <span>آمریت فوق لیسانس </span>
                     </router-link>
-                    <ul class="mt-3 mr-3 transition-all" v-if="postToggle">
-                        <li class="mt-2 transition-colors py-2 px-4 rounded">
+                    <ul class="mr-3 transition-all" v-if="postToggle">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.dashboard' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -415,7 +417,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-5 h-5"
+                                    class="w-6 h-6"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -427,7 +429,7 @@
                             </router-link>
                         </li>
 
-                        <li class="mt-2 transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.dashboard' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -438,7 +440,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-5 h-5"
+                                    class="w-6 h-6"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -451,7 +453,7 @@
                             </router-link>
                         </li>
 
-                        <li class="mt-2 transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.dashboard' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -475,7 +477,7 @@
                             </router-link>
                         </li>
 
-                        <li class="mt-2 transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.dashboard' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -499,7 +501,7 @@
                             </router-link>
                         </li>
 
-                        <li class="mt-2 transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.dashboard' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -526,7 +528,7 @@
                 </li>
 
                 <li
-                    class="mt-3 transition-colors cursor-pointer w-full px-3 py-2 text-white"
+                    class="transition-colors cursor-pointer w-full px-3 py-2 text-white"
                 >
                     <router-link
                         :to="{ name: 'app.dashboard' }"
@@ -537,8 +539,8 @@
                             id="icon5"
                             :class="[
                                 researchToggle == true
-                                    ? 'rotate-180 transform w-5 h-5 transition'
-                                    : 'transform w-5 h-5',
+                                    ? 'rotate-180 transform w-6 h-6 transition'
+                                    : 'transform w-6 h-6',
                             ]"
                             viewBox="0 0 24 24"
                             fill="none"
@@ -554,8 +556,8 @@
                         </svg>
                         <span>آمریت تحقیقات علمی</span>
                     </router-link>
-                    <ul class="mt-3 mr-3 transition-all" v-if="researchToggle">
-                        <li class="mt-2 transition-colors py-2 px-4 rounded">
+                    <ul class="mr-3 transition-all" v-if="researchToggle">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.dashboard' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -566,7 +568,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-5 h-5"
+                                    class="w-6 h-6"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -578,7 +580,7 @@
                             </router-link>
                         </li>
 
-                        <li class="mt-2 transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors py-2 px-4 rounded">
                             <router-link
                                 :to="{ name: 'app.dashboard' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -589,7 +591,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-5 h-5"
+                                    class="w-6 h-6"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -602,17 +604,29 @@
                             </router-link>
                         </li>
 
-                        <!-- <li class="mt-2">
-                            <router-link :to="{ name: 'app.dashboard' }" class="flex items-center justify-start gap-3">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5" />
+                        <li class="transition-colors py-2 px-4 rounded">
+                            <router-link
+                                :to="{ name: 'app.dashboard' }"
+                                class="sidebar-item flex items-center justify-start gap-3"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-6 h-6"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"
+                                    />
                                 </svg>
 
-                                <span>کمیته ها</span>
+                                <span> کریکولم </span>
                             </router-link>
-                        </li> -->
+                        </li>
                     </ul>
                 </li>
             </ul>

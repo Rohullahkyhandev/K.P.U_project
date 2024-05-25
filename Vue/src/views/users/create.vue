@@ -76,9 +76,7 @@
                 <div class="mt-5">
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
-                            <label
-                                for=""
-                                class="form--label"
+                            <label for="" class="form--label"
                                 >نام کامل کابر<span class="label--prefix"
                                     >*</span
                                 ></label
@@ -96,9 +94,7 @@
 
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
-                            <label
-                                for=""
-                                class="form--label"
+                            <label for="" class="form--label"
                                 >آدرس ایمل<span class="text-red-500 px-2"
                                     >*</span
                                 ></label
@@ -116,9 +112,7 @@
 
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
-                            <label
-                                for=""
-                                class="form--label"
+                            <label for="" class="form--label"
                                 >جایگاه کاری<span class="label--prefix"
                                     >*</span
                                 ></label
@@ -147,8 +141,8 @@
                         <div class="w-6/12">
                             <CustomInput
                                 type="select"
-                                v-model="user.user_type"
-                                :select-options="user_type"
+                                v-model="user.dep_id"
+                                :select-options="chanceDepartments"
                                 class="mb-2"
                                 label="بخش مربوط"
                                 required="required"
@@ -208,7 +202,7 @@
                             <CustomInput
                                 type="file"
                                 class="mb-2"
-                                @change="(file) => (user.photo = file)"
+                                @change="(file) => (user_data.photo = file)"
                             />
                         </div>
                     </div>
@@ -252,28 +246,31 @@
 </template>
 
 <script setup>
-import { ref, useSlots } from "vue";
+import { computed, onMounted, ref, useSlots } from "vue";
 import CustomInput from "../../components/core/CustomInput.vue";
 import { useUserStore } from "../../stores/user/userStore";
 
 const userStore = useUserStore();
-const user_type = ref([
-    { key: "pdc", text: "PDC" },
-    { key: "آمریت استادان", text: "آمریت استادان" },
-    { key: "آمریت فوق لیسانس", text: "آمریت فوق لیسانس" },
-    { key: "آمریت تضمین کیفت", text: "آمریت تضمین کیفت" },
-    { key: "آمریت  تحقیقات علمی", text: "آمریت  تحقیقات علمی" },
-]);
+// const user_type = ref([
+//     { key: "pdc", text: "PDC" },
+//     { key: "آمریت استادان", text: "آمریت استادان" },
+//     { key: "آمریت فوق لیسانس", text: "آمریت فوق لیسانس" },
+//     { key: "آمریت تضمین کیفت", text: "آمریت تضمین کیفت" },
+//     { key: "آمریت  تحقیقات علمی", text: "آمریت  تحقیقات علمی" },
+// ]);
 
-const user = ref({
-    name: "",
-    email: "",
-    user_type: "",
-    position: "",
-    password: "",
-    password_confirmation: "",
-    photo: "",
+onMounted(() => {
+    userStore.getChanceDepartments();
 });
+
+const user = computed(() => userStore.user_data);
+
+let chanceDepartments = computed(() =>
+    userStore.chanceDepartments.map((c) => ({
+        key: c.id,
+        text: c.display_name,
+    }))
+);
 
 function onSubmit() {
     userStore.createUser(user.value);

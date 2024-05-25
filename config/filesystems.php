@@ -83,11 +83,17 @@ return [
 
 
         //   teacher in scholarship
-        'pdc/teacher_in_schalarship' => [
+        'pdc/teacher_in_scholarship' => [
             'driver' => 'local',
-            'root' => storage_path('app/public/pdc/teacher_in_schalarship'),
+            'root' => storage_path('app/public/pdc/teacher_in_scholarship'),
         ],
 
+        // workshops
+
+        'pdc/workshop' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/pdc/workshop'),
+        ],
         //   teacher in workshops
         'pdc/teacher_in_workshop' => [
             'driver' => 'local',
@@ -102,11 +108,21 @@ return [
         ],
 
 
-
         // teachers documents
         'teacher_document' => [
             'driver' => 'local',
             'root' => storage_path('app/public/teacher_document'),
+        ],
+
+        // Quality assurance main criteria
+        'quality_assurance/document' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/quality_assurance/document'),
+        ],
+        // Quality assurance sub criteria
+        'quality_assurance/sub_document' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/quality_assurance/sub_document'),
         ],
 
         'public' => [

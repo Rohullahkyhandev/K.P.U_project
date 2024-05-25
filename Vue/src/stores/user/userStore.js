@@ -18,6 +18,7 @@ export const useUserStore = defineStore("user", () => {
     });
     const user_data = ref({
         id: "",
+        dep_id: "",
         name: "",
         email: "",
         user_type: "",
@@ -103,6 +104,7 @@ export const useUserStore = defineStore("user", () => {
 
         var form = new FormData();
         form.append("name", data.name);
+        form.append("dep_id", data.dep_id);
         form.append("email", data.email);
         form.append("password", data.password);
         form.append("position", data.position);
@@ -120,6 +122,14 @@ export const useUserStore = defineStore("user", () => {
                 loading.value = false;
                 msg_wrang.value = err.response.data.message;
             });
+    }
+
+    const chanceDepartments = ref([]);
+    function getChanceDepartments() {
+        axiosClient.get("/get_chance_department").then((response) => {
+            chanceDepartments.value = response.data;
+            console.log(chanceDepartments.value);
+        });
     }
 
     function getPermissions({ url = null, id, per_page } = {}) {
@@ -193,6 +203,7 @@ export const useUserStore = defineStore("user", () => {
 
         var form = new FormData();
         form.append("id", data.id);
+        form.append("dep_id", data.dep_id);
         form.append("name", data.name);
         form.append("email", data.email);
         form.append("password", data.password);
@@ -204,7 +215,6 @@ export const useUserStore = defineStore("user", () => {
         axiosClient
             .post("/user/update", data)
             .then((res) => {
-
                 loading.value = true;
                 msg_success.value = res.data.message;
             })
@@ -269,6 +279,7 @@ export const useUserStore = defineStore("user", () => {
     return {
         getUsers,
         getPermissions,
+        getChanceDepartments,
         getUserPermission,
         permission_list,
         createPermission,
@@ -280,6 +291,7 @@ export const useUserStore = defineStore("user", () => {
         editUser,
         updateUser,
         user,
+        chanceDepartments,
         loading,
         user_data,
         permissions,

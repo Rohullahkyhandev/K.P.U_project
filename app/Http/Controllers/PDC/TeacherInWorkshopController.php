@@ -24,12 +24,13 @@ class TeacherInWorkshopController extends Controller
         $sortDirection  = request('sortDirection', 'DESC');
 
         $data = Teacher_in_Workshop::query()
-            ->where('teacher_in_workshops.teacher_id', 'like', "%{$search}%")
-            ->orWhere('teacher_in_workshops.workshop_id', 'like', "%{$search}%")
-            ->join('workshops', 'teacher_in_workshops.workshop_id', 'workshops.id')
-            ->join('teachers', 'teacher_in_workshops.teacher_id', 'teachers.id')
-            ->select('teacher_in_workshops.*', 'users.name as uname', 'teachers.name as tname', 'teachers.lname as lname', 'teachers.phone as phone', 'teachers.email as email', 'workshops.topic as topic')
-            ->orderBy("teacher_in_workshops.$sortField", $sortDirection)
+            // ->where('teacher_in_workshops.teacher_id', 'like', "%{$search}%")
+            // ->orWhere('teacher_in_workshops.workshop_id', 'like', "%{$search}%")
+            ->join('workshops', 'teacher_in__workshops.workshop_id', 'workshops.id')
+            ->join('teachers', 'teacher_in__workshops.teacher_id', 'teachers.id')
+            ->join('users', 'teacher_in__workshops.user_id', 'users.id')
+            ->select('teacher_in__workshops.*', 'users.name as uname', 'teachers.name as name', 'teachers.lname as lname', 'teachers.phone as phone', 'teachers.email as email', 'workshops.topic as topic')
+            ->orderBy("teacher_in__workshops.$sortField", $sortDirection)
             ->paginate($per_page);
         return TeacherInWorkshopResource::collection($data);
     }
@@ -90,7 +91,7 @@ class TeacherInWorkshopController extends Controller
         $request->validate([
             'teacher_id' => 'required',
             'workshop_id' => 'required',
-            'document' => 'required|mimes:png,jpg,mp3,mp4,pdf,docx'
+            'document' => 'nullable|mimes:png,jpg,mp3,mp4,pdf,docx'
         ], [
             'teacher_id.required' => "فیلد استاد  الزامی می باشد",
             'workshop_id.required' => "فیلد زمان ورکشاپ   الزامی می باشد",

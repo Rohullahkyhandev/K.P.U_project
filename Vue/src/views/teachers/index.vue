@@ -1,7 +1,7 @@
 <template>
-    <div class="px-5 mt-10">
+    <div class="mt-10">
         <div class="flex items-center justify-between mb-8">
-            <div>
+            <div class="flex items-center gap-5">
                 <router-link
                     :to="{ name: 'app.teacher.create' }"
                     class="header--button"
@@ -22,6 +22,147 @@
                     </svg>
                     استاد جدید
                 </router-link>
+
+                <!-- <router-link
+                    :to="{ name: 'app.teacher.create' }"
+                    class="header--button"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-6 h-6"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
+                        />
+                    </svg>
+                    راپور
+                </router-link> -->
+
+                <div class="inset-0 flex items-center justify-center">
+                    <button
+                        type="button"
+                        @click="openModal"
+                        class="header--button"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="w-5 h-5"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                            />
+                        </svg>
+
+                        تهیه راپور
+                    </button>
+                </div>
+                <TransitionRoot appear :show="isOpen" as="template">
+                    <Dialog as="div" @close="closeModal" class="relative z-10">
+                        <TransitionChild
+                            as="template"
+                            enter="duration-300 ease-out"
+                            enter-from="opacity-0"
+                            enter-to="opacity-100"
+                            leave="duration-200 ease-in"
+                            leave-from="opacity-100"
+                            leave-to="opacity-0"
+                        >
+                            <div class="fixed inset-0 bg-black/25" />
+                        </TransitionChild>
+
+                        <div class="fixed inset-0 overflow-y-auto">
+                            <div
+                                class="flex min-h-full items-center justify-center p-4 text-center"
+                            >
+                                <TransitionChild
+                                    as="template"
+                                    enter="duration-300 ease-out"
+                                    enter-from="opacity-0 scale-95"
+                                    enter-to="opacity-100 scale-100"
+                                    leave="duration-200 ease-in"
+                                    leave-from="opacity-100 scale-100"
+                                    leave-to="opacity-0 scale-95"
+                                >
+                                    <DialogPanel
+                                        class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
+                                    >
+                                        <DialogTitle
+                                            as="h2"
+                                            class="text-lg font-medium leading-6 text-gray-900"
+                                        >
+                                            لطفا فلید های مورد نیاز انتخاب نماید
+                                        </DialogTitle>
+                                        <div
+                                            class="mt-2 flex items-center justify-content-end flex-col"
+                                        >
+                                            <div
+                                                class="flex gap-4"
+                                                v-for="(
+                                                    attribute, index
+                                                ) in attributes"
+                                                :key="index"
+                                            >
+                                                <div
+                                                    class="flex gap-5 items-center justify-end text-left"
+                                                >
+                                                    <Switch
+                                                        v-model="
+                                                            attribute.isActive
+                                                        "
+                                                        :class="
+                                                            attribute.isActive
+                                                                ? 'bg-blue-800'
+                                                                : 'bg-blue-600'
+                                                        "
+                                                        class="relative inline-flex h-[20px] w-[60px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
+                                                    >
+                                                        <span class="sr-only"
+                                                            >Use setting</span
+                                                        >
+                                                        <span
+                                                            aria-hidden="true"
+                                                            :class="
+                                                                attribute.isActive
+                                                                    ? 'translate-x-9'
+                                                                    : 'translate-x-0'
+                                                            "
+                                                            class="pointer-events-none inline-block h-[18px] w-[25px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
+                                                        />
+                                                    </Switch>
+                                                    <label class="form--label">
+                                                        {{ attribute.text }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="mt-4">
+                                            <button
+                                                type="button"
+                                                class="header--button"
+                                                @click="closeModal"
+                                            >
+                                                DownLoad
+                                            </button>
+                                        </div>
+                                    </DialogPanel>
+                                </TransitionChild>
+                            </div>
+                        </div>
+                    </Dialog>
+                </TransitionRoot>
             </div>
             <div>
                 <h1 class="text--header">لیست استادان</h1>
@@ -31,7 +172,7 @@
         <div class="table--wrapper--dev">
             <!-- display message area -->
             <div class="msg--success" v-if="teacherStore.msg_success">
-                <div class="flex items-center justify-between px-10">
+                <div class="flex items-center justify-between px-10 ,mb-3">
                     <div
                         class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
                     >
@@ -58,7 +199,7 @@
             </div>
 
             <div class="msg--warning" v-if="teacherStore.msg_wrang">
-                <div class="flex items-center justify-between px-10">
+                <div class="flex items-center justify-between px-10 mb-10">
                     <div
                         class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
                     >
@@ -84,7 +225,7 @@
                 </div>
             </div>
             <!-- end of display message area -->
-            <div class="flex justify-between border-b-2 pb-3">
+            <div class="flex justify-between border-b-2 pb-3 relative">
                 <div>
                     <input
                         v-model="search"
@@ -95,7 +236,36 @@
                 </div>
 
                 <div>
-                    <select
+                    <!-- <div
+                        class="bg-white z-20 absolute shadow text-right right-3 w-64 py-4"
+                    >
+                        <ul class="flex items-center flex-col">
+                            <li
+                                class="flex items-center text-left"
+                                v-for="(attribute, index) in attributes"
+                                :key="index"
+                            >
+                                <div class="ml-3">
+                                    <input
+                                        :checked="
+                                            attribute.isActive ? true : false
+                                        "
+                                        type="checkbox"
+                                        @change="
+                                            () =>
+                                                (attribute.isActive =
+                                                    !attribute.isActive)
+                                        "
+                                    />
+                                </div>
+                                <div class="text-right">
+                                    <span>{{ attribute.text }}</span>
+                                </div>
+                            </li>
+                            <input type="checkbox" @change="selectToggle" />
+                        </ul>
+                    </div> -->
+                    <!-- <select
                         v-model="department_id"
                         @change="getTeacher(null)"
                         class="appearance-none relative block w-75 px-10 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -110,7 +280,7 @@
                         >
                             {{ department.name }}
                         </option>
-                    </select>
+                    </select> -->
                 </div>
 
                 <div class="flex items-center">
@@ -132,7 +302,7 @@
                     <span class="ml-3">پیداشد {{ teachers.total }} دیتا</span>
                 </div>
             </div>
-            <table class="table-auto w-full">
+            <table class="table-auto w-full border">
                 <thead>
                     <tr>
                         <TableHeaderCell
@@ -160,6 +330,15 @@
                             @click="sortUsers('id')"
                         >
                             تخلص
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
+                            field="id"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortUsers('id')"
+                        >
+                            سویه تحصلی
                         </TableHeaderCell>
 
                         <TableHeaderCell
@@ -208,6 +387,15 @@
                         </TableHeaderCell>
 
                         <TableHeaderCell
+                            field="status"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortUsers('status')"
+                        >
+                            وضعیت
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
                             field="action"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
@@ -237,49 +425,53 @@
                     </tr>
                 </tbody>
                 <tbody v-else>
-                    <tr v-for="(teacher, index) of teachers.data">
-                        <td class="border-b p-2">{{ index + 1 }}</td>
+                    <tr v-for="(teacher, index) of teachers.data" :key="index">
+                        <td class="border-b p-2 border">{{ index + 1 }}</td>
 
-                        <td class="border-b p-2">
+                        <td class="border-b p-2 border">
                             {{ teacher.name }}
                         </td>
-                        <td class="border-b p-2">
+                        <td class="border-b p-2 border">
                             {{ teacher.lname }}
                         </td>
-                        <td class="border-b p-2">
-                            {{ teacher.faculty }}
-                        </td>
-                        <td class="border-b p-2">
-                            {{ teacher.department }}
-                        </td>
-                        <td class="border-b p-2">
-                            {{ teacher.email }}
+
+                        <td class="border-b p-2 border">
+                            {{ teacher.education }}
                         </td>
 
-                        <td class="border-b p-2">
+                        <td class="border-b p-2 border">
+                            {{ teacher.faculty }}
+                        </td>
+                        <td class="border-b p-2 border">
+                            {{ teacher.department }}
+                        </td>
+                        <td class="border-b p-2 border">
+                            {{ teacher.email }}
+                        </td>
+                        <td class="border-b p-2 border">
                             {{ teacher.phone }}
                         </td>
-                        <td class="border-b p-2">
+                        <td class="border-b p-2 border">
                             {{ teacher.hire_date }}
                         </td>
 
-                        <td class="border-b p-2">
+                        <td class="border-b p-2 px-4 border">
+                            <span
+                                v-if="teacher.status == '1'"
+                                class="block bg-green-400 text-white font-semibold rounded-lg px-5"
+                            >
+                                در حال تدریس
+                            </span>
+                            <span v-else-if="teacher.status == '2'"  class="block bg-yellow-400 text-white font-semibold rounded-lg px-5">
+                                در بورسیه
+                            </span>
+                        </td>
+
+                        <td class="border-b p-2 border">
                             {{ teacher.uname }}
                         </td>
-                        <!-- <td class="border-b p-2">
-                            <a :href="archive.file_path">
 
-                                <svg xmlns=" http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                                </svg>
-
-                            </a>
-
-                        </td> -->
-
-                        <td class="border-b p-2">
+                        <td class="border-b p-2 border">
                             <Menu
                                 as="div"
                                 class="relative inline-block text-left"
@@ -406,6 +598,7 @@
                                                         fill="none"
                                                         viewBox="0 0 24 24"
                                                         stroke-width="1.5"
+                                                        s
                                                         stroke="currentColor"
                                                         class="w-5 h-5 text-red-500"
                                                     >
@@ -470,6 +663,14 @@
 </template>
 
 <script setup>
+import {
+    TransitionRoot,
+    TransitionChild,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    Switch,
+} from "@headlessui/vue";
 import { computed, onMounted, ref } from "vue";
 import Spinner from "../../components/core/Spnnier.vue";
 import { USER_PER_PAGE } from "../../constant";
@@ -493,13 +694,22 @@ const department_id = ref("");
 // let msg_warning = ref("");
 // let user_image_src = '';
 
+const isOpen = ref(false);
+
+function closeModal() {
+    isOpen.value = false;
+}
+function openModal() {
+    isOpen.value = true;
+}
+
 onMounted(() => {
     getTeacher();
     teacherStore.getAllDepartments();
 });
 
 const departments = computed(() =>
-    teacherStore.listDepartment.map(c => ({ key: c.id, text: c.name }))
+    teacherStore.listDepartment.map((c) => ({ key: c.id, text: c.name }))
 );
 
 function getForPage(ev, link) {
@@ -543,8 +753,80 @@ function deleteTeacher(id) {
     getTeacher();
 }
 
+const enabled = ref(false);
+
+const attributes = ref([
+    {
+        key: "codebast",
+        text: "کود بست",
+        isActive: true,
+    },
+
+    {
+        key: "name",
+        text: "نام",
+        isActive: true,
+    },
+
+    {
+        key: "lname",
+        text: "تخلص ",
+        isActive: true,
+    },
+
+    {
+        key: "fname",
+        text: "نام پدر",
+        isActive: true,
+    },
+
+    {
+        key: "faculty_id",
+        text: "فاکولته",
+        isActive: true,
+    },
+    {
+        key: "department_id",
+        text: "دیمارتمنت",
+        isActive: true,
+    },
+
+    {
+        key: "email",
+        text: "علمی استاد",
+        isActive: true,
+    },
+
+    {
+        key: "adamic_rank",
+        text: "رتبه عملی ",
+        isActive: true,
+    },
+    {
+        key: "phone",
+        text: "شماره تماس",
+        isActive: true,
+    },
+    {
+        key: "join_date",
+        text: "تاریخ تقرر",
+        isActive: true,
+    },
+    {
+        key: "nic",
+        text: "نمبر تٰٰذکره",
+        isActive: true,
+    },
+]);
+
 function msg_success_fun() {}
 function msg_warning_fun() {}
+
+function selectToggle() {
+    attributes.value.map((item) => {
+        item.isActive = !item.isActive;
+    });
+}
 </script>
 
 <style scoped></style>

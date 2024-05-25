@@ -23,6 +23,8 @@ class TeacherResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'hire_date' => $this->hire_date,
+            'education' => $this->education,
+            'status' => $this->status,
             'uname' => $this->uname,
         ];
     }

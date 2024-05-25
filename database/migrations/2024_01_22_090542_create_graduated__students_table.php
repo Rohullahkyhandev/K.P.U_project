@@ -26,6 +26,8 @@ return new class extends Migration
             $table->foreign('student_id')->references('id')->on('students');
             $table->bigInteger('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users');
+            $table->bigInteger('program_id')->unsigned()->index();
+            $table->foreign('program_id')->references('id')->on('post_graduated_programs');
             $table->timestamps();
         });
     }

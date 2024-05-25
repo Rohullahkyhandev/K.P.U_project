@@ -1,6 +1,7 @@
 <?php
 
 use App\Exports\TeachersExport;
+use App\Http\Controllers\TeacherController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
@@ -21,7 +22,5 @@ use Symfony\Component\Routing\Route as RoutingRoute;
 
 
 
-Route::get("/download", function () {
+Route::get("/report", [TeacherController::class, 'downloadTeacher']);
 
-    return Excel::download(new TeachersExport, 'teachers.xlsx');
-});
