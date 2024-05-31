@@ -13,15 +13,19 @@ class SubCriteriaController extends Controller
 {
     public function index()
     {
+        $criteria_id = request('id');
         $per_page = request('per_page', 10);
         $search  =  request('search', '');
         $sortField  = request('sortField', 'id');
         $sortDirection  = request('sortDirection', 'DESC');
+        $year = date('Y');
+        $year = $year - 621;
 
         $data = SubCriteria::query()
-            ->where('sub_criterias.year', 'like', "%{$search}%")
+            ->where('sub_criterias.number', 'like', "%{$search}%")
             ->join('criterias', 'sub_criterias.criteria_id', 'criterias.id')
             ->join('users', 'sub_criterias.user_id', 'users.id')
+            ->where('sub_criterias.criteria_id', '=', $criteria_id)
             ->select('sub_criterias.*', 'users.name as uname', 'criterias.number as number', 'criterias.year as year')
             ->orderBy("sub_criterias.$sortField", $sortDirection)
             ->paginate($per_page);
@@ -31,8 +35,9 @@ class SubCriteriaController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'number' => 'required|max::20',
+
+        // return $request->criteria_id;
+        $request->validate(['number' => 'required',
             'criteria_id' => 'required',
             'description' => 'required',
             'attachment' => 'nullable|mimes:png,jpg,mp3,mp4,pdf,docx'
@@ -41,6 +46,7 @@ class SubCriteriaController extends Controller
             'criteria_id.required' => "فیلد  معیار اصلی الزامی می باشد",
             'attachment.mimes' => "فارمت فایل باید شامل این فارمت ها باشد png,jpg,mp3,mp4,pdf,docx"
         ]);
+
         $attachment = null;
         $attachment_path = null;
         if ($request->attachment != '') {
@@ -50,7 +56,7 @@ class SubCriteriaController extends Controller
         $user_id = Auth::id();
         $sub_criteria = new SubCriteria();
         $sub_criteria->number = $request->number;
-        $sub_criteria->sub_criteria_id = $request->sub_criteria_id;
+        $sub_criteria->criteria_id = $request->criteria_id;
         $sub_criteria->description = $request->description;
         $sub_criteria->attachment = $attachment;
         $sub_criteria->attachment_path = $attachment_path;
@@ -70,8 +76,9 @@ class SubCriteriaController extends Controller
 
 
 
-    public function edit($id = '')
+    public function edit()
     {
+        $id = request('id');
         $data = SubCriteria::find($id);
         return $data;
     }

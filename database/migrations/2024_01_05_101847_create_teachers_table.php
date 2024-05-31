@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
+            $table->string('code_bast', 100);
+            $table->string('education_field', 100);
             $table->string('name', 100);
             $table->string('lname', 100);
             $table->string('fatherName', 100);
+            $table->string('grandFathername', 100);
             $table->string('email', 100);
             $table->string('phone', 100);
             $table->string('gender', 100);
@@ -24,6 +27,7 @@ return new class extends Migration
             $table->string('current_address', 200);
             $table->string('hire_date', 100);
             $table->string('nic', 100);
+            $table->string('status', 10)->default('1');
             $table->string('academic_rank', 100);
             $table->string('photo');
             $table->string('photo_path');

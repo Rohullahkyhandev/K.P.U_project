@@ -14,6 +14,13 @@ class ProgramsResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id' => $this->id,
+            'program_name' => $this->program_name,
+            'degree_type' => $this->degree_type,
+            'program_duration' => $this->program_duration,
+            'description' => $this->description,
+            'uname' => $this->uname,
+        ];
     }
 }

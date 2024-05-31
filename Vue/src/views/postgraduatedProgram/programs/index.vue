@@ -1,9 +1,9 @@
 <template>
-    <div class="">
-        <div class="flex items-center justify-between mb-8">
-            <div>
+    <div class="form--padding--top">
+        <div class="flex items-center justify-between mb-4">
+            <div class="mb-2">
                 <router-link
-                    :to="{ name: 'app.teacher.qualification.create' }"
+                    :to="{ name: 'app.post.create' }"
                     class="header--button"
                 >
                     <svg
@@ -12,96 +12,100 @@
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
                         stroke="currentColor"
-                        class="w-5 h-5 text-white"
+                        class="w-5 h-5"
                     >
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            d="M12 4.5v15m7.5-7.5h-15"
+                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
                         />
                     </svg>
-                    ثبت سطح
+                    ثبت برنامه جدید
                 </router-link>
             </div>
-            <div>
-                <h1 class="text--header">سطح تحصلی</h1>
-            </div>
+            <div class="text--header">لیست برنامه های فوق لیسانس</div>
         </div>
-
-        <!-- display message area -->
-        <div class="msg--success" v-if="teacherStore.msg_qsuccess">
-            <div class="flex items-center justify-between px-10">
-                <div
-                    class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        @click="teacherStore.msg_qsuccess = ''"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-6 h-6"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 18 18 6M6 6l12 12"
-                        />
-                    </svg>
-                </div>
-                <div>
-                    <span>{{ teacherStore.msg_qsuccess }}</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="msg--warning" v-if="teacherStore.msg_qwrang">
-            <div class="flex items-center justify-between px-10">
-                <div
-                    class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        @click="teacherStore.msg_qwrang = ''"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-6 h-6"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 18 18 6M6 6l12 12"
-                        />
-                    </svg>
-                </div>
-                <div>
-                    <span>{{ teacherStore.msg_qwrang }}</span>
-                </div>
-            </div>
-        </div>
-        <!-- end of display message area -->
 
         <div class="table--wrapper--dev">
+            <!-- display message area -->
+            <div
+                class="bg-green-700 text-white rounded py-4 mb-2 text-center"
+                v-if="programStore.msg_success"
+            >
+                <div class="flex items-center justify-between px-10">
+                    <div
+                        class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            @click="programStore.msg_success = ''"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="w-6 h-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6 18 18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </div>
+                    <div>
+                        <span>{{ programStore.msg_success }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-red-500 text-white py-4 rounded mb-2 text-center"
+                v-if="programStore.msg_wrang"
+            >
+                <div class="flex items-center justify-between px-10">
+                    <div
+                        class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            @click="programStore.msg_wrang = ''"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="w-6 h-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6 18 18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </div>
+                    <div>
+                        <span>{{ programStore.msg_wrang }}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- end of display message area -->
+
             <div class="flex justify-between border-b-2 pb-3">
                 <div>
                     <input
                         v-model="search"
-                        @change="getQualification(null)"
+                        @change="getProgram(null)"
                         class="appearance-none relative block w-48 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="جستجوی بر اساس نام اثر"
+                        placeholder="جستجوی بر اساس همه فیلد ها"
                     />
                 </div>
                 <div class="flex items-center">
                     <span class="whitespace-nowrap mr-3">هر صفحه</span>
                     &nbsp;
                     <select
-                        dir="ltr"
-                        @change="getQualification(null)"
+                        @change="getProgram(null)"
                         v-model="perPage"
-                        class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        dir="ltr"
+                        class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     >
                         <option value="5" selected>5</option>
                         <option value="10" selected>10</option>
@@ -110,73 +114,63 @@
                         <option value="100">100</option>
                     </select>
                     &nbsp;
-                    <span class="ml-3"
-                        >پیداشد {{ qualifications.total }} کابر</span
-                    >
+                    <span class="ml-3">پیداشد {{ programs.total }} دیتا</span>
                 </div>
             </div>
-            <table class="table-auto w-full">
+
+            <table class="table-auto w-full border">
                 <thead>
                     <tr>
                         <TableHeaderCell
                             field="id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('id')"
+                            @click="sortProgram('id')"
                         >
                             شماره.
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="edu_degree"
+                            field="program_name"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('edu_degree')"
+                            @click="sortProgram('program_name')"
                         >
-                            سطح تحصلی
+                            نام برنامه
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="country"
+                            field="degree_type"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('country')"
+                            @click="sortProgram('degree_type')"
                         >
-                            کشور
+                            مقطع برنامه
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="university"
+                            field="program_duration"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('university')"
+                            @click="sortProgram('program_duration')"
                         >
-                            دانشگاه
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="graduated_year"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortQualification('graduated_year')"
-                        >
-                            سال فراغت
+                            مدت زمان برنامه
                         </TableHeaderCell>
 
                         <TableHeaderCell
                             field="description"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('description')"
+                            @click="sortProgram('description')"
                         >
-                            توضیحات
+                            توضحیات
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="graduated_year"
+                            field="id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('graduated_year')"
+                            @click="sortProgram('id')"
                         >
                             کابر
                         </TableHeaderCell>
@@ -185,55 +179,47 @@
                             field="action"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('acs')"
+                            @click="sortProgram('acs')"
                         >
                             عملیات
                         </TableHeaderCell>
                     </tr>
                 </thead>
-                <tbody
-                    v-if="
-                        qualifications.loading || !qualifications.data?.length
-                    "
-                >
+                <tbody v-if="programs.loading || !programs.data.length">
                     <tr>
-                        <td colspan="6">
-                            <Spinner v-if="qualifications.loading" />
+                        <td colspan="10">
+                            <Spinner v-if="programs.loading" />
                             <p v-else class="text-center py-8 text-gray-700">
                                 نتیجه ای پیدا نشد
                             </p>
                         </td>
                     </tr>
                 </tbody>
-                <tbody v-else>
-                    <tr v-for="(qualification, index) of qualifications.data">
-                        <td class="border-b p-2">{{ index + 1 }}</td>
+                <tbody class="border" v-else>
+                    <tr v-for="(program, index) of programs.data" :key="index">
+                        <td class="border-b p-3">{{ index + 1 }}</td>
 
-                        <td class="border-b p-2">
-                            {{ qualification.education_ }}
+                        <td class="border p-">
+                            {{ program.program_name }}
                         </td>
 
-                        <td class="border-b p-2">
-                            {{ qualification.country }}
+                        <td class="border p-3">
+                            {{ program.degree_type }}
                         </td>
 
-                        <td class="border-b p-2">
-                            {{ qualification.university }}
+                        <td class="border p-3">
+                            {{ program.program_duration }}
                         </td>
 
-                        <td class="border-b p-2">
-                            {{ qualification.graduated_year }}
+                        <td class="border p-3">
+                            {{ program.description }}
                         </td>
 
-                        <td class="border-b p-2">
-                            {{ qualifications.description }}
+                        <td class="border p-3">
+                            {{ program.uname }}
                         </td>
 
-                        <td class="border-b p-2">
-                            {{ qualification.uname }}
-                        </td>
-
-                        <td class="border-b p-2">
+                        <td class="border p-2">
                             <Menu
                                 as="div"
                                 class="relative inline-block text-left"
@@ -272,10 +258,9 @@
                                             <MenuItem v-slot="{ active }">
                                                 <router-link
                                                     :to="{
-                                                        name: 'app.teacher.qualification.edit',
+                                                        name: 'app.pdc.commit.edit',
                                                         params: {
-                                                            q_id: qualification.id,
-                                                            t_id: $route.params.id,
+                                                            id: program.id,
                                                         },
                                                     }"
                                                     :class="[
@@ -308,10 +293,11 @@
                                             <MenuItem v-slot="{ active }">
                                                 <button
                                                     @click="
-                                                        deleteQualification(
-                                                            qualification.id
-                                                        )
+                                                        deleteCommit(program.id)
                                                     "
+                                                    :to="{
+                                                        name: 'app.pdc.received_document',
+                                                    }"
                                                     :class="[
                                                         active
                                                             ? 'bg-blue-800 text-white'
@@ -346,22 +332,21 @@
                 </tbody>
             </table>
             <div
-                v-if="!qualifications.loading"
+                v-if="!programs.loading"
                 class="flex justify-between items-center mt-5"
                 dir="ltr"
             >
-                <div v-if="qualifications.data">
-                    نمایش از {{ qualifications.from }} تا
-                    {{ qualifications.to }}
+                <div v-if="programs.data">
+                    نمایش از {{ programs.from }} تا {{ programs.to }}
                 </div>
                 <nav
-                    v-if="qualifications.total > qualifications.limit"
+                    v-if="programs.total > programs.limit"
                     class="relative z-0 inline-flex justify-center rounded-md shadow-sm -space-x-px"
                     aria-label="Pagination"
                 >
                     <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
                     <a
-                        v-for="(link, i) of qualifications.links"
+                        v-for="(link, i) of programs.links"
                         :key="i"
                         :disabled="!link.url"
                         href="#"
@@ -373,7 +358,7 @@
                                 ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
                                 : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
                             i === 0 ? 'rounded-l-md' : '',
-                            i === qualifications.links.length - 1
+                            i === programs.links.length - 1
                                 ? 'rounded-r-md'
                                 : '',
                             !link.url ? ' bg-gray-100 text-gray-700' : '',
@@ -390,24 +375,27 @@
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import Spinner from "../../components/core/Spnnier.vue";
-import { USER_PER_PAGE } from "../../constant";
-import TableHeaderCell from "../../components/tableHeader/tableheader.vue";
+import Spinner from "../../../components/core/Spnnier.vue";
+import { USER_PER_PAGE } from "../../../constant";
+import TableHeaderCell from "../../../components/tableHeader/tableheader.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import { useRoute } from "vue-router";
-import { useTeacherStore } from "../../stores/teachers/teacherStore";
+// import { PencilAltIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
+import { useRoute, useRouter } from "vue-router";
+import useProgramStore from "../../../stores/postgraduatedPrograms/programStore";
 
-const teacherStore = useTeacherStore();
+const programStore = useProgramStore();
 const route = useRoute();
+const router = useRouter();
+const getCurrentPath = route.path;
 
 const perPage = ref(USER_PER_PAGE);
 const search = ref("");
-const qualifications = computed(() => teacherStore.teacher_qualification);
+const programs = computed(() => programStore.programs);
 const sortField = ref("updated_at");
 const sortDirection = ref("desc");
 
 onMounted(() => {
-    getQualification();
+    getProgram();
 });
 
 function getForPage(ev, link) {
@@ -415,21 +403,20 @@ function getForPage(ev, link) {
     if (!link.url || link.active) {
         return;
     }
-    getQualification(link.url);
+    getProgram(link.url);
 }
 
-function getQualification(url = null) {
-    teacherStore.getQualification({
+function getProgram(url = null) {
+    programStore.getProgram({
         url,
         search: search.value,
         per_page: perPage.value,
         sort_field: sortField.value,
         sort_direction: sortDirection.value,
-        id: route.params.id,
     });
 }
 
-function sortQualification(field) {
+function sortProgram(field) {
     if (field === sortField.value) {
         if (sortDirection.value === "desc") {
             sortDirection.value = "asc";
@@ -440,18 +427,21 @@ function sortQualification(field) {
         sortField.value = field;
         sortDirection.value = "asc";
     }
-    getQualification();
+    getProgram();
 }
 
-function deleteQualification(id) {
-    if (!confirm(`آیا شما می خواهید این اطلاعات را حذف نماید?`)) {
+function deleteCommit(id) {
+    if (!confirm(`مطمین هسید می خواهید این دیتا را خذف نماید؟?`)) {
         return;
     }
-    teacherStore.deleteQualification(id);
-    getQualification();
+    programStore.deleteCommit(id);
+    if (programStore.msg_success != null) {
+    }
+    getProgram();
 }
 
 function msg_success_fun() {}
+
 function msg_warning_fun() {}
 </script>
 

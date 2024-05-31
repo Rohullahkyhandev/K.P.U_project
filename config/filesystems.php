@@ -114,6 +114,12 @@ return [
             'root' => storage_path('app/public/teacher_document'),
         ],
 
+        // teachers documents
+        'teacher_promotion' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/teacher_promotion'),
+        ],
+
         // Quality assurance main criteria
         'quality_assurance/document' => [
             'driver' => 'local',

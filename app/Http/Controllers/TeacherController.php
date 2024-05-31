@@ -35,9 +35,11 @@ class TeacherController extends Controller
     public function validation()
     {
         $rules = [
+            'code_bast' => 'required:string:max:10',
             'name' => 'required:string:max:100',
             'lname' => 'required:string:max:100',
             'fatherName' => 'required:string:max:100',
+            'grandFathername' => 'required:string:max:100',
             'email' => 'email:string:max:100:unique:teachers',
             'phone' => 'required:string:max:14',
             'gender' => 'required:string',
@@ -47,7 +49,7 @@ class TeacherController extends Controller
             'academic_rank' => 'required:string:max:100',
             'hire_date' => 'required:date:max:100',
             'nic' => 'required:string:max:100',
-
+            'education_field' => 'required:string:max:100',
         ];
 
         return $rules;
@@ -64,14 +66,16 @@ class TeacherController extends Controller
         $sortDirection = request('sortDirection', 'DESC');
 
         $data = Teacher::query()
+            ->distinct()
             ->where('teachers.name', 'like', "%{$search}%")
             ->where('teachers.department_id', '=', $department_id)
             ->orWhere('teachers.lname', 'like', "%{$search}%")
             ->join('departments', 'teachers.department_id', 'departments.id')
             ->join('users', 'teachers.user_id', 'users.id')
-            // ->join('teacher_qualifications', 'teachers.id', 'teacher_qualifications.teacher_id')
+            ->leftJoin('promotions', 'promotions.teacher_id', 'teachers.id')
+            ->leftJoin('teacher_qualifications', 'teachers.id', 'teacher_qualifications.teacher_id')
             ->join('faculties', 'teachers.faculty_id', 'faculties.id')
-            ->select('teachers.*', 'faculties.name as faculty', 'departments.name as department', 'users.name as uname')
+            ->select('teachers.*', 'promotions.date as date', 'promotions.attachment_path as promotion_attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department', 'teacher_qualifications.education_ as education', 'users.name as uname')
             ->orderBy("teachers.$sortField", $sortDirection)
             ->paginate($per_page);
         return TeacherResource::collection($data);
@@ -94,9 +98,11 @@ class TeacherController extends Controller
             }
             $user_id = Auth::id();
             $teacher = new Teacher();
+            $teacher->code_bast  = $request->code_bast;
             $teacher->name  = $request->name;
             $teacher->lname = $request->lname;
             $teacher->fatherName = $request->fatherName;
+            $teacher->grandFathername = $request->grandFathername;
             $teacher->email = $request->email;
             $teacher->phone = $request->phone;
             $teacher->gender = $request->gender;
@@ -106,6 +112,7 @@ class TeacherController extends Controller
             $teacher->academic_rank = $request->academic_rank;
             $teacher->hire_date = $request->hire_date;
             $teacher->nic = $request->nic;
+            $teacher->education_field = $request->education_field;
             $teacher->photo = $photo;
             $teacher->photo_path = $photo_path;
             $teacher->department_id = $request->department_id;
@@ -149,9 +156,11 @@ class TeacherController extends Controller
                 $photo_path = asset(Storage::url('teacher_photo/' . $photo));
             }
             $user_id = Auth::id();
+            $teacher->code_bast  = $request->code_bast;
             $teacher->name  = $request->name;
             $teacher->lname = $request->lname;
             $teacher->fatherName = $request->fatherName;
+            $teacher->grandFathername = $request->grandFathername;
             $teacher->email = $request->email;
             $teacher->phone = $request->phone;
             $teacher->gender = $request->gender;
@@ -161,6 +170,7 @@ class TeacherController extends Controller
             $teacher->academic_rank = $request->academic_rank;
             $teacher->hire_date = $request->hire_date;
             $teacher->nic = $request->nic;
+            $teacher->education_field = $request->education_field;
             $teacher->photo = $photo;
             $teacher->photo_path = $photo_path;
             $teacher->department_id = $request->department_id;
@@ -206,7 +216,7 @@ class TeacherController extends Controller
 
         $request->validate([
             'country' => 'required|string',
-            'education_degree' => 'required|string',
+            'education_' => 'required|string',
             'graduated_year' => 'required|string',
             'university' => 'required|string',
             'description' => 'nullable|string'
@@ -216,7 +226,7 @@ class TeacherController extends Controller
 
         $teacher_qualification = new Teacher_qualification();
         $teacher_qualification->country = $request->country;
-        $teacher_qualification->education_degree = $request->education_degree;
+        $teacher_qualification->education_ = $request->education_;
         $teacher_qualification->graduated_year = $request->graduated_year;
         $teacher_qualification->university = $request->university;
         $teacher_qualification->description = $request->description;
@@ -261,7 +271,7 @@ class TeacherController extends Controller
     {
         $request->validate([
             'country' => 'required|string',
-            'education_degree' => 'required|string',
+            'education_' => 'required|string',
             'graduated_year' => 'required|string',
             'university' => 'required|string',
             'description' => 'nullable|string'
@@ -270,7 +280,7 @@ class TeacherController extends Controller
         $user_id = Auth::id();
         $teacher_qualification = Teacher_qualification::find($id);
         $teacher_qualification->country = $request->country;
-        $teacher_qualification->education_degree = $request->education_degree;
+        $teacher_qualification->education_ = $request->education_;
         $teacher_qualification->graduated_year = $request->graduated_year;
         $teacher_qualification->university = $request->university;
         $teacher_qualification->description = $request->description;

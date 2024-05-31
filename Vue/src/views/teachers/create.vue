@@ -90,6 +90,24 @@
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
                             <label class="form--label"
+                                >کود بست
+                                <span class="label--prefix">*</span>
+                            </label>
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                type="text"
+                                v-model="teacher.code_bast"
+                                class="mb-2"
+                                required="required"
+                                label="کود بست "
+                            />
+                        </div>
+                    </div>
+
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label class="form--label"
                                 >نام
                                 <span class="label--prefix">*</span>
                             </label>
@@ -138,6 +156,24 @@
                             class="mb-2"
                             required="required"
                             label="نام پدر"
+                        />
+                    </div>
+                </div>
+
+                <div class="wrapper--dev--input">
+                    <div class="w-2/12">
+                        <label class="form--label"
+                            >نام پدر کلان
+                            <span class="label--prefix">*</span>
+                        </label>
+                    </div>
+                    <div class="w-6/12">
+                        <CustomInput
+                            type="text"
+                            v-model="teacher.grandFathername"
+                            class="mb-2"
+                            required="required"
+                            label=" نام پدر کلان"
                         />
                     </div>
                 </div>
@@ -250,6 +286,24 @@
                 <div class="wrapper--dev--input">
                     <div class="label--dev--width">
                         <label class="form--label"
+                            >ریشته تحصلی
+                            <span class="label--prefix">*</span>
+                        </label>
+                    </div>
+                    <div class="input--dev--width">
+                        <CustomInput
+                            type="text"
+                            v-model="teacher.education_field"
+                            class="mb-2"
+                            required="required"
+                            label=" ریشته تحصلی"
+                        />
+                    </div>
+                </div>
+
+                <div class="wrapper--dev--input">
+                    <div class="label--dev--width">
+                        <label class="form--label"
                             >آدرس اصلی
                             <span class="label--prefix">*</span>
                         </label>
@@ -294,13 +348,13 @@
                         <!-- <EMDatePicker v-model="teacher.hire_date" /> -->
                         <!-- <DatePicker /> -->
 
-                        <!-- <CustomInput
+                        <CustomInput
                             type="date"
                             v-model="teacher.hire_date"
                             class="mb-2"
                             required="required"
                             label="تاریخ استخدام"
-                        /> -->
+                        />
 
                         <!-- <date-picker v-model="teacher.hire_date"></date-picker> -->
                     </div>
@@ -478,21 +532,21 @@ function onSubmit() {
     let id = route.params.id;
     if (teacher.value.faculty_id != "") {
         teacherStore.createTeacher(teacher.value, id);
-        teacher.value.name = "";
-        teacher.value.lname = "";
-        teacher.value.fatherName = "";
-        teacher.value.email = "";
-        teacher.value.phone = "";
-        teacher.value.gender = "";
-        teacher.value.birth_date = "";
-        teacher.value.main_address = "";
-        teacher.value.current_address = "";
-        teacher.value.hire_date = "";
-        teacher.value.nic = "";
-        teacher.value.photo = "";
-        teacher.value.academic_rank = "";
-        teacher.value.faculty_id = "";
-        teacher.value.department_id = "";
+        // teacher.value.name = "";
+        // teacher.value.lname = "";
+        // teacher.value.fatherName = "";
+        // teacher.value.email = "";
+        // teacher.value.phone = "";
+        // teacher.value.gender = "";
+        // teacher.value.birth_date = "";
+        // teacher.value.main_address = "";
+        // teacher.value.current_address = "";
+        // teacher.value.hire_date = "";
+        // teacher.value.nic = "";
+        // teacher.value.photo = "";
+        // teacher.value.academic_rank = "";
+        // teacher.value.faculty_id = "";
+        // teacher.value.department_id = "";
     }
 }
 </script>

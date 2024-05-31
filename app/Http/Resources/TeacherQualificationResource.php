@@ -17,7 +17,7 @@ class TeacherQualificationResource extends JsonResource
         return [
             'id' => $this->id,
             'country' => $this->country,
-            'education_degree' => $this->education_degree,
+            'education_' => $this->education_,
             'graduated_year' => $this->graduated_year,
             'university' => $this->university,
             'description' => $this->description,

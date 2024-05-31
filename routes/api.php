@@ -12,7 +12,9 @@ use App\Http\Controllers\PDC\TeacherInCommitController;
 use App\Http\Controllers\PDC\TeacherInSchalarshipController;
 use App\Http\Controllers\PDC\TeacherInWorkshopController;
 use App\Http\Controllers\PDC\WorkshopController;
+use App\Http\Controllers\postgraducated\ProgramsController;
 use App\Http\Controllers\TeacherController;
+use App\Http\Controllers\TeacherPromotionController;
 use App\Http\Controllers\UserController;
 use App\Models\Department;
 
@@ -146,7 +148,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     });
 
     // teacher
-    Route::middleware(['auth:sanctum', 'create_teacher'])->group(function () {
+    Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/teacher', [TeacherController::class, 'index']);
         Route::post('/teacher/create', [TeacherController::class, 'store']);
         Route::get('/teacher/edit/{id}', [TeacherController::class, 'edit']);
@@ -180,6 +182,14 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/teacher/literature/edit/{id}', [TeacherController::class, 'editLiterature']);
         Route::post('/teacher/literature/update/{id}', [TeacherController::class, 'updateLiterature']);
         Route::get('/teacher/literature/delete/{id}', [TeacherController::class, 'destroyLiterature']);
+
+        //  current teacher Promotions routes
+        Route::get('/teacher/promotion/{id}', [TeacherPromotionController::class, 'index']);
+        Route::post('/teacher/promotion/create', [TeacherPromotionController::class, 'store']);
+        Route::get('/teacher/promotion/edit/{id}', [TeacherPromotionController::class, 'edit']);
+        Route::post('/teacher/promotion/update/{id}', [TeacherPromotionController::class, 'update']);
+        Route::get('/teacher/promotion/delete/{id}', [TeacherPromotionController::class, 'destory']);
+
     });
 
 
@@ -187,18 +197,30 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::middleware(['auth:sanctum'])->group(function () {
         // main criteria
         Route::get('/criteria', [CriteriaController::class, 'index']);
-        Route::get('/get_criteria', [CriteriaController::class, 'getAllCriteria']);
+        // Route::get('/get_criteria', [CriteriaController::class, 'getAllCriteria']);
+        Route::get('/get_criteria/{id}', [CriteriaController::class, 'getCriteria']);
         Route::post('/criteria/create', [CriteriaController::class, 'store']);
         Route::get('/criteria/edit/{id}', [CriteriaController::class, 'edit']);
         Route::post('/criteria/update', [CriteriaController::class, 'update']);
         Route::get('/criteria/delete/{id}', [CriteriaController::class, 'destroy']);
         // sub criteria
         Route::get('/sub_criteria', [SubCriteriaController::class, 'index']);
-        Route::get('/get_criteria', [SubCriteriaController::class, 'getAllSubCriteria']);
+        Route::get('/get_sub_criteria', [SubCriteriaController::class, 'getAllSubCriteria']);
         Route::post('/sub_criteria/create', [SubCriteriaController::class, 'store']);
         Route::get('/sub_criteria/edit/{id}', [SubCriteriaController::class, 'edit']);
         Route::post('/sub_criteria/update', [SubCriteriaController::class, 'update']);
         Route::get('/sub_criteria/delete/{id}', [SubCriteriaController::class, 'destroy']);
+    });
+
+    // post graduated
+
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('/get_all_program', [ProgramsController::class, 'getAllProgram']);
+        Route::get('/program', [ProgramsController::class, 'index']);
+        Route::post('/program/create', [ProgramsController::class, 'store']);
+        Route::get('/program/edit/{id}', [ProgramsController::class, 'edit']);
+        Route::post('/program/update', [ProgramsController::class, 'update']);
+        Route::get('/program/delete/{id}', [ProgramsController::class, 'destroy']);
     });
 
     Route::middleware(['auth:sanctum', 'edit_teacher'])->group(function () {

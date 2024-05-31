@@ -13,8 +13,12 @@ return new class extends Migration
     {
         Schema::create('post_graduated_programs', function (Blueprint $table) {
             $table->id();
-            $table->string('program_name');
-            $table->string('type');
+            $table->string('program_name', 100);
+            $table->string('degree_type', 100);
+            $table->string('program_duration', 100);
+            $table->text('description');
+            $table->bigInteger('user_id')->unsigned()->index();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

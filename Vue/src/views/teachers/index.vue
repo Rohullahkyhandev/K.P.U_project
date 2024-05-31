@@ -314,6 +314,16 @@
                             شماره.
                         </TableHeaderCell>
 
+
+                        <TableHeaderCell
+                            field="code_bast"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortUsers('code_bast')"
+                        >
+                            کود بست
+                        </TableHeaderCell>
+
                         <TableHeaderCell
                             field="name"
                             :sortDirection="sortDirection"
@@ -333,6 +343,15 @@
                         </TableHeaderCell>
 
                         <TableHeaderCell
+                            field="‌fname"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortUsers('‌fname')"
+                        >
+                            نام پدر
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
                             field="id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
@@ -340,6 +359,8 @@
                         >
                             سویه تحصلی
                         </TableHeaderCell>
+
+                        <TableHeaderCell> آخرین ترفیع </TableHeaderCell>
 
                         <TableHeaderCell
                             field="id"
@@ -416,7 +437,7 @@
                 </thead>
                 <tbody v-if="teachers.loading || !teachers.data?.length">
                     <tr>
-                        <td colspan="9">
+                        <td colspan="11">
                             <Spinner v-if="teachers.loading" />
                             <p v-else class="text-center py-8 text-gray-700">
                                 نتیجه ای پیدا نشد
@@ -429,6 +450,10 @@
                         <td class="border-b p-2 border">{{ index + 1 }}</td>
 
                         <td class="border-b p-2 border">
+                            {{ teacher.code_bast }}
+                        </td>
+
+                        <td class="border-b p-2 border">
                             {{ teacher.name }}
                         </td>
                         <td class="border-b p-2 border">
@@ -436,7 +461,63 @@
                         </td>
 
                         <td class="border-b p-2 border">
-                            {{ teacher.education }}
+                            {{ teacher.fatherName }}
+                        </td>
+
+                        <td class="border-b p-2 border">
+                            <span
+                                class="bg-blue-500 text-white px-4 px-2 rounded-lg"
+                                v-if="teacher.education != ''"
+                                >{{ teacher.education }}</span
+                            >
+                        </td>
+
+                        <td class="border-b p-2 px-8 border">
+                            <span
+                                class="font-semibold"
+                                v-if="teacher.academic_rank != null"
+                            >
+                                رتبه عملی: {{ teacher.academic_rank }}
+                            </span>
+                            <br />
+                            <span
+                                class="font-semibold"
+                                v-if="teacher.date != null"
+                                >تاریخ ترفیع:{{ teacher.date }}</span
+                            >
+                            <br />
+                            <span
+                                class="font-semibold flex items-center gap-3"
+                                v-if="teacher.promotion_attachment_path != null"
+                            >
+                                دانلود اسناد:
+                                <a
+                                    v-if="
+                                        teacher.promotion_attachment_path !=
+                                        null
+                                    "
+                                    class="bg-blue-600 block w-8 py-2 flex item-center justify-center rounded-lg text-white"
+                                    :href="
+                                        teacher.promotion_attachment_path
+                                            ? teacher.promotion_attachment_path
+                                            : '#'
+                                    "
+                                >
+                                    <svg
+                                        xmlns=" http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="1.5"
+                                        stroke="currentColor"
+                                        class="w-5 h-5"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                                        />
+                                    </svg> </a
+                            ></span>
                         </td>
 
                         <td class="border-b p-2 border">
@@ -462,7 +543,10 @@
                             >
                                 در حال تدریس
                             </span>
-                            <span v-else-if="teacher.status == '2'"  class="block bg-yellow-400 text-white font-semibold rounded-lg px-5">
+                            <span
+                                v-else-if="teacher.status == '2'"
+                                class="block bg-yellow-400 text-white font-semibold rounded-lg px-5"
+                            >
                                 در بورسیه
                             </span>
                         </td>
@@ -540,6 +624,39 @@
                                                     </svg>
                                                     جزئيات
                                                 </router-link>
+                                            </MenuItem>
+                                        </div>
+
+                                        <div class="px-1 py-1">
+                                            <MenuItem v-slot="{ active }">
+                                                <button
+                                                    @click="
+                                                        openProModal(teacher.id)
+                                                    "
+                                                    :class="[
+                                                        active
+                                                            ? 'bg-blue-800 text-white'
+                                                            : 'text-gray-900',
+                                                        'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
+                                                    ]"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke-width="1.5"
+                                                        stroke="currentColor"
+                                                        class="size-5"
+                                                    >
+                                                        <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z"
+                                                        />
+                                                    </svg>
+
+                                                    ترفیع
+                                                </button>
                                             </MenuItem>
                                         </div>
 
@@ -659,6 +776,15 @@
             </div>
         </div>
         <br /><br />
+
+        <!-- Modal Box -->
+        <ModalBox
+            :is-pro-open="isProOpen"
+            :close-pro-modal="closeProModal"
+            :openProModal="openProModal"
+            :teacher_id="teacher_id"
+        />
+        <!-- end of Modal box -->
     </div>
 </template>
 
@@ -679,6 +805,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 // import { PencilAltIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useRoute } from "vue-router";
 import { useTeacherStore } from "../../stores/teachers/teacherStore";
+import ModalBox from "./ModalBox.vue";
 
 const teacherStore = useTeacherStore();
 const route = useRoute();
@@ -695,12 +822,23 @@ const department_id = ref("");
 // let user_image_src = '';
 
 const isOpen = ref(false);
-
+const teacher_id = ref("");
+const isProOpen = ref(false);
 function closeModal() {
     isOpen.value = false;
 }
 function openModal() {
     isOpen.value = true;
+}
+
+function closeProModal() {
+    isProOpen.value = false;
+}
+function openProModal(id) {
+    if (id) {
+        teacher_id.value = id;
+        isProOpen.value = true;
+    }
 }
 
 onMounted(() => {

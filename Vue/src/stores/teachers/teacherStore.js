@@ -74,8 +74,10 @@ export const useTeacherStore = defineStore("teacher", () => {
     let teacher = ref({
         id: "",
         name: "",
+        code_bast: "",
         lname: "",
         fatherName: "",
+        grandFathername: "",
         email: "",
         phone: "",
         gender: "",
@@ -84,6 +86,7 @@ export const useTeacherStore = defineStore("teacher", () => {
         current_address: "",
         hire_date: "",
         nic: "",
+        education_field: "",
         photo: "",
         photo_path: "",
         academic_rank: "",
@@ -103,7 +106,7 @@ export const useTeacherStore = defineStore("teacher", () => {
     // teacher qualification
     let qualification = ref({
         id: "",
-        education_degree: "",
+        education_: "",
         graduated_year: "",
         university: "",
         country: "",
@@ -144,8 +147,10 @@ export const useTeacherStore = defineStore("teacher", () => {
         let form = new FormData();
 
         form.append("name", data.name);
+        form.append("code_bast", data.code_bast);
         form.append("lname", data.lname);
         form.append("fatherName", data.fatherName);
+        form.append("grandFathername", data.grandFathername);
         form.append("email", data.email);
         form.append("phone", data.phone);
         form.append("gender", data.gender);
@@ -154,6 +159,7 @@ export const useTeacherStore = defineStore("teacher", () => {
         form.append("current_address", data.current_address);
         form.append("academic_rank", data.academic_rank);
         form.append("nic", data.nic);
+        form.append("education_field", data.education_field);
         form.append("photo", data.photo);
         form.append("hire_date", data.hire_date);
         form.append("faculty_id", data.faculty_id);
@@ -267,6 +273,36 @@ export const useTeacherStore = defineStore("teacher", () => {
 
     function updateTeacher(data) {
         loading.value = true;
+        let photo = "";
+        if (data.photo instanceof File) {
+            photo = data.photo;
+        } else {
+            photo = "";
+        }
+
+        let form = new FormData();
+
+        form.append("name", data.name);
+        form.append("code_bast", data.code_bast);
+        form.append("lname", data.lname);
+        form.append("fatherName", data.fatherName);
+        form.append("grandFathername", data.grandFathername);
+        form.append("email", data.email);
+        form.append("phone", data.phone);
+        form.append("gender", data.gender);
+        form.append("birth_date", data.birth_date);
+        form.append("main_address", data.main_address);
+        form.append("current_address", data.current_address);
+        form.append("academic_rank", data.academic_rank);
+        form.append("nic", data.nic);
+        form.append("education_field", data.education_field);
+        form.append("photo", data.photo);
+        form.append("hire_date", data.hire_date);
+        form.append("faculty_id", data.faculty_id);
+        form.append("department_id", data.department_id);
+
+        data = form;
+        loading.value = true;
         axiosClient
             .post("/teacher/update", data)
             .then((res) => {
@@ -322,7 +358,7 @@ export const useTeacherStore = defineStore("teacher", () => {
                 msg_qsuccess.value = res.data.message;
                 teacher_qualification.value.date = "";
                 teacher_qualification.value.graduated_year = "";
-                teacher_qualification.value.education_degree = "";
+                teacher_qualification.value.education_ = "";
                 teacher_qualification.value.country = "";
                 teacher_qualification.value.university = "";
             })
@@ -779,6 +815,156 @@ export const useTeacherStore = defineStore("teacher", () => {
             });
     }
 
+    // teacher promotions
+    let msg_psuccess = ref("");
+    let msg_pwrang = ref("");
+    let promotion = ref({
+        date: "",
+        last_academic_rank: "",
+        now_academic_rank: "",
+        teacher_id: "",
+        attachment: "",
+    });
+    let promotions = ref({
+        data: [],
+        links: {},
+        to: 0,
+        from: 0,
+        current_page: 0,
+        total: 0,
+        loading: false,
+    });
+
+    function createPromotion(data, id) {
+        loading.value = true;
+
+        let attachment = "";
+        if (data.attachment instanceof File) {
+            attachment = data.attachment;
+        } else {
+            attachment = "";
+        }
+
+        let form = new FormData();
+        form.append("date", data.date);
+        form.append("last_academic_rank", data.last_academic_rank);
+        form.append("now_academic_rank", data.now_academic_rank);
+        form.append("teacher_id", id);
+        form.append("attachment", attachment);
+        data = form;
+
+        axiosClient
+            .post("/teacher/promotion/create", data)
+            .then((res) => {
+                loading.value = false;
+                msg_success.value = res.data.message;
+            })
+            .catch((err) => {
+                loading.value = false;
+
+                msg_wrang.value = err.response.data.message;
+            });
+    }
+
+    function getPromotions({
+        url = null,
+        sortField,
+        sortDirection,
+        search = "",
+        id,
+    }) {
+        promotion.value.loading = false;
+        url = url || "/teacher/promotion";
+        const params = {
+            per_page: 10,
+        };
+        axiosClient
+            .get(url, {
+                params: {
+                    ...params,
+                    url,
+                    search,
+                    sortDirection,
+                    sortField,
+                    per_page,
+                    id,
+                },
+            })
+            .then((response) => {
+                promotions.value.loading = false;
+                setPromotion(response.data);
+            })
+            .catch((error) => {
+                promotions.value.loading = false;
+                msg_pwrang.value = error.response.data.message;
+            });
+    }
+
+    function setPromotion(data) {
+        if (data) {
+            promotions.value.data = data.data;
+            promotions.value.links = data.meta?.links;
+            promotions.value.to = data.meta.to;
+            promotions.value.from = data.meta.from;
+            promotions.value.current_page = data.meta.current_page;
+            promotions.value.total = data.meta.total;
+        }
+    }
+
+    function editPromotion(id) {
+        axiosClient
+            .get(`/teacher/promotion/edit/${id}`)
+            .then((response) => {
+                promotion.value = response.data;
+            })
+            .catch((error) => {
+                msg_psuccess.value = error.response.data.message;
+            });
+    }
+
+    function updatePromotion(data, id, t_id) {
+        loading.value = true;
+        let attachment = "";
+        if (data.attachment instanceof File) {
+            attachment = data.attachment;
+        } else {
+            attachment = "";
+        }
+        let form = FormData();
+        form.append("date", data.date);
+        form.append("last_academic_rank", data.last_academic_rank);
+        form.append("now_academic_rank", data.now_academic_rank);
+        form.append("teacher_id", data.teacher_id);
+        form.append("attachment", attachment);
+        data = form;
+        axiosClient
+            .post(`/teacher/promotion/create/${id}`, promotion.value)
+            .then((res) => {
+                loading.value = false;
+                msg_success.value = res.data.message;
+            })
+            .catch((err) => {
+                loading.value = false;
+                msg_wrang.value = err.response.data.message;
+            });
+    }
+
+    function deletePromotion(id) {
+        loading.value = true;
+        axiosClient
+            .get(`/teacher/promotion/delete/${id}`)
+            .then((res) => {
+                if (res.status === 200) {
+                    loading.value = false;
+                    msg_psuccess.value = "اطلاعات موفقانه حذف شد";
+                }
+            })
+            .catch((err) => {
+                loading.value = false;
+                msg_pwrang.value = "اطلاعات  حذف نشد دوباره تلا�� نماید";
+            });
+    }
+
     return {
         getAllDepartments,
         getTeachers,
@@ -821,6 +1007,12 @@ export const useTeacherStore = defineStore("teacher", () => {
         editDocument,
         updateDocument,
         deleteDocument,
+        // teacher promotion
+        createPromotion,
+        getPromotions,
+        editPromotion,
+        updatePromotion,
+        deletePromotion,
 
         teacher_articles,
         teacher_document,
@@ -830,6 +1022,8 @@ export const useTeacherStore = defineStore("teacher", () => {
         literature,
         document,
         qualification,
+        promotion,
+        promotions,
 
         // common ref
         loading,
@@ -843,5 +1037,7 @@ export const useTeacherStore = defineStore("teacher", () => {
         msg_lwrang,
         msg_qsuccess,
         msg_qwrang,
+        msg_psuccess,
+        msg_pwrang,
     };
 });

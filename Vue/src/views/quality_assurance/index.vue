@@ -1,9 +1,9 @@
 <template>
-    <div class="">
-        <div class="flex items-center justify-between mb-8">
-            <div>
+    <div class="form--padding--top">
+        <!-- <div class="flex items-center justify-between mb-4">
+            <div class="mb-2 flex gap-4">
                 <router-link
-                    :to="{ name: 'app.teacher.qualification.create' }"
+                    :to="{ name: 'app.pdc.teacher_in_workshop.list' }"
                     class="header--button"
                 >
                     <svg
@@ -12,95 +12,121 @@
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
                         stroke="currentColor"
-                        class="w-5 h-5 text-white"
+                        class="w-5 h-5"
                     >
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            d="M12 4.5v15m7.5-7.5h-15"
+                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
                         />
                     </svg>
-                    ثبت سطح
+                    ثبت ورکشاپ
+                </router-link>
+
+                <router-link
+                    :to="{ name: 'app.pdc.teacher_in_workshop.list' }"
+                    class="header--button"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-5 h-5"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
+                        />
+                    </svg>
+
+                    لیست استادان در ورکشاپ
                 </router-link>
             </div>
-            <div>
-                <h1 class="text--header">سطح تحصلی</h1>
-            </div>
-        </div>
-
-        <!-- display message area -->
-        <div class="msg--success" v-if="teacherStore.msg_qsuccess">
-            <div class="flex items-center justify-between px-10">
-                <div
-                    class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        @click="teacherStore.msg_qsuccess = ''"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-6 h-6"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 18 18 6M6 6l12 12"
-                        />
-                    </svg>
-                </div>
-                <div>
-                    <span>{{ teacherStore.msg_qsuccess }}</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="msg--warning" v-if="teacherStore.msg_qwrang">
-            <div class="flex items-center justify-between px-10">
-                <div
-                    class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        @click="teacherStore.msg_qwrang = ''"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-6 h-6"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M6 18 18 6M6 6l12 12"
-                        />
-                    </svg>
-                </div>
-                <div>
-                    <span>{{ teacherStore.msg_qwrang }}</span>
-                </div>
-            </div>
-        </div>
-        <!-- end of display message area -->
+            <div class="text--header">لسیت ورکشاپ ها</div>
+        </div> -->
 
         <div class="table--wrapper--dev">
+            <!-- display message area -->
+            <div
+                class="bg-green-700 text-white rounded py-4 mb-2 text-center"
+                v-if="criteriaStore.msg_success"
+            >
+                <div class="flex items-center justify-between px-10">
+                    <div
+                        class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            @click="criteriaStore.msg_success = ''"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="w-6 h-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6 18 18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </div>
+                    <div>
+                        <span>{{ criteriaStore.msg_success }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-red-500 text-white py-4 rounded mb-2 text-center"
+                v-if="criteriaStore.msg_wrang"
+            >
+                <div class="flex items-center justify-between px-10">
+                    <div
+                        class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            @click="criteriaStore.msg_wrang = ''"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke-width="1.5"
+                            stroke="currentColor"
+                            class="w-6 h-6"
+                        >
+                            <path
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                d="M6 18 18 6M6 6l12 12"
+                            />
+                        </svg>
+                    </div>
+                    <div>
+                        <span>{{ criteriaStore.msg_wrang }}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- end of display message area -->
+
             <div class="flex justify-between border-b-2 pb-3">
                 <div>
                     <input
                         v-model="search"
-                        @change="getQualification(null)"
+                        @change="getCriteria(null)"
                         class="appearance-none relative block w-48 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="جستجوی بر اساس نام اثر"
+                        placeholder="جستجوی بر اساس تمام فیلد "
                     />
                 </div>
                 <div class="flex items-center">
                     <span class="whitespace-nowrap mr-3">هر صفحه</span>
                     &nbsp;
                     <select
-                        dir="ltr"
-                        @change="getQualification(null)"
+                        @change="getCriteria(null)"
                         v-model="perPage"
+                        dir="ltr"
                         class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     >
                         <option value="5" selected>5</option>
@@ -110,73 +136,63 @@
                         <option value="100">100</option>
                     </select>
                     &nbsp;
-                    <span class="ml-3"
-                        >پیداشد {{ qualifications.total }} کابر</span
-                    >
+                    <span class="ml-3">پیداشد {{ criterias.total }} پلان</span>
                 </div>
             </div>
-            <table class="table-auto w-full">
+
+            <table class="table-auto w-full border">
                 <thead>
                     <tr>
                         <TableHeaderCell
                             field="id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('id')"
+                            @click="sortCriteria('id')"
                         >
                             شماره.
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="edu_degree"
+                            field="number"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('edu_degree')"
+                            @click="sortCriteria('number')"
                         >
-                            سطح تحصلی
+                            شماره معیار
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="country"
+                            field="year"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('country')"
+                            @click="sortCriteria('year')"
                         >
-                            کشور
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="university"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortQualification('university')"
-                        >
-                            دانشگاه
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="graduated_year"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortQualification('graduated_year')"
-                        >
-                            سال فراغت
+                            معیار براساس سال
                         </TableHeaderCell>
 
                         <TableHeaderCell
                             field="description"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('description')"
+                            @click="sortCriteria('description')"
                         >
                             توضیحات
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="graduated_year"
+                            field="attachment"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('graduated_year')"
+                            @click="sortCriteria('attachment')"
+                        >
+                            فایل معیارات
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
+                            field="id"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortCriteria('id')"
                         >
                             کابر
                         </TableHeaderCell>
@@ -185,55 +201,82 @@
                             field="action"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortQualification('acs')"
+                            @click="sortCriteria('acs')"
                         >
                             عملیات
                         </TableHeaderCell>
                     </tr>
                 </thead>
-                <tbody
-                    v-if="
-                        qualifications.loading || !qualifications.data?.length
-                    "
-                >
+                <tbody v-if="criterias.loading || !criterias.data.length">
                     <tr>
-                        <td colspan="6">
-                            <Spinner v-if="qualifications.loading" />
+                        <td colspan="10">
+                            <Spinner v-if="criterias.loading" />
                             <p v-else class="text-center py-8 text-gray-700">
                                 نتیجه ای پیدا نشد
                             </p>
                         </td>
                     </tr>
                 </tbody>
-                <tbody v-else>
-                    <tr v-for="(qualification, index) of qualifications.data">
+                <tbody class="border" v-else>
+                    <tr
+                        v-for="(criteria, index) of criterias.data"
+                        :key="index"
+                    >
                         <td class="border-b p-2">{{ index + 1 }}</td>
 
-                        <td class="border-b p-2">
-                            {{ qualification.education_ }}
+                        <td class="border p-2">
+                            <span v-if="criteria.number == 1">اول</span>
+                            <span v-else-if="criteria.number == 2">دوم</span>
+                            <span v-else-if="criteria.number == 3">سوم</span>
+                            <span v-else-if="criteria.number == 4">چهاروم</span>
+                            <span v-else-if="criteria.number == 5">پنجم</span>
+                            <span v-else-if="criteria.number == 6">ششم</span>
+                            <span v-else-if="criteria.number == 7">هفتم</span>
+                            <span v-else-if="criteria.number == 8">هشتم</span>
+                            <span v-else-if="criteria.number == 9">نهم</span>
+                            <span v-else-if="criteria.number == 10">دهم</span>
+                            <span v-else-if="criteria.number == 11"
+                                >یازدهم</span
+                            >
+                        </td>
+                        <td class="border p-2">
+                            {{ criteria.year }}
                         </td>
 
-                        <td class="border-b p-2">
-                            {{ qualification.country }}
+                        <td class="border p-2">
+                            {{ criteria.descripton }}
                         </td>
 
-                        <td class="border-b p-2">
-                            {{ qualification.university }}
+                        <td class="border p-3">
+                            <a
+                                class="bg-blue-600 block w-8 py-2 flex item-center justify-center rounded-lg text-white"
+                                :href="
+                                    criteria.attachment_path
+                                        ? criteria.attachment_path
+                                        : '#'
+                                "
+                            >
+                                <svg
+                                    xmlns=" http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-5 h-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                                    />
+                                </svg>
+                            </a>
+                        </td>
+                        <td class="border p-2">
+                            {{ criteria.uname }}
                         </td>
 
-                        <td class="border-b p-2">
-                            {{ qualification.graduated_year }}
-                        </td>
-
-                        <td class="border-b p-2">
-                            {{ qualifications.description }}
-                        </td>
-
-                        <td class="border-b p-2">
-                            {{ qualification.uname }}
-                        </td>
-
-                        <td class="border-b p-2">
+                        <td class="border p-2">
                             <Menu
                                 as="div"
                                 class="relative inline-block text-left"
@@ -270,12 +313,45 @@
                                     >
                                         <div class="px-1 py-1">
                                             <MenuItem v-slot="{ active }">
+                                                <button
+                                                    @click="
+                                                        props.openModal(
+                                                            criteria.id
+                                                        )
+                                                    "
+                                                    :class="[
+                                                        active
+                                                            ? 'bg-blue-800 text-white'
+                                                            : 'text-gray-900',
+                                                        'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
+                                                    ]"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke-width="1.5"
+                                                        stroke="currentColor"
+                                                        class="size-5"
+                                                    >
+                                                        <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+                                                        />
+                                                    </svg>
+
+                                                    معیارات فرعی
+                                                </button>
+                                            </MenuItem>
+                                        </div>
+                                        <div class="px-1 py-1">
+                                            <MenuItem v-slot="{ active }">
                                                 <router-link
                                                     :to="{
-                                                        name: 'app.teacher.qualification.edit',
+                                                        name: 'app.pdc.plan.edit',
                                                         params: {
-                                                            q_id: qualification.id,
-                                                            t_id: $route.params.id,
+                                                            id: criteria.id,
                                                         },
                                                     }"
                                                     :class="[
@@ -308,10 +384,13 @@
                                             <MenuItem v-slot="{ active }">
                                                 <button
                                                     @click="
-                                                        deleteQualification(
-                                                            qualification.id
+                                                        deleteCriteria(
+                                                            criteria.id
                                                         )
                                                     "
+                                                    :to="{
+                                                        name: 'app.pdc.received_document',
+                                                    }"
                                                     :class="[
                                                         active
                                                             ? 'bg-blue-800 text-white'
@@ -346,22 +425,21 @@
                 </tbody>
             </table>
             <div
-                v-if="!qualifications.loading"
+                v-if="!criterias.loading"
                 class="flex justify-between items-center mt-5"
                 dir="ltr"
             >
-                <div v-if="qualifications.data">
-                    نمایش از {{ qualifications.from }} تا
-                    {{ qualifications.to }}
+                <div v-if="criterias.data">
+                    نمایش از {{ criterias.from }} تا {{ criterias.to }}
                 </div>
                 <nav
-                    v-if="qualifications.total > qualifications.limit"
+                    v-if="criterias.total > criterias.limit"
                     class="relative z-0 inline-flex justify-center rounded-md shadow-sm -space-x-px"
                     aria-label="Pagination"
                 >
                     <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
                     <a
-                        v-for="(link, i) of qualifications.links"
+                        v-for="(link, i) of criterias.links"
                         :key="i"
                         :disabled="!link.url"
                         href="#"
@@ -373,7 +451,7 @@
                                 ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
                                 : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
                             i === 0 ? 'rounded-l-md' : '',
-                            i === qualifications.links.length - 1
+                            i === criterias.links.length - 1
                                 ? 'rounded-r-md'
                                 : '',
                             !link.url ? ' bg-gray-100 text-gray-700' : '',
@@ -394,20 +472,28 @@ import Spinner from "../../components/core/Spnnier.vue";
 import { USER_PER_PAGE } from "../../constant";
 import TableHeaderCell from "../../components/tableHeader/tableheader.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+// import { PencilAltIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useRoute } from "vue-router";
-import { useTeacherStore } from "../../stores/teachers/teacherStore";
+import useCriteriaStore from "../../stores/pdc/quality_assurance/qualityAssuranceStore";
 
-const teacherStore = useTeacherStore();
+const criteriaStore = useCriteriaStore();
 const route = useRoute();
+
+const props = defineProps({
+    openModal: {
+        type: Function,
+        required: true,
+    },
+});
 
 const perPage = ref(USER_PER_PAGE);
 const search = ref("");
-const qualifications = computed(() => teacherStore.teacher_qualification);
+const criterias = computed(() => criteriaStore.criterias);
 const sortField = ref("updated_at");
 const sortDirection = ref("desc");
 
 onMounted(() => {
-    getQualification();
+    getCriteria();
 });
 
 function getForPage(ev, link) {
@@ -415,21 +501,20 @@ function getForPage(ev, link) {
     if (!link.url || link.active) {
         return;
     }
-    getQualification(link.url);
+    getCriteria(link.url);
 }
 
-function getQualification(url = null) {
-    teacherStore.getQualification({
+function getCriteria(url = null) {
+    criteriaStore.getCriteria({
         url,
         search: search.value,
         per_page: perPage.value,
         sort_field: sortField.value,
         sort_direction: sortDirection.value,
-        id: route.params.id,
     });
 }
 
-function sortQualification(field) {
+function sortCriteria(field) {
     if (field === sortField.value) {
         if (sortDirection.value === "desc") {
             sortDirection.value = "asc";
@@ -440,18 +525,21 @@ function sortQualification(field) {
         sortField.value = field;
         sortDirection.value = "asc";
     }
-    getQualification();
+    getCriteria();
 }
 
-function deleteQualification(id) {
-    if (!confirm(`آیا شما می خواهید این اطلاعات را حذف نماید?`)) {
+function deleteCriteria(id) {
+    if (!confirm(`آیا شما می خواهید دیتا را حذف نماید?`)) {
         return;
     }
-    teacherStore.deleteQualification(id);
-    getQualification();
+    criteriaStore.deleteCriteria(id);
+    if (criteriaStore.msg_success != null) {
+    }
+    getCriteria();
 }
 
 function msg_success_fun() {}
+
 function msg_warning_fun() {}
 </script>
 

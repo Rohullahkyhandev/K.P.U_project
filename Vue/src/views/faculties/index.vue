@@ -1,9 +1,9 @@
 <template>
-    <div class="px-5 mt-10">
+    <div class="form--padding--top">
         <div class="flex items-center justify-between mb-8">
             <div>
                 <router-link :to="{ name: 'app.faculty.create' }"
-                    class="bg-blue-600 py-2 px-3 flex items-center justify-center gap-3 rounded-lg shadow text-white focus:ring focus:ring-blue-400">
+                    class="header--button">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-5 h-5 text-white">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded shadow animate-fade-in-down overflow-auto">
+        <div class="table--wrapper--dev">
             <!-- display message area -->
             <div class="bg-green-700 text-white rounded py-4 text-center mb-3" v-if="facultyStore.msg_success">
                 <div class="flex items-center justify-between px-10">

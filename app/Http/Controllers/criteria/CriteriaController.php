@@ -31,12 +31,15 @@ class CriteriaController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'year' => 'required',
+            'number' => 'required',
             'description' => 'required',
             'attachment' => 'nullable|mimes:png,jpg,mp3,mp4,pdf,docx'
         ], [
             'year.required' => "فیلد سال  الزامی می باشد",
+            'number.required' => "فیلد شماره میعار  الزامی می باشد",
             'attachment.mimes' => "فارمت فایل باید شامل این فارمت ها باشد png,jpg,mp3,mp4,pdf,docx"
         ]);
         $attachment = null;
@@ -48,6 +51,7 @@ class CriteriaController extends Controller
         $user_id = Auth::id();
         $criteria = new Criteria();
         $criteria->year = $request->year;
+        $criteria->number = $request->number;
         $criteria->description = $request->description;
         $criteria->attachment = $attachment;
         $criteria->attachment_path = $attachment_path;
@@ -59,15 +63,14 @@ class CriteriaController extends Controller
                 'message' => 'اطلاعات  موفقانه ذخیره گردید'
             ], 200);
         } else {
-            return response([
-                'message' => 'اطلاعات  ذخیره نشد دوباره تلاش نماید'
+            return response(['error' => 'اطلاعات  ذخیره نشد دوباره تلاش نماید'
             ], 304);
         }
     }
 
-    public function getAllCriteria()
+    public function getCriteria($id = '')
     {
-        $data = Criteria::all();
+        $data = Criteria::find($id);
         return $data;
     }
 

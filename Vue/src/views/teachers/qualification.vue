@@ -106,7 +106,7 @@
                         <div class="input--dev--width">
                             <CustomInput
                                 type="text"
-                                v-model="qualification.education_degree"
+                                v-model="qualification.education_"
                                 class="mb-2"
                                 required="required"
                             />

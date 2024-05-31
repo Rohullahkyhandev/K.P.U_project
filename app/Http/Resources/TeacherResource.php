@@ -17,6 +17,8 @@ class TeacherResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'code_bast' => $this->code_bast,
+            'education_field' => $this->education_field,
             'lname' => $this->lname,
             'faculty' => $this->faculty,
             'department' => $this->department,
@@ -24,8 +26,15 @@ class TeacherResource extends JsonResource
             'phone' => $this->phone,
             'hire_date' => $this->hire_date,
             'education' => $this->education,
+            'academic_rank' => $this->academic_rank,
+            'education' => $this->education,
+            'last_rank' => $this->last_rank,
+            'promotion_attachment_path' => $this->promotion_attachment_path,
+            'now_rank' => $this->now_rank,
+            'date' => $this->date,
             'status' => $this->status,
             'uname' => $this->uname,
+
         ];
     }
 }

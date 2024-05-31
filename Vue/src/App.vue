@@ -1,4 +1,6 @@
 <template>
-    <router-view></router-view>
+    <main>
+        <Toast />
+        <router-view></router-view>
+    </main>
 </template>
-

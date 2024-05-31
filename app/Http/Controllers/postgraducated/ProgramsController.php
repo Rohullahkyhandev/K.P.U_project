@@ -20,7 +20,9 @@ class ProgramsController extends Controller
         $sortDirection = request('sortDirection', 'DESC');
 
         $data = PostGraduatedPrograms::query()
-            ->where('post_graduated_programs.name', 'like', "{%$search%}")
+            ->where('post_graduated_programs.program_name', 'like', "%{$search}%")
+            ->orWhere('post_graduated_programs.degree_type', 'like', "%{$search}%")
+            ->orWhere('post_graduated_programs.program_duration', 'like', "%{$search}%")
             ->join('users', 'post_graduated_programs.user_id', 'users.id')
             ->select('post_graduated_programs.*', 'users.name as uname')
             ->orderBy("post_graduated_programs.$sortField", $sortDirection)
@@ -28,21 +30,32 @@ class ProgramsController extends Controller
         return ProgramsResource::collection($data);
     }
 
+    public function getAllProgram()
+    {
+        $data  = PostGraduatedPrograms::all();
+        return $data;
+    }
 
     public function store(Request $request)
     {
         $request->validate([
             'program_name' => 'required',
-            'type' => 'required',
+            'degree_type' => 'required',
+            'program_duration' => 'required',
+            'description' => 'nullable',
         ], [
             'program_name.required' => 'فیلد برنامه الزامی  میباشد',
-            'program_name.required' => 'فیلد نوع برنامه الزامی  میباشد',
+            'degree_type.required' => 'فیلد نوع مقطع الزامی  میباشد',
+            'program_duration.required' => 'فیلد  مدت زمان الزامی  میباشد',
+
         ]);
 
         $user_id = Auth::user()->id;
         $program = new PostGraduatedPrograms();
         $program->program_name = $request->program_name;
-        $program->type = $request->type;
+        $program->degree_type = $request->degree_type;
+        $program->program_duration = $request->program_duration;
+        $program->description = $request->description;
         $program->user_id = $user_id;
         $result  = $program->save();
 

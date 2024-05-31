@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SubCriteriaResource extends JsonResource
+class TeacherPromotionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,12 +16,13 @@ class SubCriteriaResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'main_number' => $this->main_number,
-            'number' => $this->number,
-            'year' => $this->year,
-            'attachment_path' => $this->attachment_path,
-            'description' => $this->description,
             'uname' => $this->uname,
+            'name' => $this->name,
+            'lname' => $this->lname,
+            'date' => $this->date,
+            'last_academic_rank' => $this->last_academic_rank,
+            'now_academic_rank' => $this->now_academic_rank,
+            'attachment_path' => $this->attachment_path,
         ];
     }
 }

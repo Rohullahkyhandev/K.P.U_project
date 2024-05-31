@@ -106,7 +106,7 @@
                         <div class="input--dev--width">
                             <CustomInput
                                 type="text"
-                                v-model="qualification.education_degree"
+                                v-model="qualification.education_"
                                 class="mb-2"
                                 required="required"
                             />
@@ -242,6 +242,6 @@ const qualification = computed(() => teacherStore.qualification);
 function onSubmit() {
     let id = route.params.q_id;
     let t_id = route.params.t_id;
-    teacherStore.updateQualification(qualification.value, id,t_id);
+    teacherStore.updateQualification(qualification.value, id, t_id);
 }
 </script>

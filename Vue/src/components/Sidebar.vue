@@ -320,8 +320,7 @@
                 <li
                     class="transition-colors cursor-pointer w-full px-3 py-2 text-white"
                 >
-                    <router-link
-                        :to="{ name: 'app.dashboard' }"
+                    <button
                         class="sidebar-item flex items-center justify-start gap-3"
                         @click="toggleQuality"
                     >
@@ -347,11 +346,11 @@
                             />
                         </svg>
                         <span>آمریت تضمین کیفیت</span>
-                    </router-link>
+                    </button>
                     <ul class="mr-3 transition-all" v-if="qualityToggle">
                         <li class="transition-colors py-2 px-4 rounded">
                             <router-link
-                                :to="{ name: 'app.dashboard' }"
+                                :to="{ name: 'app.criteria.create' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
                             >
                                 <svg
@@ -378,7 +377,7 @@
                     class="transition-colors cursor-pointer w-full px-3 py-2 text-white"
                 >
                     <router-link
-                        :to="{ name: 'app.dashboard' }"
+                        to="#"
                         class="sidebar-item flex items-center justify-start gap-3"
                         @click="togglePost"
                     >
@@ -408,7 +407,7 @@
                     <ul class="mr-3 transition-all" v-if="postToggle">
                         <li class="transition-colors py-2 px-4 rounded">
                             <router-link
-                                :to="{ name: 'app.dashboard' }"
+                                :to="{ name: 'app.post.select_program' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
                             >
                                 <svg
@@ -635,9 +634,13 @@
 </template>
 <script setup>
 import { computed, onMounted, ref } from "vue";
+import { useRoute } from "vue-router";
 import { useUserStore } from "../stores/user/userStore";
 
 const userStore = useUserStore();
+const route = useRoute();
+
+const current_route = route.path;
 
 onMounted(() => {
     getCurrentPermission();

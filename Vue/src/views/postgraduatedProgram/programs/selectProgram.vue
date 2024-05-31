@@ -1,9 +1,9 @@
 <template>
-    <div class="mt-10 mb-10 w-full">
+    <div class="form--padding--top">
         <div class="flex items-center justify-between w-full">
             <div>
                 <router-link
-                    :to="{ name: 'app.faculty.list' }"
+                    :to="{ name: 'app.post.list' }"
                     class="header--button"
                 >
                     <svg
@@ -20,28 +20,27 @@
                             d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
                         />
                     </svg>
-                    لیست فاکولته ها
+                    لیست برنامه ها
                 </router-link>
             </div>
             <div>
-                <h1 class="font-bold text-xl">&nbsp;</h1>
+                <h1 class="text--header">
+                    لطفا برنامه مورد نظر را انتخاب نماید
+                </h1>
             </div>
         </div>
 
         <form @submit.prevent="onSubmit">
-            <div class="w-full py-8 bg-white shadow mt-8 px-4">
+            <div class="wrapper--dev--form">
                 <!-- display message area -->
-                <div
-                    class="bg-green-700 text-white rounded py-4 text-center"
-                    v-if="facultyStore.msg_success"
-                >
+                <!-- <div class="msg--success" v-if="planStore.msg_success">
                     <div class="flex items-center justify-between px-10">
                         <div
                             class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                @click="facultyStore.msg_success = ''"
+                                @click="planStore.msg_success = ''"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke-width="1.5"
@@ -56,22 +55,19 @@
                             </svg>
                         </div>
                         <div>
-                            <span>{{ facultyStore.msg_success }}</span>
+                            <span>{{ planStore.msg_success }}</span>
                         </div>
                     </div>
                 </div>
 
-                <div
-                    class="bg-red-500 text-white py-4 rounded text-center"
-                    v-if="facultyStore.msg_wrang"
-                >
+                <div class="msg--warning" v-if="planStore.msg_wrang">
                     <div class="flex items-center justify-between px-10">
                         <div
                             class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                @click="facultyStore.msg_wrang = ''"
+                                @click="planStore.msg_wrang = ''"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke-width="1.5"
@@ -86,68 +82,29 @@
                             </svg>
                         </div>
                         <div>
-                            <span>{{ facultyStore.msg_wrang }}</span>
+                            <span>{{ planStore.msg_wrang }}</span>
                         </div>
                     </div>
-                </div>
+                </div> -->
                 <!-- end of display message area -->
+
                 <div>
-                    <div class="border-b py-2">
-                        <h1 class="text--header">فورم ثبت اطلاعات فاکولته</h1>
-                    </div>
-                </div>
-                <div class="mt-5">
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
-                            <label class="form--label"
-                                >نام فاکولته
-                                <span class="label--prefix">*</span>
-                            </label>
-                        </div>
-                        <div class="input--dev--width">
-                            <CustomInput
-                                type="text"
-                                v-model="faculty.name"
-                                class="mb-2"
-                                required="required"
-                            />
-                        </div>
-                    </div>
-
-                    <div class="wrapper--dev--input">
-                        <div class="label--dev--width">
-                            <label class="form--label"
-                                >تاریخ تأسیس<span class="label--prefix"
+                            <label for="" class="form--label">
+                                برنامه های فوق لیسانس<span class="label--prefix"
                                     >*</span
                                 ></label
                             >
                         </div>
                         <div class="input--dev--width">
                             <CustomInput
-                                type="date"
-                                v-model="faculty.date"
+                                type="select"
+                                :selectOptions="programs"
+                                v-model="program_id"
                                 class="mb-2"
                                 required="required"
-                            />
-                        </div>
-                    </div>
-
-                    <div class="wrapper--dev--input">
-                        <div class="label--dev--width">
-                            <label
-                                class="form--label"
-                                >توضیحات<span class="label--prefix"
-                                    >*</span
-                                ></label
-                            >
-                        </div>
-                        <div
-                            class="input--dev--width"
-                        >
-                            <CustomInput
-                                type="textarea"
-                                v-model="faculty.description"
-                                class="mb-2"
+                                label=" برنامه فوق"
                             />
                         </div>
                     </div>
@@ -156,13 +113,14 @@
             <footer class="bg-gray-100 py-4 md:flex gap-5">
                 <button
                     type="submit"
+                    :disabled="program_id === '' ? true : false"
                     :class="[
-                        facultyStore.loading === true
+                        programStore.loading === true && program_id === ''
                             ? 'footer--button--submit cursor-not-allowed'
-                            : 'footer--button--submit cursor-pointer',
+                            : 'footer--button--submit cursor-pointer rounded ',
                     ]"
                 >
-                    <span v-if="facultyStore.loading === true">
+                    <span v-if="programStore.loading === true">
                         <svg
                             class="animate-spin -ml-1 h-5 w-5 text-white"
                             xmlns="http://www.w3.org/2000/svg"
@@ -184,12 +142,13 @@
                             ></path>
                         </svg>
                     </span>
-                    <span v-else> ثبت </span>
+                    <span v-else> بعدی </span>
                 </button>
                 <router-link
                     :to="{ name: 'app.dashboard' }"
-                    class="footer--button--cancel cursor-pointer"
-                    >لغو ثبت</router-link
+                    class="footer--button--cancel"
+                >
+                    برگشت</router-link
                 >
             </footer>
         </form>
@@ -197,18 +156,27 @@
 </template>
 
 <script setup>
-import { computed, ref, useSlots } from "vue";
-import CustomInput from "../../components/core/CustomInput.vue";
-import { useFacultyStore } from "../../stores/faculties/facultyStore";
+import { computed, onMounted, ref, useSlots } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import CustomInput from "../../../components/core/CustomInput.vue";
+import useProgramStore from "../../../stores/postgraduatedPrograms/programStore";
 
-const facultyStore = useFacultyStore();
+const programStore = useProgramStore();
+const route = useRoute();
+const router = useRouter();
 
-const faculty = computed(() => facultyStore.faculty);
+onMounted(() => {
+    programStore.getAllPrograms();
+});
 
+const programs = computed(() =>
+    programStore.listProgram.map((c) => ({ key: c.id, text: c.program_name }))
+);
+
+const program_id = ref("");
 function onSubmit() {
-    facultyStore.createFaculty(faculty.value);
-    faculty.value.date = "";
-    faculty.value.name = "";
-    faculty.value.description = "";
+    if (program_id.value != null) {
+        router.push({ name: "app.post-graduated-program" });
+    }
 }
 </script>

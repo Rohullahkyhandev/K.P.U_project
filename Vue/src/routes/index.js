@@ -54,6 +54,24 @@ import CreateArchive from "../views/pdc/pdcArchives/create.vue";
 import ListArchive from "../views/pdc/pdcArchives/index.vue";
 import EditArchive from "../views/pdc/pdcArchives/edit.vue";
 
+// quality assurance
+import createCriteria from "../views/quality_assurance/create.vue";
+
+// post graduated program
+import postGraduatedProgramTabs from "../views/postgraduatedProgram/table.vue";
+import CreatePG from "../views/postgraduatedProgram/programs/cerate.vue";
+import listProgram from "../views/postgraduatedProgram/programs/index.vue";
+import selectPG from "../views/postgraduatedProgram/programs/selectProgram.vue";
+
+// post graduated program teacher
+import postTeacherCreate from "../views/postgraduatedProgram/teacher/create.vue";
+
+// import ListPG from "../views/post_graduated_program/index.vue";
+// import EditPG from "../views/post_graduated_program/edit.vue";
+// import DetailsPG from "../views/post_graduated_program/details.vue";
+
+// scholarship
+
 // faculty
 import CreateFaculty from "../views/faculties/create.vue";
 import ListFaculty from "../views/faculties/index.vue";
@@ -256,6 +274,48 @@ const routes = [
                 path: "teacher_in_scholarship/:id/edit/:f_id",
                 name: "app.pdc.teacher_in_scholarship.edit",
                 component: editTeacherInScholarship,
+            },
+
+            // quality assurance routes
+
+            {
+                path: "criteria/create",
+                name: "app.criteria.create",
+                component: createCriteria,
+            },
+
+            // post graduated program
+
+            {
+                path: "post/create",
+                name: "app.post.create",
+                component: CreatePG,
+            },
+
+            {
+                path: "post/list",
+                name: "app.post.list",
+                component: listProgram,
+            },
+
+            {
+                path: "select_program",
+                name: "app.post.select_program",
+                component: selectPG,
+            },
+
+            {
+                path: "post-graduated-program",
+                name: "app.post-graduated-program",
+                redirect: "/post-graduated-program/teacher/create",
+                component: postGraduatedProgramTabs,
+                children: [
+                    {
+                        path: "/post-graduated-program/teacher/create",
+                        name: "app.post-graduated.teacher.create",
+                        component: postTeacherCreate,
+                    },
+                ],
             },
 
             // {

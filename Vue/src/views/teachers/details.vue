@@ -140,7 +140,7 @@ import IndexDocument from "./documentIndex.vue";
 import IndexArticle from "./articleIndex.vue";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-import Sppinner from "../../components/core/spnnier.vue";
+import Sppinner from "../../components/core/Spnnier.vue";
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useTeacherStore } from "../../stores/teachers/teacherStore";
