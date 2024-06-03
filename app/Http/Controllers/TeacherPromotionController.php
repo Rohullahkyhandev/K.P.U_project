@@ -23,6 +23,7 @@ class TeacherPromotionController extends Controller
         $sortDirection  = request('sortDirection', 'DESC');
 
         $data = Promotion::query()
+            ->distinct()
             ->where('promotions.date', 'like', "%{$search}%")
             ->join('users', 'promotions.user_id', 'users.id')
             ->join('teachers', 'promotions.teacher_id', 'teachers.id')
@@ -36,11 +37,12 @@ class TeacherPromotionController extends Controller
     public function store(Request $request)
     {
 
+
         $request->validate([
             'date' => 'required',
             'last_academic_rank' => 'required',
             'now_academic_rank' => 'required',
-            'attachment' => 'nullable|mimes:png,jpg,mp3,mp4,pdf,docx'
+            'attachment.*' => 'nullable|mimes:png,jpg,mp3,mp4,pdf,docx|max:4000'
         ], [
             'date.required' => "فیلد تاریخ  الزامی می باشد",
             'last_academic_rank.required' => "فیلد رتبه علمی قبلی  الزامی می باشد",
@@ -49,11 +51,15 @@ class TeacherPromotionController extends Controller
         ]);
         DB::beginTransaction();
         try {
-            $attachment = null;
-            $attachment_path = null;
+            $attachment = [];
+            $attachment_path = [];
             if ($request->attachment != '') {
-                $attachment = $request->attachment->store('/', 'teacher_promotion');
-                $attachment_path = asset(Storage::url('teacher_promotion/' . $attachment));
+                foreach ($request->file('attachment') as $file) {
+                    $document = $file->store('/', 'teacher_promotion');
+                    $document_path = asset(Storage::url('teacher_promotion/' . $document));
+                    $attachment[] = $document;
+                    $attachment_path[] = $document_path;
+                }
             }
             $user_id = Auth::id();
             $teacher_id = $request->teacher_id;

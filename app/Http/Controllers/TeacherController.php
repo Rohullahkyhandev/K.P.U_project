@@ -72,10 +72,11 @@ class TeacherController extends Controller
             ->orWhere('teachers.lname', 'like', "%{$search}%")
             ->join('departments', 'teachers.department_id', 'departments.id')
             ->join('users', 'teachers.user_id', 'users.id')
+            // ->distinct()
             ->leftJoin('promotions', 'promotions.teacher_id', 'teachers.id')
             ->leftJoin('teacher_qualifications', 'teachers.id', 'teacher_qualifications.teacher_id')
             ->join('faculties', 'teachers.faculty_id', 'faculties.id')
-            ->select('teachers.*', 'promotions.date as date', 'promotions.attachment_path as promotion_attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department', 'teacher_qualifications.education_ as education', 'users.name as uname')
+            ->select('teachers.*', 'promotions.date as date', 'promotions.attachment_path as attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department', 'teacher_qualifications.education_ as education', 'users.name as uname')
             ->orderBy("teachers.$sortField", $sortDirection)
             ->paginate($per_page);
         return TeacherResource::collection($data);

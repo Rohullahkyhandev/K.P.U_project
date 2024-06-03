@@ -230,6 +230,7 @@ export const useTeacherStore = defineStore("teacher", () => {
             .then((response) => {
                 console.log(response);
                 Teachers.value.loading = false;
+                console.log(response.data);
                 setTeacher(response.data);
             })
             .catch((err) => {
@@ -823,7 +824,7 @@ export const useTeacherStore = defineStore("teacher", () => {
         last_academic_rank: "",
         now_academic_rank: "",
         teacher_id: "",
-        attachment: "",
+        attachment: [],
     });
     let promotions = ref({
         data: [],
@@ -837,20 +838,21 @@ export const useTeacherStore = defineStore("teacher", () => {
 
     function createPromotion(data, id) {
         loading.value = true;
-
-        let attachment = "";
-        if (data.attachment instanceof File) {
-            attachment = data.attachment;
-        } else {
-            attachment = "";
-        }
+        // let attachment = "";
+        // if (data.attachment instanceof File) {
+        //     attachment = data.attachment;
+        // } else {
+        //     attachment = "";
+        // }
 
         let form = new FormData();
+        for (let i = 0; i < data.attachment.length; i++) {
+            form.append("attachment[]", data.attachment[i]);
+        }
         form.append("date", data.date);
         form.append("last_academic_rank", data.last_academic_rank);
         form.append("now_academic_rank", data.now_academic_rank);
         form.append("teacher_id", id);
-        form.append("attachment", attachment);
         data = form;
 
         axiosClient

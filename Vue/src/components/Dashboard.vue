@@ -37,12 +37,15 @@
                     alt=""
                 />
             </div>
-            <pdf src=""></pdf>
         </div>
+        <Three />
+        <br />
+        <Uploader />
     </div>
 </template>
 <script setup>
-
+import Three from "./Three.vue";
+import Uploader from "./Uploader.vue";
 // import LinerChart from '../views/liner.vue';
 // import BarChart from '../views/Bar.vue';
 // import PieChart from '../views/pie.vue';

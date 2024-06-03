@@ -3,6 +3,7 @@ import { createPinia } from "pinia";
 import CKEditor from "@ckeditor/ckeditor5-vue";
 import router from "./routes/index.js";
 
+
 import "./style.css";
 import App from "./App.vue";
 

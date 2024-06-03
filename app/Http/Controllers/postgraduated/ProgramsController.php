@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\postgraducated;
+namespace App\Http\Controllers\postgraduated;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProgramsResource;
 use App\Models\PostGraduatedPrograms;
-use Illuminate\Database\Query\Processors\PostgresProcessor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 

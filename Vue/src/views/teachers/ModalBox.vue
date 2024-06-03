@@ -198,13 +198,43 @@
                                                     >
                                                 </div>
                                                 <div class="input--dev--width">
-                                                    <CustomInput
+                                                    <!-- <CustomInput
                                                         type="file"
                                                         @change="
                                                             (file) =>
                                                                 (promotion.attachment =
                                                                     file)
                                                         "
+                                                        class="mb-2"
+                                                        required="required"
+                                                    /> -->
+                                                    <label
+                                                        for="link"
+                                                        class="w-full flex items-center flex-col justify-center py-4 cursor-pointer transition-all duration-75 hover:bg-green-300 border border-dashed border-blue-400"
+                                                    >
+                                                        <span class="mb-2 font-semibold">برای آپلود فایل کلیک نماید</span>
+                                                        <svg
+                                                            xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none"
+                                                            viewBox="0 0 24 24"
+                                                            stroke-width="1.5"
+                                                            stroke="currentColor"
+                                                            class="size-5"
+                                                        >
+                                                            <path
+                                                                stroke-linecap="round"
+                                                                stroke-linejoin="round"
+                                                                d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                                                            />
+                                                        </svg>
+                                                    </label>
+
+                                                    <input
+                                                        id="link"
+                                                        type="file"
+                                                        multiple
+                                                        hidden
+                                                        @change="handleOnChange"
                                                         class="mb-2"
                                                         required="required"
                                                     />
@@ -311,6 +341,14 @@ const props = defineProps({
         default: (id) => {},
     },
 });
+
+
+
+function handleOnChange(event) {
+    if (event) {
+        promotion.value.attachment = event.target.files;
+    }
+}
 
 function onSubmit() {
     teacherStore.createPromotion(promotion.value, props.teacher_id);

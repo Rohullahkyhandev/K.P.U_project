@@ -12,15 +12,21 @@ use App\Http\Controllers\PDC\TeacherInCommitController;
 use App\Http\Controllers\PDC\TeacherInSchalarshipController;
 use App\Http\Controllers\PDC\TeacherInWorkshopController;
 use App\Http\Controllers\PDC\WorkshopController;
-use App\Http\Controllers\postgraducated\ProgramsController;
+use App\Http\Controllers\postgraduated\BoardMemberController;
+use App\Http\Controllers\postgraduated\BoradController;
+use App\Http\Controllers\postgraduated\ClassRoomController;
+use App\Http\Controllers\postgraduated\CommitteeMemberController;
+use App\Http\Controllers\postgraduated\LabController;
+use App\Http\Controllers\postgraduated\LabEquipmentController;
+use App\Http\Controllers\postgraduated\PostCommitteeController;
+use App\Http\Controllers\postgraduated\ProgramsController;
+use App\Http\Controllers\postgraduated\studentController;
+use App\Http\Controllers\postgraduated\StudentResearchController;
+use App\Http\Controllers\student\GraduatedStudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TeacherPromotionController;
 use App\Http\Controllers\UserController;
-use App\Models\Department;
-
-use App\Models\Teacher;
 use Illuminate\Auth\Middleware\Authenticate;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -189,7 +195,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/teacher/promotion/edit/{id}', [TeacherPromotionController::class, 'edit']);
         Route::post('/teacher/promotion/update/{id}', [TeacherPromotionController::class, 'update']);
         Route::get('/teacher/promotion/delete/{id}', [TeacherPromotionController::class, 'destory']);
-
     });
 
 
@@ -212,6 +217,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/sub_criteria/delete/{id}', [SubCriteriaController::class, 'destroy']);
     });
 
+
     // post graduated
 
     Route::middleware(['auth:sanctum'])->group(function () {
@@ -221,6 +227,84 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/program/edit/{id}', [ProgramsController::class, 'edit']);
         Route::post('/program/update', [ProgramsController::class, 'update']);
         Route::get('/program/delete/{id}', [ProgramsController::class, 'destroy']);
+
+
+        // students routes
+        Route::get('/studnet', [studentController::class, 'index']);
+        Route::post('/studnet/create', [studentController::class, 'store']);
+        Route::get('/studnet/edit/{id}', [studentController::class, 'edit']);
+        Route::post('/studnet/update', [studentController::class, 'update']);
+        Route::get('/studnet/delete/{id}', [studentController::class, 'destroy']);
+
+
+        // graduated students
+        Route::get('/graduated_student', [GraduatedStudentController::class, 'index']);
+        Route::post('/graduated_student/create', [GraduatedStudentController::class, 'store']);
+        Route::get('/graduated_student/edit/{id}', [GraduatedStudentController::class, 'edit']);
+        Route::post('/graduated_student/update', [GraduatedStudentController::class, 'update']);
+        Route::get('/graduated_student/delete/{id}', [GraduatedStudentController::class, 'destroy']);
+
+
+        // student research routes
+        Route::get('/student_research', [StudentResearchController::class, 'index']);
+        Route::post('/student_research/create', [StudentResearchController::class, 'store']);
+        Route::get('/student_research/edit/{id}', [StudentResearchController::class, 'edit']);
+        Route::post('/student_research/update', [StudentResearchController::class, 'update']);
+        Route::get('/student_research/delete/{id}', [StudentResearchController::class, 'destroy']);
+
+        // post committee
+        Route::get('/post_committee', [PostCommitteeController::class, 'index']);
+        Route::post('/post_committee/create', [PostCommitteeController::class, 'store']);
+        Route::get('/post_committee/edit/{id}', [PostCommitteeController::class, 'edit']);
+        Route::post('/post_committee/update', [PostCommitteeController::class, 'update']);
+        Route::get('/post_committee/delete/{id}', [PostCommitteeController::class, 'destroy']);
+
+        // committee members routes
+        Route::get('/get_all_committees', [CommitteeMemberController::class, 'getAllCommittees']);
+        Route::get('/post_committee_member', [CommitteeMemberController::class, 'index']);
+        Route::post('/post_committee_member/create', [CommitteeMemberController::class, 'store']);
+        Route::get('/post_committee_member/edit/{id}', [CommitteeMemberController::class, 'edit']);
+        Route::post('/post_committee_member/update', [CommitteeMemberController::class, 'update']);
+        Route::get('/post_committee_member/delete/{id}', [CommitteeMemberController::class, 'destroy']);
+
+        // board routes
+        Route::get('/board', [BoradController::class, 'index']);
+        Route::post('/board/create', [BoradController::class, 'store']);
+        Route::get('/board/edit/{id}', [BoradController::class, 'edit']);
+        Route::post('/board/update', [BoradController::class, 'update']);
+        Route::get('/board/delete/{id}', [BoradController::class, 'destroy']);
+
+
+        // board Members
+        Route::get('/all_boar_member', [BoardMemberController::class, 'getAllMembers']);
+        Route::get('/boar_member', [BoardMemberController::class, 'index']);
+        Route::post('/boar_member/create', [BoardMemberController::class, 'store']);
+        Route::get('/boar_member/edit/{id}', [BoardMemberController::class, 'edit']);
+        Route::post('/boar_member/update', [BoardMemberController::class, 'update']);
+        Route::get('/boar_member/delete/{id}', [BoardMemberController::class, 'destroy']);
+
+
+        // labs routes
+        Route::get('/lab', [LabController::class, 'index']);
+        Route::post('/lab/create', [LabController::class, 'store']);
+        Route::get('/lab/edit/{id}', [LabController::class, 'edit']);
+        Route::post('/lab/update', [LabController::class, 'update']);
+        Route::get('/lab/delete/{id}', [LabController::class, 'destroy']);
+
+        // lab equipments routes
+        Route::get('/get_all_lab', [LabEquipmentController::class, 'getAllLab']);
+        Route::get('/equipment_lab', [LabEquipmentController::class, 'index']);
+        Route::post('/equipment_lab/create', [LabEquipmentController::class, 'store']);
+        Route::get('/equipment_lab/edit/{id}', [LabEquipmentController::class, 'edit']);
+        Route::post('/equipment_lab/update', [LabEquipmentController::class, 'update']);
+        Route::get('/equipment_lab/delete/{id}', [LabEquipmentController::class, 'destroy']);
+
+        // class rooms
+        Route::get('/class_room', [ClassRoomController::class, 'index']);
+        Route::post('/class_room/create', [ClassRoomController::class, 'store']);
+        Route::get('/class_room/edit/{id}', [ClassRoomController::class, 'edit']);
+        Route::post('/class_room/update', [ClassRoomController::class, 'update']);
+        Route::get('/class_room/delete/{id}', [ClassRoomController::class, 'destroy']);
     });
 
     Route::middleware(['auth:sanctum', 'edit_teacher'])->group(function () {

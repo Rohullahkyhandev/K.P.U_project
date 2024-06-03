@@ -131,6 +131,12 @@ return [
             'root' => storage_path('app/public/quality_assurance/sub_document'),
         ],
 
+        // Graduated program
+        'postgraduated/student_research' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/postgraduated/student_research'),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

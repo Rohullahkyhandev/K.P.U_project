@@ -16,8 +16,8 @@ return new class extends Migration
             $table->string('date');
             $table->string('last_academic_rank', 100);
             $table->string('now_academic_rank', 100);
-            $table->string('attachment');
-            $table->string('attachment_path');
+            $table->json('attachment');
+            $table->json('attachment_path');
             $table->bigInteger('teacher_id')->unsigned()->index();
             $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
             $table->bigInteger('user_id')->unsigned()->index();

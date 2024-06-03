@@ -314,7 +314,6 @@
                             شماره.
                         </TableHeaderCell>
 
-
                         <TableHeaderCell
                             field="code_bast"
                             :sortDirection="sortDirection"
@@ -488,20 +487,16 @@
                             <br />
                             <span
                                 class="font-semibold flex items-center gap-3"
-                                v-if="teacher.promotion_attachment_path != null"
+                                v-if="teacher.attachment_path != null"
                             >
                                 دانلود اسناد:
                                 <a
-                                    v-if="
-                                        teacher.promotion_attachment_path !=
-                                        null
-                                    "
+                                    v-for="(
+                                        path, index
+                                    ) in teacher.attachment_path"
+                                    :key="index"
                                     class="bg-blue-600 block w-8 py-2 flex item-center justify-center rounded-lg text-white"
-                                    :href="
-                                        teacher.promotion_attachment_path
-                                            ? teacher.promotion_attachment_path
-                                            : '#'
-                                    "
+                                    :href="path"
                                 >
                                     <svg
                                         xmlns=" http://www.w3.org/2000/svg"
