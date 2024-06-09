@@ -16,14 +16,18 @@ return new class extends Migration
             $table->string('title');
             $table->string('date');
             $table->string('description');
-            $table->bigInteger('program_id')->index()->unsigned();
-            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
-            $table->bigInteger('student_id')->index()->unsigned();
+            $table->bigInteger('program_id')->unsigned()->index();
+            $table->foreign('program_id')->references('id')->on('post_graduated_programs')->onDelete('cascade');
+
+            $table->bigInteger('student_id')->unsigned()->index();
             $table->foreign('student_id')->references('id')->on('students')->onDelete('cascade');
-            $table->bigInteger('teacher_id')->index()->unsigned();
+
+            $table->bigInteger('teacher_id')->unsigned()->index();
             $table->foreign('teacher_id')->references('id')->on('teachers')->onDelete('cascade');
-            $table->bigInteger('user_id')->index()->unsigned();
+
+            $table->bigInteger('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users');
+
             $table->json('attachments');
             $table->timestamps();
         });

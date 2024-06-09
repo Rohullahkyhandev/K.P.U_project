@@ -4,14 +4,13 @@ namespace App\Http\Controllers\postgraduated;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StudentResource;
-use App\Student;
+use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\StudentT;
 
 class studentController extends Controller
 {
-
-
 
     // =================================================================================================
     //  status number 1 indicates to the not graduation 2 number means graduation
@@ -19,18 +18,23 @@ class studentController extends Controller
     public function index()
     {
 
-        $search = request('');
+        $search = request('search', '');
         $per_page = request('per_page', 10);
-        $sortField = request('sortField', 'id');
-        $sortDirection = request('sortDirection', 'DESC');
+        $sortField = request('sort_Field', 'id');
+        $sortDirection = request('sort_direction', 'DESC');
+        $program_id = request('program_id', '');
+        $year = request('year', date('Y') - 621);
+
         $data = Student::query()
-            ->where('name', 'like', "%{$search}%")
-            ->orWhere('lname', 'like', "%{$search}%")
-            ->orWhere('fname', 'like', "%{$search}%")
-            ->join("users", "students.user_id", "users.user_id")
-            ->join("post_programs", "students.program_id", "post_programs.id")
-            ->select("students.*", "post_programs.program_name as program_name", "users.name as uname")
-            ->orderBy("post_programs.$sortField", $sortDirection)
+            ->where('students.program_id', '=', $program_id)
+            ->where('students.name', 'like', "%{$search}%")
+            ->whereDate('students.admission_year', 'like', "%{$year}%")
+            // ->where('students.lname', 'like', "%{$search}%")
+            // ->where('students.fname', 'like', "%{$search}%")
+            ->join("users", "students.user_id", "users.id")
+            ->join("post_graduated_programs", "students.program_id", "post_graduated_programs.id")
+            ->select("students.*", "post_graduated_programs.program_name as program_name", "users.name as uname")
+            ->orderBy("students.$sortField", $sortDirection)
             ->paginate($per_page);
 
         return StudentResource::collection($data);
@@ -67,7 +71,6 @@ class studentController extends Controller
             'admission_year.required' => 'فلید نام تاریخ ثبت نام می باشد',
         ]);
 
-
         $user_id = Auth::user()->id;
         $student = new Student();
         $student->name = $request->name;
@@ -80,6 +83,7 @@ class studentController extends Controller
         $student->kankor_mark = $request->kankor_mark;
         $student->bachelor_field = $request->bachelor_field;
         $student->nic = $request->nic;
+        $student->blood_group = $request->blood_group;
         $student->status = '1';
         $student->address = $request->address;
         $student->admission_year = $request->admission_year;
@@ -101,7 +105,7 @@ class studentController extends Controller
     public function edit($id = '')
     {
         $student = Student::find($id);
-        return new StudentResource($student);
+        return $student;
     }
 
     public function update(Request $request)
@@ -135,7 +139,6 @@ class studentController extends Controller
             'admission_year.required' => 'فلید نام تاریخ ثبت نام می باشد',
         ]);
 
-
         $student = Student::find($request->id);
         $user_id = Auth::user()->id;
         $student->name = $request->name;
@@ -147,6 +150,7 @@ class studentController extends Controller
         $student->kankor_id = $request->kankor_id;
         $student->kankor_mark = $request->kankor_mark;
         $student->bachelor_field = $request->bachelor_field;
+        $student->nic = $request->nic;
         $student->nic = $request->nic;
         $student->address = $request->address;
         $student->admission_year = $request->admission_year;

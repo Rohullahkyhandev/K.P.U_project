@@ -176,6 +176,7 @@ const programs = computed(() =>
 const program_id = ref("");
 function onSubmit() {
     if (program_id.value != null) {
+        localStorage.setItem("program_id", program_id.value);
         router.push({ name: "app.post-graduated-program" });
     }
 }

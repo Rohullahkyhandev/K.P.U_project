@@ -137,6 +137,24 @@ return [
             'root' => storage_path('app/public/postgraduated/student_research'),
         ],
 
+
+        // Research department
+
+        'research_department/teacher_research' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/research_department/teacher_research'),
+        ],
+
+        'research_department/project_images' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/research_department/project_images'),
+        ],
+
+        'research_department/experiment_details_images' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/research_department/experiment_details_images'),
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

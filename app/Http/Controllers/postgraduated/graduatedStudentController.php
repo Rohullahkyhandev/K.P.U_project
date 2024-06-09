@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\GraduatedStudentResource;
 use App\Http\Resources\StudentResource;
 use App\Models\GraduatedStudent;
-use App\Student;
+use App\Models\Student;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class graduatedStudentController extends Controller
 {
@@ -59,22 +61,33 @@ class graduatedStudentController extends Controller
             'thesis_mark.required' => 'فیلد نمره تیسز  الزامی می باشد'
         ]);
 
+        DB::beginTransaction();
+        try {
 
-        $user_id = Auth::user()->id;
-        $student_id  = $request->student_id;
-        $student = Student::find($student_id);
-        $graduated_student = new GraduatedStudent();
-        $graduated_student->email = $student->email;
-        $graduated_student->phone = $student->phone;
-        $graduated_student->percentage = $request->percentage;
-        $graduated_student->graduation_year = $request->graduation_year;
-        $graduated_student->diploma_id = $request->diploma_id;
-        $graduated_student->thesis_guide_teacher = $request->thesis_guide_teacher;
-        $graduated_student->thesis_mark = $request->thesis_mark;
-        $graduated_student->studnet_id = $request->studnet_id;
-        $graduated_student->user_id = $request->user_id;
-        $result = $graduated_student->save();
+            $user_id = Auth::user()->id;
+            $student_id  = $request->student_id;
+            $student = Student::find($student_id);
+            $student->status = '2';
+            $student->save();
 
+            $graduated_student = new GraduatedStudent();
+            $graduated_student->email = $student->email;
+            $graduated_student->phone = $student->phone;
+            $graduated_student->address = $student->address;
+            $graduated_student->percentage = $request->percentage;
+            $graduated_student->graduation_year = $request->graduation_year;
+            $graduated_student->diploma_id = $request->diploma_id;
+            $graduated_student->thesis_guide_teacher = $request->thesis_guide_teacher;
+            $graduated_student->thesis_mark = $request->thesis_mark;
+            $graduated_student->studnet_id = $request->studnet_id;
+            $graduated_student->program_id = $request->program_id;
+            $graduated_student->user_id = $user_id;
+            $result = $graduated_student->save();
+            DB::commit();
+        } catch (Exception  $e) {
+            $result = $e;
+            DB::rollBack();
+        }
         if ($result) {
             return response([
                 'message' => 'اطلاعات موفقانه راجستر گردید'

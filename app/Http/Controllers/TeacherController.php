@@ -594,11 +594,15 @@ class TeacherController extends Controller
     }
 
 
-    public function downloadTeacher()
+    public function generateReport()
     {
-        $data = Teacher::all();
-        return Excel::download(new TeachersExport($data), 'reports.teacherReport.xls');
     }
+
+    // public function downloadTeacher()
+    // {
+    //     $data = Teacher::all();
+    //     return Excel::download(new TeachersExport($data), 'reports.teacherReport.xls');
+    // }
 }
 
 

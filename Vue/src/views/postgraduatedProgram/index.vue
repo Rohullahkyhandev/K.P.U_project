@@ -33,7 +33,8 @@
 
                 <div>
                     <router-link
-                        :to="{ name: 'app.pdc.commit.list' }"
+
+                        :to="{ name: 'app.post-graduated.student.create' }"
                         :class="[
                             getCurrentPath == $route.matched
                                 ? 'header--button active--button'

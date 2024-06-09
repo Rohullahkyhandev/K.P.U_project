@@ -14,6 +14,7 @@ class Kernel extends HttpKernel
      * @var array<int, class-string|string>
      */
     protected $middleware = [
+
         // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
@@ -64,50 +65,47 @@ class Kernel extends HttpKernel
         'delete_user' =>  \App\Http\Middleware\user\user_delete::class,
 
 
-        // pdc/document
-        'view_document' =>  \App\Http\Middleware\pdc\docments\document_view::class,
-        'create_document' =>  \App\Http\Middleware\pdc\docments\document_create::class,
-        'edit_document' =>  \App\Http\Middleware\pdc\docments\document_edit::class,
-        'delete_document' =>  \App\Http\Middleware\pdc\docments\document_delete::class,
+        // pdc department
+        'view_pdc' => \App\Http\Middleware\pdc\view_pdc::class,
+        'create' => \App\Http\Middleware\pdc\create_pdc::class,
+        'edit_pdc' => \App\Http\Middleware\pdc\edit_pdc::class,
+        'delete_pdc' => \App\Http\Middleware\pdc\delete_pdc::class,
 
-        // pdc/commit
-        'view_commita' =>  \App\Http\Middleware\pdc\commite\commite_view::class,
-        'create_commita' =>  \App\Http\Middleware\pdc\commite\commite_create::class,
-        'edit_commita' =>  \App\Http\Middleware\pdc\commite\commite_edit::class,
-        'delete_commita' =>  \App\Http\Middleware\pdc\commite\commite_delete::class,
+        // teacher department
+        'view_teacher' => \App\Http\Middleware\teacherDepartment\view_teacher::class,
+        'create_teacher' => \App\Http\Middleware\teacherDepartment\create_teacher::class,
+        'edit_teacher' => \App\Http\Middleware\teacherDepartment\edit_teacher::class,
+        'delete_teacher' => \App\Http\Middleware\teacherDepartment\delete_teacher::class,
 
+        // quality assurance
+        'view_quality' => \App\Http\Middleware\qualityDepartment\view_quality_assurenace::class,
+        'create_quality' => \App\Http\Middleware\qualityDepartment\create_quality_assurenace::class,
+        'edit_quality' => \App\Http\Middleware\qualityDepartment\edit_quality_assurenace::class,
+        'delete_quality' => \App\Http\Middleware\qualityDepartment\delete_quality_assurenace::class,
 
-        // pdc/plan
-        'view_plan' =>  \App\Http\Middleware\pdc\plan\plan_view::class,
-        'create_plan' =>  \App\Http\Middleware\pdc\plan\plan_create::class,
-        'edit_plan' =>  \App\Http\Middleware\pdc\plan\plan_edit::class,
-        'delete_plan' =>  \App\Http\Middleware\pdc\plan\plan_delete::class,
-
-
-        // pdc/scholarship
-        'view_scholarship' =>  \App\Http\Middleware\pdc\scholaship\scholarship_view::class,
-        'create_scholarship' =>  \App\Http\Middleware\pdc\scholaship\scholarship_create::class,
-        'edit_scholarship' =>  \App\Http\Middleware\pdc\scholaship\scholarship_edit::class,
-        'delete_scholarship' =>  \App\Http\Middleware\pdc\scholaship\scholarship_delete::class,
-
-        //pdc/workshop
-        'view_workshop' =>  \App\Http\Middleware\pdc\workshop\workshop_view::class,
-        'create_workshop' =>  \App\Http\Middleware\pdc\workshop\workshop_create::class,
-        'edit_workshop' =>  \App\Http\Middleware\pdc\workshop\workshop_edit::class,
-        'delete_workshop' =>  \App\Http\Middleware\pdc\workshop\workshop_delete::class,
+        // post graduated department
+        'view_post_graduated' => \App\Http\Middleware\postGraduated\view_post_graduated::class,
+        'create_post_graduated' => \App\Http\Middleware\postGraduated\create_post_graduated::class,
+        'edit_post_graduated' => \App\Http\Middleware\postGraduated\edit_post_graduated::class,
+        'delete_post_graduated' => \App\Http\Middleware\postGraduated\delete_post_graduated::class,
 
 
-        // teacher_department/teachers
-        'view_teacher' =>  \App\Http\Middleware\teacher_department\techaer\techaer_view::class,
-        'create_teacher' =>  \App\Http\Middleware\teacher_department\techaer\techaer_create::class,
-        'edit_teacher' =>  \App\Http\Middleware\teacher_department\techaer\techaer_edit::class,
-        'delete_teacher' =>  \App\Http\Middleware\teacher_department\techaer\techaer_delete::class,
+        // research department
+        'view_research_department' => \App\Http\Middleware\researchDepartment\view_research::class,
+        'create_research_department' => \App\Http\Middleware\researchDepartment\create_research::class,
+        'edit_research_department' => \App\Http\Middleware\researchDepartment\edit_research::class,
+        'delete_research_department' => \App\Http\Middleware\researchDepartment\delete_research::class,
 
-        //teacher_department/faculty
-        'view_faculty' =>  \App\Http\Middleware\teacher_department\faculty\faculty_view::class,
-        'create_faculty' =>  \App\Http\Middleware\teacher_department\faculty\faculty_create::class,
-        'edit_faculty' =>  \App\Http\Middleware\teacher_department\faculty\faculty_edit::class,
-        'delete_faculty' =>  \App\Http\Middleware\teacher_department\faculty\faculty_delete::class,
+
+
+
+
+
+
+
+
+
+
 
 
 

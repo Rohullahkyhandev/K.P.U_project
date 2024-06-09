@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-10">
+    <div class="mt-10 m-8">
         <div class="flex items-center justify-between mb-8">
             <div class="flex items-center gap-5">
                 <router-link
@@ -45,9 +45,8 @@
                 </router-link> -->
 
                 <div class="inset-0 flex items-center justify-center">
-                    <button
-                        type="button"
-                        @click="openModal"
+                    <router-link
+                        :to="{ name: 'teacher.report' }"
                         class="header--button"
                     >
                         <svg
@@ -66,7 +65,7 @@
                         </svg>
 
                         تهیه راپور
-                    </button>
+                    </router-link>
                 </div>
                 <TransitionRoot appear :show="isOpen" as="template">
                     <Dialog as="div" @close="closeModal" class="relative z-10">

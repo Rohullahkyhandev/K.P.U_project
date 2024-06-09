@@ -22,6 +22,13 @@ use App\Http\Controllers\postgraduated\PostCommitteeController;
 use App\Http\Controllers\postgraduated\ProgramsController;
 use App\Http\Controllers\postgraduated\studentController;
 use App\Http\Controllers\postgraduated\StudentResearchController;
+use App\Http\Controllers\researchDepartment\CurriculumController;
+use App\Http\Controllers\researchDepartment\ExperimentDetailController;
+use App\Http\Controllers\researchDepartment\InternatinalPublishmentController;
+use App\Http\Controllers\researchDepartment\LabController as ResearchDepartmentLabController;
+use App\Http\Controllers\researchDepartment\ResearchProjectController;
+use App\Http\Controllers\researchDepartment\SpecailistAreaController;
+use App\Http\Controllers\researchDepartment\TeacherResearchController;
 use App\Http\Controllers\student\GraduatedStudentController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TeacherPromotionController;
@@ -230,7 +237,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
 
         // students routes
-        Route::get('/studnet', [studentController::class, 'index']);
+        Route::get('/studnet/{id}', [studentController::class, 'index']);
         Route::post('/studnet/create', [studentController::class, 'store']);
         Route::get('/studnet/edit/{id}', [studentController::class, 'edit']);
         Route::post('/studnet/update', [studentController::class, 'update']);
@@ -305,6 +312,58 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/class_room/edit/{id}', [ClassRoomController::class, 'edit']);
         Route::post('/class_room/update', [ClassRoomController::class, 'update']);
         Route::get('/class_room/delete/{id}', [ClassRoomController::class, 'destroy']);
+    });
+
+
+    Route::middleware(['auth:sanctum'], function () {
+        //  internaital publisher
+        Route::get('/international_publisher', [InternatinalPublishmentController::class, 'index']);
+        Route::post('/international_publisher/create', [InternatinalPublishmentController::class, 'create']);
+        Route::get('/international_publisher/edit/{id}', [InternatinalPublishmentController::class, 'edit']);
+        Route::post('/international_publisher/update', [InternatinalPublishmentController::class, 'update']);
+        Route::get('/international_publisher/delete/{id}', [InternatinalPublishmentController::class, 'destroy']);
+
+        // teacher research
+        Route::get('/teacher_research', [TeacherResearchController::class, 'index']);
+        Route::post('/teacher_research/create', [TeacherResearchController::class, 'create']);
+        Route::get('/teacher_research/edit/{id}', [TeacherResearchController::class, 'edit']);
+        Route::post('/teacher_research/update', [TeacherResearchController::class, 'update']);
+        Route::get('/teacher_research/delete/{id}', [TeacherResearchController::class, 'destroy']);
+
+        // curriculum
+        Route::get('/curriculum', [CurriculumController::class, 'index']);
+        Route::post('/curriculum/create', [CurriculumController::class, 'create']);
+        Route::get('/curriculum/edit/{id}', [CurriculumController::class, 'edit']);
+        Route::post('/curriculum/update', [CurriculumController::class, 'update']);
+        Route::get('/curriculum/delete/{id}', [CurriculumController::class, 'destroy']);
+
+        // research labs
+        Route::get('/research_lab', [LabController::class, 'index']);
+        Route::post('/research_lab/create', [LabController::class, 'create']);
+        Route::get('/research_lab/edit/{id}', [LabController::class, 'edit']);
+        Route::post('/research_lab/update', [LabController::class, 'update']);
+        Route::get('/research_lab/delete/{id}', [LabController::class, 'destroy']);
+
+        // research project
+        Route::get('/research_project', [ResearchProjectController::class, 'index']);
+        Route::post('/research_project/create', [ResearchProjectController::class, 'create']);
+        Route::get('/research_project/edit/{id}', [ResearchProjectController::class, 'edit']);
+        Route::post('/research_project/update', [ResearchProjectController::class, 'update']);
+        Route::get('/research_project/delete/{id}', [ResearchProjectController::class, 'destroy']);
+
+        // specialist area
+        Route::get('/specialist_area', [SpecailistAreaController::class, 'index']);
+        Route::post('/specialist_area/create', [SpecailistAreaController::class, 'create']);
+        Route::get('/specialist_area/edit/{id}', [SpecailistAreaController::class, 'edit']);
+        Route::post('/specialist_area/update', [SpecailistAreaController::class, 'update']);
+        Route::get('/specialist_area/delete/{id}', [SpecailistAreaController::class, 'destroy']);
+
+        // experimental details
+        Route::get('/experiment_detail', [ExperimentDetailController::class, 'index']);
+        Route::post('/experiment_detail/create', [ExperimentDetailController::class, 'create']);
+        Route::get('/experiment_detail/edit/{id}', [ExperimentDetailController::class, 'edit']);
+        Route::post('/experiment_detail/update', [ExperimentDetailController::class, 'update']);
+        Route::get('/experiment_detail/delete/{id}', [ExperimentDetailController::class, 'destroy']);
     });
 
     Route::middleware(['auth:sanctum', 'edit_teacher'])->group(function () {

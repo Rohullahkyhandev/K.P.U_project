@@ -66,11 +66,12 @@ import selectPG from "../views/postgraduatedProgram/programs/selectProgram.vue";
 // post graduated program teacher
 import postTeacherCreate from "../views/postgraduatedProgram/teacher/create.vue";
 
-// import ListPG from "../views/post_graduated_program/index.vue";
-// import EditPG from "../views/post_graduated_program/edit.vue";
-// import DetailsPG from "../views/post_graduated_program/details.vue";
+// post graduated program student
+import postStudentCreate from "../views/postgraduatedProgram/student/create.vue";
+import postStudentList from "../views/postgraduatedProgram/student/index.vue";
+import postStudentEdit from "../views/postgraduatedProgram/student/edit.vue";
 
-// scholarship
+// scholarshipp
 
 // faculty
 import CreateFaculty from "../views/faculties/create.vue";
@@ -86,6 +87,9 @@ import CreateTeacher from "../views/teachers/create.vue";
 import ListTeacher from "../views/teachers/index.vue";
 import detailsTeacher from "../views/teachers/details.vue";
 import editTeacher from "../views/teachers/edit.vue";
+
+// teacher report
+import teacherReport from "../views/teachers/report.vue";
 
 import createQualification from "../views/teachers/qualification.vue";
 import editQualification from "../views/teachers/editQualification.vue";
@@ -191,20 +195,17 @@ const routes = [
                         name: "app.pdc.commit.create",
                         component: createCommit,
                     },
-
                     {
                         path: "/commit/edit/:id",
                         name: "app.pdc.commit.edit",
                         component: editCommit,
                     },
-
                     // teacher in commits
                     {
                         path: "teacher_in_commit/create",
                         name: "app.pdc.teacher_in_commit.create",
                         component: createTeacherInCommit,
                     },
-
                     {
                         path: "teacher_in_commit/list",
                         name: "app.pdc.teacher_in_commit.list",
@@ -315,31 +316,26 @@ const routes = [
                         name: "app.post-graduated.teacher.create",
                         component: postTeacherCreate,
                     },
+
+                    {
+                        path: "student/create",
+                        name: "app.post-graduated.student.create",
+                        component: postStudentCreate,
+                    },
+
+                    {
+                        path: "student/list",
+                        name: "app.post-graduated.student.list",
+                        component: postStudentList,
+                    },
+
+                    {
+                        path: "student/edit/:id",
+                        name: "app.post-graduated.student.edit",
+                        component: postStudentEdit,
+                    },
                 ],
             },
-
-            // {
-            //     path: "teacher_in_workshop/list",
-            //     name: "app.pdc.teacher_in_workshop.list",
-            //     component: listTeacherInWorkshop,
-            // },
-
-            // {
-            //     path: "teacher_in_workshop/edit/:id",
-            //     name: "app.pdc.teacher_in_workshop.edit",
-            //     component: editTeacherInWorkshop,
-            // },
-
-            // {
-            //     path: "teacher_in_commit/list",
-            //     name: "app.pdc.teacher_in_commit.list",
-            //     component: listTeacherInCommit,
-            // },
-            // {
-            //     path: "teacher_in_commit/edit/:id",
-            //     name: "app.pdc.teacher_in_commit.edit",
-            //     component: editTeacherCommit,
-            // },
 
             // archive
             {
@@ -458,6 +454,14 @@ const routes = [
                 component: editArticle,
             },
         ],
+    },
+
+    // teacher report
+
+    {
+        path: "/teacher/report",
+        name: "teacher.report",
+        component: teacherReport,
     },
 
     {

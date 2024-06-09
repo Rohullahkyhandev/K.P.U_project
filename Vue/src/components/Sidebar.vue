@@ -430,7 +430,9 @@
 
                         <li class="transition-colors py-2 px-4 rounded">
                             <router-link
-                                :to="{ name: 'app.dashboard' }"
+                                :to="{
+                                    name: 'app.post-graduated.student.create',
+                                }"
                                 class="sidebar-item flex items-center justify-start gap-3"
                             >
                                 <svg
