@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string("name");
             $table->string("quantity", 30);
             $table->string("entry_date");
+            $table->string("description");
             $table->string('stuats')->default('1');
             $table->bigInteger('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users');

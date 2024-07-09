@@ -23,6 +23,8 @@ class TeacherInWorkshopResource extends JsonResource
             'topic' => $this->topic,
             'document_path' => $this->document_path,
             'uname' => $this->uname,
+            'faculty_name' => $this->faculty_name,
+            'department_name' => $this->department_name,
         ];
     }
 }

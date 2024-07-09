@@ -21,6 +21,8 @@ return new class extends Migration
             // $table->foreign('faculty_id')->references('id')->on('faculties')->onDelete('cascade');
             $table->bigInteger('program_id')->unsigned()->index();
             $table->foreign('program_id')->references('id')->on('post_graduated_programs')->onDelete('cascade');
+            $table->bigInteger('user_id')->unsigned()->index();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

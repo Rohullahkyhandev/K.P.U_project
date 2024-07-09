@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axiosClient from "../../../axios";
 import { ref } from "vue";
+import router from "../../../routes";
 
 const useTeacherInCommit = defineStore("teacher_in_commit", () => {
     let msg_success = ref("");
@@ -21,6 +22,9 @@ const useTeacherInCommit = defineStore("teacher_in_commit", () => {
         commit_id: "",
         teacher_id: "",
         attachment: "",
+        faculty_id: "",
+        department_id: "",
+        department_type: "",
     });
 
     function createTeacherInCommit(data) {
@@ -33,8 +37,12 @@ const useTeacherInCommit = defineStore("teacher_in_commit", () => {
         }
 
         var form = new FormData();
+        form.append("faculty_id", data.faculty_id);
+        form.append("department_id", data.department_id);
+        form.append("department_type", data.department_type);
         form.append("teacher_id", data.teacher_id);
         form.append("commit_id", data.commit_id);
+        form.append("part_type", data.part_type);
         form.append("attachment", attachment);
 
         data = form;
@@ -115,6 +123,9 @@ const useTeacherInCommit = defineStore("teacher_in_commit", () => {
         var form = new FormData();
         form.append("id", data.id);
         form.append("teacher_id", data.teacher_id);
+        form.append("faculty_id", data.faculty_id);
+        form.append("department_id", data.department_id);
+        form.append("department_type", data.department_type);
         form.append("commit_id", data.commit_id);
         form.append("attachment", attachment);
 
@@ -125,7 +136,7 @@ const useTeacherInCommit = defineStore("teacher_in_commit", () => {
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
-                teacher_in_commit.value = "";
+                return router.push("app.pdc.teacher_in_commit.list");
             })
             .catch((err) => {
                 loading.value = false;
@@ -148,9 +159,9 @@ const useTeacherInCommit = defineStore("teacher_in_commit", () => {
 
     // external data;
     let teachers = ref([]);
-    function getTeachers() {
+    function getTeachers(id) {
         axiosClient
-            .get("/pdc/get_teachers")
+            .get(`/pdc/get_teachers/${id}`)
             .then((response) => {
                 teachers.value = response.data;
             })

@@ -445,8 +445,8 @@ function getCommit(url = null) {
         url,
         search: search.value,
         per_page: perPage.value,
-        sort_field: sortField.value,
-        sort_direction: sortDirection.value,
+        sortField: sortField.value,
+        sortDirection: sortDirection.value,
     });
 }
 

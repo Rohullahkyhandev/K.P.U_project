@@ -16,7 +16,10 @@ return new class extends Migration
             $table->string('program_name', 100);
             $table->string('degree_type', 100);
             $table->string('program_duration', 100);
+            $table->string('program_type', 100);
             $table->text('description');
+            $table->bigInteger('faculty_id')->unsigned()->index();
+            $table->foreign('faculty_id')->references('id')->on('faculties')->onDelete('cascade');
             $table->bigInteger('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

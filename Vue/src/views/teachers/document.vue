@@ -88,12 +88,20 @@
                     </div>
                 </div>
                 <!-- end of display message area -->
+
                 <div>
                     <div class="border-b py-2">
                         <h1 class="font-bold text-xl">
                             فورم ثبت اسناد تحصلی استادان
                         </h1>
                     </div>
+                </div>
+                <div class="w-full flex items-center justify-center">
+                    <Steper
+                        :step-one="teacherStore.stepOne"
+                        :step-two="teacherStore.stepTwo"
+                        :step-three="teacherStore.stepThree"
+                    />
                 </div>
                 <br />
                 <div class="">
@@ -204,15 +212,16 @@
 <script setup>
 import { computed, onMounted, ref, useSlots } from "vue";
 import { useRoute } from "vue-router";
+import Steper from "../../components/steps.vue";
 import CustomInput from "../../components/core/CustomInput.vue";
 import { useTeacherStore } from "../../stores/teachers/teacherStore";
 // import { EMDatePicker } from '@cafebazaar/emrooz';
 const teacherStore = useTeacherStore();
 const route = useRoute();
 
-onMounted(()=>{
-      teacherStore.editDocument(route.params.d_id);
-})
+onMounted(() => {
+    teacherStore.editDocument(route.params.d_id);
+});
 
 const teacher_document = computed(() => teacherStore.teacher_document);
 

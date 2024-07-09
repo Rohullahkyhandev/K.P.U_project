@@ -115,7 +115,7 @@
                     <input
                         v-model="search"
                         @change="getTeacherInWorkshop(null)"
-                        class="appearance-none relative block w-48 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        class="appearance-none relative block w-48 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         placeholder="جستجوی بر اساس تمام فیلد"
                     />
                 </div>
@@ -126,7 +126,7 @@
                         @change="getTeacherInWorkshop(null)"
                         v-model="perPage"
                         dir="ltr"
-                        class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        class="appearance-none relative block w-24 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     >
                         <option value="5" selected>5</option>
                         <option value="10" selected>10</option>
@@ -187,6 +187,24 @@
                             @click="sortTeacherInWorkshop('start_time')"
                         >
                             ایمل ادرس
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
+                            field="faculty_id"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortTeacherInWorkshop('faculty_id')"
+                        >
+                            فاکولته
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
+                            field="department_id"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortTeacherInWorkshop('department_id')"
+                        >
+                             دیپارتمنت
                         </TableHeaderCell>
 
                         <TableHeaderCell
@@ -262,6 +280,14 @@
 
                         <td class="border p-2">
                             {{ workshop.email }}
+                        </td>
+
+                        <td class="border p-2">
+                            {{ workshop.faculty_name }}
+                        </td>
+
+                        <td class="border p-2">
+                            {{ workshop.department_name }}
                         </td>
 
                         <td class="border p-2">
@@ -492,8 +518,8 @@ function getTeacherInWorkshop(url = null) {
         url,
         search: search.value,
         per_page: perPage.value,
-        sort_field: sortField.value,
-        sort_direction: sortDirection.value,
+        sortField: sortField.value,
+        sortDirection: sortDirection.value,
     });
 }
 

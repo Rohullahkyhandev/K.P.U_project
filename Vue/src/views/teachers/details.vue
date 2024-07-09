@@ -55,64 +55,61 @@
                             </div>
                             <div>
                                 <tr>
-                                    <td class="border-b p-4 font-semibold">
+                                    <td class="border-b p-2 font-semibold">
                                         نام و تخلص:&nbsp;
-                                    </td>
-                                    <td class="border-b p-4 text-left">
                                         {{ teacher.name }} {{ teacher.lname }}
                                     </td>
-                                    <td class="border-b p-4 font-semibold">
-                                        نام پدر:&nbsp;
+
+                                    <td class="border-b p-2 font-semibold">
+                                        نام پدر:&nbsp; {{ teacher.fatherName }}
                                     </td>
-                                    <td class="border-b p-4 text-left">
-                                        {{ teacher.fatherName }}
+                                    <td class="border-b p-2 font-semibold">
+                                        نام پدرکلان:&nbsp;
+                                        {{ teacher.grandFathername }}
                                     </td>
-                                    <td class="border-b p-4 font-semibold">
-                                        ایمل آدرس:&nbsp;
+
+                                    <td class="border-b p-2 font-semibold">
+                                        ایمل آدرس:&nbsp; {{ teacher.email }}
                                     </td>
-                                    <td class="border-b p-4 text-left">
-                                        {{ teacher.email }}
+                                    <td class="border-b p-2 font-semibold">
+                                        شماره تماس:&nbsp; {{ teacher.phone }}
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td class="border-b p-4 font-semibold">
+                                    <td class="border-b p-2 font-semibold">
                                         تاریخ تولد:&nbsp;
-                                    </td>
-                                    <td class="border-b p-4 text-left">
                                         {{ teacher.birth_date }}
                                     </td>
-                                    <td class="border-b p-4 font-semibold">
+
+                                    <td class="border-b p-2 font-semibold">
                                         تاریخ استخدام:&nbsp;
-                                    </td>
-                                    <td class="border-b p-4 text-left">
                                         {{ teacher.hire_date }}
                                     </td>
-                                    <td class="border-b p-4 font-semibold">
-                                        نمبر تذکره:&nbsp;
-                                    </td>
-                                    <td class="border-b p-4 text-left">
-                                        {{ teacher.nic }}
+
+                                    <td class="border-b p-2 font-semibold">
+                                        نمبر تذکره:&nbsp; {{ teacher.nic }}
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td class="border-b p-4 font-semibold">
-                                        سکونت اصلی:&nbsp;
+                                    <td class="border-b p-2 font-semibold">
+                                         جنسیت:&nbsp;
+                                        {{ teacher.gender }}
                                     </td>
-                                    <td class="border-b p-4 text-left">
+                                    <td class="border-b p-2 font-semibold">
+                                        سکونت اصلی:&nbsp;
                                         {{ teacher.main_address }}
                                     </td>
-                                    <td class="border-b p-4 font-semibold">
-                                        سکونت فرعی:&nbsp;
+
+                                    <td class="border-b p-2 font-semibold">
+                                        سکونت فعلی:&nbsp;{{
+                                            teacher.current_address
+                                        }}
                                     </td>
-                                    <td class="border-b p-4 text-left">
-                                        {{ teacher.current_address }}
-                                    </td>
-                                    <td class="border-b p-4 font-semibold">
+
+                                    <td class="border-b p-2 font-semibold">
                                         رتبه علمی:&nbsp;
-                                    </td>
-                                    <td class="border-b p-4 text-left">
                                         {{ teacher.academic_rank }}
                                     </td>
                                 </tr>
@@ -153,5 +150,4 @@ const teacher = computed(() => teacherStore.teacher);
 onMounted(() => {
     teacherStore.getTeacherDetails(route.params.id);
 });
-
 </script>

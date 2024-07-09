@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\PDC;
 
+use App\Exports\TeacherInScholarship;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ScholarshipResource;
 use App\Http\Resources\TeacherInSchalarshipResource;
@@ -14,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Excel;
 
 class TeacherInSchalarshipController extends Controller
 {
@@ -22,8 +24,8 @@ class TeacherInSchalarshipController extends Controller
     /*
      # --------------------------------
         if teacher status be 1 is teaching
-        if teacher status be 2 is scholarship
-        if teacher status be 3 is come bac
+        if teacher status be 2 is in scholarship
+        if teacher status be 3  come back
         if teacher status be 4 is retaired
      #
     */
@@ -75,7 +77,7 @@ class TeacherInSchalarshipController extends Controller
             "edu_maqta" => 'required',
             "sent_date" => 'required',
             "back_date" => 'required',
-            "faculty_id" => 'required',
+            "faculty_id" => 'nullable',
             "department_id" => 'required',
             "teacher_id" => 'required',
             "document" => 'required|mimes:png,jpg,mp3,mp4,pdf,docx',
@@ -218,5 +220,10 @@ class TeacherInSchalarshipController extends Controller
         }
         $result = Scholarship::destroy($id);
         return $result;
+    }
+
+    public function generateReport($format_type, $year)
+    { 
+        return  Excel::download((new TeacherInScholarship)->getData($year), "teacher in scholarship.$format_type");
     }
 }

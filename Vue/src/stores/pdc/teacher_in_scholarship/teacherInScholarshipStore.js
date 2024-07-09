@@ -31,6 +31,18 @@ const useTeacherInScholarship = defineStore("teacher_in_scholarship", () => {
         department_id: "",
     });
 
+    let teacher_department = ref([]);
+    function getTeacher(id) {
+        axiosClient
+            .get(`/pdc/get_teacher/${id}`)
+            .then((res) => {
+                teacher_department.value = res.data;
+            })
+            .catch((err) => {
+                msg_wrang.value = err.response.data.message;
+            });
+    }
+
     function createTeacherInScholarship(data) {
         loading.value = true;
         let document = "";
@@ -173,12 +185,14 @@ const useTeacherInScholarship = defineStore("teacher_in_scholarship", () => {
     }
 
     return {
+        getTeacher,
         createTeacherInScholarship,
         getTeacherInScholarship,
         editTeacherInScholarship,
         updateTeacherInScholarship,
         deleteTeacherInScholarship,
         getTeacherInScholarship,
+        teacher_department,
         teacherInScholarship,
         teacherInScholarships,
         loading,

@@ -29,8 +29,7 @@ export const useAuthStore = defineStore('authenticate', () => {
     }
 
     function setToken(token) {
-        user.value.token = token
-        console.log(user.value.token);
+        user.value.token = token;
         if (token) {
             sessionStorage.setItem('TOKEN', token)
         } else {

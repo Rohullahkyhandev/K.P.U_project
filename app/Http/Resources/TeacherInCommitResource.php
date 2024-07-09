@@ -23,6 +23,8 @@ class TeacherInCommitResource extends JsonResource
             "commit_name" => $this->commit_name,
             "uname" => $this->uname,
             "cname" => $this->cname,
+            "faculty_name" => $this->faculty_name,
+            "department_name" => $this->department_name,
         ];
     }
 }

@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <form @submit.prevent="onSubmit">
+        <form @submit.prevent="onSubmit" enctype="multipart/form-data">
             <div class="wrapper--dev--form">
                 <!-- start of alert message -->
                 <div class="msg--success" v-if="userStore.msg_success">
@@ -128,7 +128,30 @@
                         </div>
                     </div>
 
-                    <div class="md:flex md:items-center md:justify-center">
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label for="" class="form--label">
+                                نوع یوزر<span class="label--prefix"
+                                    >*</span
+                                ></label
+                            >
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                type="select"
+                                :select-options="user_type"
+                                v-model="user.user_type"
+                                class="mb-2"
+                                required="required"
+                                label=" نوع یوزر"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        class="md:flex md:items-center md:justify-center"
+                        v-if="user.user_type == 'fifth_department'"
+                    >
                         <div class="w-2/12">
                             <label
                                 for=""
@@ -145,6 +168,57 @@
                                 :select-options="chanceDepartments"
                                 class="mb-2"
                                 label="بخش مربوط"
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        class="md:flex md:items-center md:justify-center"
+                        v-if="user.user_type == 'faculty_user'"
+                    >
+                        <div class="w-2/12">
+                            <label
+                                for=""
+                                class="block text-gray-500 md:text-left mb-1 md:mb-0"
+                                >فاکولته مربوط<span class="text-red-500 px-2"
+                                    >*</span
+                                ></label
+                            >
+                        </div>
+                        <div class="w-6/12">
+                            <CustomInput
+                                type="select"
+                                v-model="user.faculty_id"
+                                :select-options="faculties"
+                                class="mb-2"
+                                label=" فاکولته مربوط"
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        class="md:flex md:items-center md:justify-center"
+                        v-if="user.user_type == 'department_user'"
+                    >
+                        <div class="w-2/12">
+                            <label
+                                for=""
+                                class="block text-gray-500 md:text-left mb-1 md:mb-0"
+                            >
+                                دیپارتمنت<span class="text-red-500 px-2"
+                                    >*</span
+                                ></label
+                            >
+                        </div>
+                        <div class="w-6/12">
+                            <CustomInput
+                                type="select"
+                                v-model="user.department_id"
+                                :select-options="departments"
+                                class="mb-2"
+                                label="دیپارتمنت "
                                 required="required"
                             />
                         </div>
@@ -202,7 +276,7 @@
                             <CustomInput
                                 type="file"
                                 class="mb-2"
-                                @change="(file) => (user_data.photo = file)"
+                                @change="(file) => (user.photo = file)"
                             />
                         </div>
                     </div>
@@ -236,7 +310,7 @@
                 </button>
 
                 <router-link
-                    :to="{ name: 'app.dashboard' }"
+                    :to="{ name: 'app.user.list' }"
                     class="footer--button--cancel"
                     >لغو ثبت</router-link
                 >
@@ -248,20 +322,42 @@
 <script setup>
 import { computed, onMounted, ref, useSlots } from "vue";
 import CustomInput from "../../components/core/CustomInput.vue";
+import useDepartmentStore from "../../stores/department/deparmentStore";
+import { useFacultyStore } from "../../stores/faculties/facultyStore";
 import { useUserStore } from "../../stores/user/userStore";
 
 const userStore = useUserStore();
-// const user_type = ref([
-//     { key: "pdc", text: "PDC" },
-//     { key: "آمریت استادان", text: "آمریت استادان" },
-//     { key: "آمریت فوق لیسانس", text: "آمریت فوق لیسانس" },
-//     { key: "آمریت تضمین کیفت", text: "آمریت تضمین کیفت" },
-//     { key: "آمریت  تحقیقات علمی", text: "آمریت  تحقیقات علمی" },
-// ]);
+const facultyStore = useFacultyStore();
+const departmentStore = useDepartmentStore();
+const user_type = ref([
+    { key: "faculty_user", text: " یوزر فاکولته" },
+    { key: "department_user", text: " یوزر دیپارتمنت" },
+    { key: "fifth_department", text: "آمریت های پنج گانه" },
+]);
 
 onMounted(() => {
+    facultyStore.getAllFaculty();
     userStore.getChanceDepartments();
+    if (
+        user.value.user_type == "department_user" &&
+        user.value.faculty_id != null
+    ) {
+        departmentStore.getFacultyDepartment(user.value.faculty_id);
+    } else {
+        departmentStore.departmentHasOutFaculties();
+    }
 });
+
+const faculties = computed(() =>
+    facultyStore.listFaculty.map((f) => ({ key: f.id, text: f.name }))
+);
+
+const departments = computed(() =>
+    departmentStore.department_has_out_facilities.map((f) => ({
+        key: f.id,
+        text: f.name,
+    }))
+);
 
 const user = computed(() => userStore.user_data);
 

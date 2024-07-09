@@ -4,6 +4,10 @@ import axiosClient from "../../axios";
 import { pushScopeId, ref } from "vue";
 
 export const useTeacherStore = defineStore("teacher", () => {
+    let stepOne = ref(false);
+    let stepTwo = ref(false);
+    let stepThree = ref(false);
+
     let msg_success = ref("");
     let msg_wrang = ref("");
     let msg_dsuccess = ref("");
@@ -92,6 +96,9 @@ export const useTeacherStore = defineStore("teacher", () => {
         academic_rank: "",
         faculty_id: "",
         department_id: "",
+        teaching_status: "",
+        program_id: "",
+        related_part: "",
     });
 
     // teacher document
@@ -159,11 +166,15 @@ export const useTeacherStore = defineStore("teacher", () => {
         form.append("current_address", data.current_address);
         form.append("academic_rank", data.academic_rank);
         form.append("nic", data.nic);
+        form.append("teaching_status", data.teaching_status);
+        form.append("related_part", data.related_part);
+        form.append("part", data.part);
         form.append("education_field", data.education_field);
         form.append("photo", data.photo);
         form.append("hire_date", data.hire_date);
         form.append("faculty_id", data.faculty_id);
         form.append("department_id", data.department_id);
+        form.append("program_id", data.program_id);
 
         data = form;
         axiosClient
@@ -171,6 +182,35 @@ export const useTeacherStore = defineStore("teacher", () => {
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
+                if (res.status == 200) {
+                    stepOne.value = true;
+                    (teacher.value.name = ""),
+                        (teacher.value.code_bast = ""),
+                        (teacher.value.lname = ""),
+                        (teacher.value.fatherName = ""),
+                        (teacher.value.grandFathername = ""),
+                        (teacher.value.email = ""),
+                        (teacher.value.phone = ""),
+                        (teacher.value.gender = ""),
+                        (teacher.value.birth_date = ""),
+                        (teacher.value.main_address = ""),
+                        (teacher.value.current_address = ""),
+                        (teacher.value.hire_date = ""),
+                        (teacher.value.nic = ""),
+                        (teacher.value.education_field = ""),
+                        (teacher.value.photo = ""),
+                        (teacher.value.photo_path = ""),
+                        (teacher.value.academic_rank = ""),
+                        (teacher.value.faculty_id = ""),
+                        (teacher.value.department_id = ""),
+                        (stepOne.value = true);
+                    setTimeout(() => {
+                        router.push({
+                            name: "app.teacher.qualification.create",
+                            params: { id: res.data.teacher_id },
+                        });
+                    }, 1000);
+                }
             })
             .catch((err) => {
                 loading.value = false;
@@ -183,19 +223,19 @@ export const useTeacherStore = defineStore("teacher", () => {
             .get("/get/faculties")
             .then((res) => {
                 console.log(res);
-                faculties.value = res.data.data;
+                faculties.value = res.data;
             })
             .catch((err) => {
                 console.log(err);
             });
     }
 
-    function getDepartments(id) {
+    function getDepartments(id = "") {
         axiosClient
             .get(`/get/departments/${id}`)
             .then((res) => {
                 console.log(res);
-                departments.value = res.data.data;
+                departments.value = res.data;
             })
             .catch((err) => {
                 console.log(err);
@@ -204,7 +244,7 @@ export const useTeacherStore = defineStore("teacher", () => {
 
     function getTeachers({
         url = null,
-        perPage,
+        per_page,
         search = "",
         sortDirection,
         sortField,
@@ -221,7 +261,7 @@ export const useTeacherStore = defineStore("teacher", () => {
                     ...params,
                     url,
                     search,
-                    perPage,
+                    per_page,
                     sortDirection,
                     sortField,
                     department_id,
@@ -248,6 +288,19 @@ export const useTeacherStore = defineStore("teacher", () => {
             Teachers.value.current_page = data.meta.current_page;
             Teachers.value.total = data.meta.total;
         }
+    }
+
+    //  get teacher acc department
+    const department_teacher = ref([]);
+    function getDepartmentTeacher(id) {
+        axiosClient
+            .get(`/department/teacher/${id}`)
+            .then((response) => {
+                department_teacher.value = response.data;
+            })
+            .catch((error) => {
+                msg_wrang.value = error.response.data.message;
+            });
     }
 
     function getTeacherDetails(id) {
@@ -283,6 +336,7 @@ export const useTeacherStore = defineStore("teacher", () => {
 
         let form = new FormData();
 
+        form.append("id", data.id);
         form.append("name", data.name);
         form.append("code_bast", data.code_bast);
         form.append("lname", data.lname);
@@ -297,6 +351,8 @@ export const useTeacherStore = defineStore("teacher", () => {
         form.append("academic_rank", data.academic_rank);
         form.append("nic", data.nic);
         form.append("education_field", data.education_field);
+        form.append("teaching_status", data.teaching_status);
+        form.append("related_part", data.related_part);
         form.append("photo", data.photo);
         form.append("hire_date", data.hire_date);
         form.append("faculty_id", data.faculty_id);
@@ -337,7 +393,7 @@ export const useTeacherStore = defineStore("teacher", () => {
     let listDepartment = ref([]);
     function getAllDepartments() {
         axiosClient
-            .get("/get_all_departments")
+            .get("/get/departments")
             .then((response) => {
                 if (response.status == 200) {
                     listDepartment.value = response.data;
@@ -356,12 +412,19 @@ export const useTeacherStore = defineStore("teacher", () => {
             .post(`/teacher/qualification/create/${id}`, data)
             .then((res) => {
                 loading.value = false;
+                stepTwo.value = true;
                 msg_qsuccess.value = res.data.message;
                 teacher_qualification.value.date = "";
                 teacher_qualification.value.graduated_year = "";
                 teacher_qualification.value.education_ = "";
                 teacher_qualification.value.country = "";
                 teacher_qualification.value.university = "";
+                setTimeout(() => {
+                    return router.push({
+                        name: "app.teacher.document.create",
+                        params: { id: id },
+                    });
+                }, 1000);
             })
             .catch((err) => {
                 loading.value = false;
@@ -454,6 +517,10 @@ export const useTeacherStore = defineStore("teacher", () => {
                 loading.value = false;
                 if (res.status === 200) {
                     msg_qsuccess.value = "در خواست حذف شد";
+                    router.push({
+                        name: "app.teacher.details",
+                        params: { id: id },
+                    });
                 }
             })
             .catch((err) => {
@@ -571,7 +638,6 @@ export const useTeacherStore = defineStore("teacher", () => {
     }
 
     //  teacher literature,
-
     function createLiterature(data, id) {
         loading.value = true;
         axiosClient
@@ -699,11 +765,15 @@ export const useTeacherStore = defineStore("teacher", () => {
             .post(`/teacher/document/create/${id}`, data)
             .then((res) => {
                 loading.value = false;
+                stepThree.value = true;
                 msg_success.value = res.data.message;
                 teacher_document.value.date = "";
                 teacher_document.value.description = "";
                 teacher_document.value.name = "";
                 teacher_document.value.publisher = "";
+                setTimeout(() => {
+                    router.push({ name: "app.teacher.list" });
+                }, 1000);
             })
             .catch((err) => {
                 loading.value = false;
@@ -968,6 +1038,10 @@ export const useTeacherStore = defineStore("teacher", () => {
     }
 
     return {
+        stepOne,
+        stepTwo,
+        stepThree,
+
         getAllDepartments,
         getTeachers,
         getFaculties,
@@ -1015,6 +1089,9 @@ export const useTeacherStore = defineStore("teacher", () => {
         editPromotion,
         updatePromotion,
         deletePromotion,
+        // department teacher
+        getDepartmentTeacher,
+        department_teacher,
 
         teacher_articles,
         teacher_document,

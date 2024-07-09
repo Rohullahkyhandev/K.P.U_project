@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import axiosClient from "../../../axios";
 import { ref } from "vue";
 
-const useCommitStore = defineStore("commit", () => {
+const useCommitStore = defineStore("postCommit", () => {
     let msg_success = ref("");
     let msg_wrang = ref("");
     let loading = ref(false);

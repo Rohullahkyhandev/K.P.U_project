@@ -26,6 +26,8 @@ export const useUserStore = defineStore("user", () => {
         password: "",
         password_confirmation: "",
         photo: "",
+        faculty_id: "",
+        // department_id: "",
     });
 
     let permissions = ref({
@@ -41,13 +43,44 @@ export const useUserStore = defineStore("user", () => {
 
     let permission_list = ref([]);
     let permission_current = ref({
-        admin: false,
-        //user
-        user_view: false,
-        user_create: false,
-        user_delete: false,
-        user_edit: false,
+        administrator: false,
+        view_pdc: false,
+        create_pdc: false,
+        delete_pdc: false,
+        edit_pdc: false,
+
+        // teacher department permissions
+        view_teacher_department: false,
+        create_teacher_department: false,
+        delete_teacher_department: false,
+        edit_teacher_department: false,
     });
+
+    function getCurrentPermission() {
+        axiosClient.get(`/user/current/permission`).then(({ data }) => {
+            data.forEach((item) => {
+                if (item.id === 1) {
+                    permission_current.value.administrator = true;
+                } else if (item.id === 5) {
+                    permission_current.value.view_pdc = true;
+                } else if (item.id === 6) {
+                    permission_current.value.create_pdc = true;
+                } else if (item.id === 7) {
+                    permission_current.value.edit_pdc = true;
+                } else if (item.id === 8) {
+                    permission_current.value.delete_pdc = true;
+                } else if (item.id === 10) {
+                    permission_current.value.view_teacher_department = true;
+                } else if (item.id === 11) {
+                    permission_current.value.create_teacher_department = true;
+                } else if (item.id === 12) {
+                    permission_current.value.edit_teacher_department = true;
+                } else if (item.id === 13) {
+                    permission_current.value.delete_teacher_department = true;
+                }
+            });
+        });
+    }
 
     function getUsers({
         url = null,
@@ -109,6 +142,8 @@ export const useUserStore = defineStore("user", () => {
         form.append("password", data.password);
         form.append("position", data.position);
         form.append("user_type", data.user_type);
+        form.append("faculty_id", data.faculty_id);
+        form.append("department_id", data.department_id);
         form.append("password_confirmation", data.password_confirmation);
         form.append("photo", photo);
         data = form;
@@ -177,7 +212,7 @@ export const useUserStore = defineStore("user", () => {
                 permission_list.value = res.data;
             })
             .catch((err) => {
-                console.log(err);
+                msg_wrang.value = err.response.data.message;
             });
     }
 
@@ -188,7 +223,7 @@ export const useUserStore = defineStore("user", () => {
                 user_data.value = res.data;
             })
             .catch((err) => {
-                console.log(err);
+                msg_wrang.value = err.response.data.message;
             });
     }
 
@@ -209,16 +244,18 @@ export const useUserStore = defineStore("user", () => {
         form.append("password", data.password);
         form.append("position", data.position);
         form.append("user_type", data.user_type);
+        form.append("faculty_id", data.faculty_id);
         form.append("password_confirmation", data.password_confirmation);
         form.append("photo", photo);
         data = form;
         axiosClient
             .post("/user/update", data)
             .then((res) => {
-                loading.value = true;
+                loading.value = false;
                 msg_success.value = res.data.message;
             })
             .catch((err) => {
+                loading.value = false;
                 msg_wrang.value = err.response.data.message;
             });
     }
@@ -246,20 +283,6 @@ export const useUserStore = defineStore("user", () => {
             .catch((err) => {
                 msg_wrang.value = err.response.data.error;
             });
-    }
-
-    function getCurrentPermission() {
-        axiosClient.get("/user/current/permission").then(({ data }) => {
-            console.log(data);
-            data.forEach((item) => {
-                console.log(item.id);
-                if (item.id === 1) {
-                    permission_current.value.admin = true;
-                } else if (item.id === 2) {
-                    permission_current.value.user_view = true;
-                }
-            });
-        });
     }
 
     function deletePermission(user_id) {

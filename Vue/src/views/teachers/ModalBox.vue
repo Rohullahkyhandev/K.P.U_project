@@ -13,7 +13,7 @@
                 <div class="fixed inset-0 bg-black/25" />
             </TransitionChild>
 
-            <div class="fixed inset-0 overflow-y-auto">
+        <div class="fixed inset-0 overflow-y-auto">
                 <div
                     class="flex min-h-full items-center justify-center p-4 text-center"
                 >
@@ -129,12 +129,16 @@
                                                 </div>
                                                 <div class="input--dev--width">
                                                     <CustomInput
-                                                        type="text"
+                                                        type="select"
+                                                        :select-options="
+                                                            academic_ranks
+                                                        "
                                                         v-model="
                                                             promotion.last_academic_rank
                                                         "
                                                         class="mb-2"
                                                         required="required"
+                                                        label=" رتبه علمی"
                                                     />
                                                 </div>
                                             </div>
@@ -153,12 +157,16 @@
                                                 </div>
                                                 <div class="input--dev--width">
                                                     <CustomInput
-                                                        type="text"
+                                                        type="select"
+                                                        :select-options="
+                                                            academic_ranks
+                                                        "
                                                         v-model="
                                                             promotion.now_academic_rank
                                                         "
                                                         class="mb-2"
                                                         required="required"
+                                                        label=" رتبه علمی"
                                                     />
                                                 </div>
                                             </div>
@@ -176,10 +184,10 @@
                                                     >
                                                 </div>
                                                 <div class="input--dev--width">
-                                                    <CustomInput
-                                                        type="date"
+                                                    <DatePicker
                                                         v-model="promotion.date"
                                                         class="mb-2"
+                                                        placeholder=" تاریخ ترفیع"
                                                         required="required"
                                                     />
                                                 </div>
@@ -212,7 +220,11 @@
                                                         for="link"
                                                         class="w-full flex items-center flex-col justify-center py-4 cursor-pointer transition-all duration-75 hover:bg-green-300 border border-dashed border-blue-400"
                                                     >
-                                                        <span class="mb-2 font-semibold">برای آپلود فایل کلیک نماید</span>
+                                                        <span
+                                                            class="mb-2 font-semibold"
+                                                            >برای آپلود فایل
+                                                            کلیک نماید</span
+                                                        >
                                                         <svg
                                                             xmlns="http://www.w3.org/2000/svg"
                                                             fill="none"
@@ -227,6 +239,16 @@
                                                                 d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
                                                             />
                                                         </svg>
+
+                                                        <span
+                                                            v-if="
+                                                                files_length !=
+                                                                null
+                                                            "
+                                                        >
+                                                            تعداد فایل ها
+                                                            {{ files_length }}
+                                                        </span>
                                                     </label>
 
                                                     <input
@@ -310,7 +332,7 @@ import {
 import CustomInput from "../../components/core/CustomInput.vue";
 import { computed, ref } from "vue";
 import { useTeacherStore } from "../../stores/teachers/teacherStore";
-
+import DatePicker from "vue3-persian-datetime-picker";
 const teacherStore = useTeacherStore();
 
 const promotion = computed(() => teacherStore.promotion);
@@ -342,15 +364,38 @@ const props = defineProps({
     },
 });
 
-
-
+const files_length = ref();
 function handleOnChange(event) {
     if (event) {
         promotion.value.attachment = event.target.files;
+        files_length.value = promotion.value.attachment.length;
     }
 }
 
 function onSubmit() {
     teacherStore.createPromotion(promotion.value, props.teacher_id);
 }
+
+const academic_ranks = ref([
+    {
+        text: "نامزاد پوهنیار",
+        key: "نامزاد پوهنیار",
+    },
+    {
+        text: "پوهیالی",
+        key: "پوهیالی",
+    },
+    {
+        text: "پوهنیار",
+        key: "پوهنیار",
+    },
+    {
+        text: "پوهنمل",
+        key: "پوهنمل",
+    },
+    {
+        text: "پوهاند",
+        key: "پوهاند",
+    },
+]);
 </script>

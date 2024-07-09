@@ -18,6 +18,11 @@ class AuthController extends Controller
         $credential = $request->validate([
             'email' => 'required|email|max:100',
             'password' => 'required|min:8',
+        ], [
+            'email.required' => 'فیلد ایمل آدرس الزامی می باشد',
+            'email.max' => 'فیلد ایمل باید حد اکثر کمتر از 100 حرف  می باشد',
+            'password.required' => 'فیلد رمز عبور الزامی می باشد',
+            'password.min' => 'فد اقل طول رمز عبور شما باید ۸ حرف باشد'
         ]);
 
         // User::create([
@@ -28,7 +33,7 @@ class AuthController extends Controller
         //     'photo' => 'test.jpg',
         //     'password' => $request->password,
         //     'user_type' => 'admin',
-        //     'dep_id' => '1'
+        //     // 'dep_id' => '1'
         // ]);
 
         if (!Auth::attempt($credential)) {
@@ -54,9 +59,9 @@ class AuthController extends Controller
     public function getCurrentPermission()
     {
         return permission::query()
-            ->join('userpermissions', 'userpermissions.permission_id', 'permissions.id')
+            ->join('user__permissions', 'user__permissions.permission_id', 'permissions.id')
             ->where('user_id', Auth::id())
-            ->select('permissions.*', 'userpermissions.permission_id as id')
+            ->select('permissions.*', 'user__permissions.permission_id as id')
             ->get();
     }
 

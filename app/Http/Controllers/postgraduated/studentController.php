@@ -27,6 +27,7 @@ class studentController extends Controller
 
         $data = Student::query()
             ->where('students.program_id', '=', $program_id)
+            ->where('students.status', '=', '1')
             ->where('students.name', 'like', "%{$search}%")
             ->whereDate('students.admission_year', 'like', "%{$year}%")
             // ->where('students.lname', 'like', "%{$search}%")

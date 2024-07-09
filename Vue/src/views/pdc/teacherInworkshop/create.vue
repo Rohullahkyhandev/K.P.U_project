@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between w-full">
             <div>
                 <router-link
-                    :to="{ name: 'app.pdc.workshop.list' }"
+                    :to="{ name: 'app.pdc.teacher_in_workshop.list' }"
                     class="header--button"
                 >
                     <svg
@@ -93,149 +93,170 @@
                 </div>
                 <!-- end of display message area -->
 
-                <!-- <div>
-                    <div class="wrapper--dev--input">
-                        <div class="label--dev--width">
-                            <label for="" class="form--label">
-                                موضوع
-                                <span class="label--prefix">*</span>
-                            </label>
-                        </div>
-                        <div class="input--dev--width">
-                            <CustomInput
-                                type="text"
-                                v-model="workshop.topic"
-                                class="mb-2"
-                                required="required"
-                            />
-                        </div>
+                <div class="wrapper--dev--input">
+                    <div class="label--dev--width">
+                        <label for="" class="form--label">
+                            نوع دیپارتمنت
+                            <span class="label--prefix">*</span>
+                        </label>
                     </div>
-
-                    <div class="wrapper--dev--input">
-                        <div class="label--dev--width">
-                            <label for="" class="form--label">
-                                تایم شروع
-                                <span class="label--prefix">*</span>
-                            </label>
-                        </div>
-                        <div class="input--dev--width">
-                            <CustomInput
-                                type="time"
-                                v-model="workshop.start_time"
-                                class="mb-2"
-                                required="required"
-                            />
-                        </div>
+                    <div class="input--dev--width">
+                        <CustomInput
+                            type="select"
+                            v-model="teacherInWorkshop.department_type"
+                            :select-options="department_type"
+                            class="mb-2"
+                            required="required"
+                        />
                     </div>
+                </div>
 
-                    <div class="wrapper--dev--input">
-                        <div class="label--dev--width">
-                            <label for="" class="form--label">
-                                تایم ختم
-                                <span class="label--prefix">*</span>
-                            </label>
-                        </div>
-                        <div class="input--dev--width">
-                            <CustomInput
-                                type="time"
-                                v-model="workshop.end_time"
-                                class="mb-2"
-                                required="required"
-                            />
-                        </div>
+                <div
+                    class="wrapper--dev--input"
+                    v-if="
+                        teacherInWorkshop.department_type == 'common_department'
+                    "
+                >
+                    <div class="label--dev--width">
+                        <label for="" class="form--label">
+                            دیپارمنت های عمومی
+                            <span class="label--prefix">*</span>
+                        </label>
                     </div>
-
-                    <div class="wrapper--dev--input">
-                        <div class="label--dev--width">
-                            <label for="" class="form--label">
-                                توضیحات
-                                <span class="label--prefix">*</span>
-                            </label>
-                        </div>
-                        <div class="input--dev--width">
-                            <CustomInput
-                                type="textarea"
-                                v-model="workshop.description"
-                                class="mb-2"
-                                required="required"
-                            />
-                        </div>
+                    <div class="input--dev--width">
+                        <CustomInput
+                            type="select"
+                            @change="
+                                getTeacher(teacherInWorkshop.department_id)
+                            "
+                            v-model="teacherInWorkshop.department_id"
+                            :select-options="department_out_faculties"
+                            class="mb-2"
+                            required="required"
+                            label=" دیپارتمنت"
+                        />
                     </div>
+                </div>
 
-                    <div class="wrapper--dev--input">
-                        <div class="label--dev--width">
-                            <label for="" class="form--label">
-                                آپلود فایل<span class="label--prefix"></span
-                            ></label>
-                        </div>
-                        <div class="input--dev--width">
-                            <CustomInput
-                                type="file"
-                                @change="(file) => (workshop.document = file)"
-                                class="mb-2"
-                            />
-                        </div>
+                <div
+                    class="wrapper--dev--input"
+                    v-if="
+                        teacherInWorkshop.department_type ==
+                        'uncommon_department'
+                    "
+                >
+                    <div class="label--dev--width">
+                        <label for="" class="form--label">
+                            فاکولته
+                            <span class="label--prefix">*</span>
+                        </label>
                     </div>
-                </div> -->
-
-                <div>
-                    <div class="wrapper--dev--input">
-                        <div class="label--dev--width">
-                            <label for="" class="form--label">
-                                استادان
-                                <span class="label--prefix">*</span>
-                            </label>
-                        </div>
-                        <div class="input--dev--width">
-                            <CustomInput
-                                type="select"
-                                :selectOptions="teachers"
-                                v-model="teacherInWorkshop.teacher_id"
-                                class="mb-2"
-                                required="required"
-                            />
-                        </div>
+                    <div class="input--dev--width">
+                        <CustomInput
+                            type="select"
+                            @change="
+                                getDepartment(teacherInWorkshop.faculty_id)
+                            "
+                            v-model="teacherInWorkshop.faculty_id"
+                            :select-options="faculties"
+                            class="mb-2"
+                            required="required"
+                        />
                     </div>
+                </div>
 
-                    <div class="wrapper--dev--input">
-                        <div class="label--dev--width">
-                            <label for="" class="form--label">
-                                ورکشاپ ها
-                                <span class="label--prefix">*</span>
-                            </label>
-                        </div>
-                        <div class="input--dev--width">
-                            <CustomInput
-                                type="select"
-                                :selectOptions="workshops"
-                                v-model="teacherInWorkshop.workshop_id"
-                                class="mb-2"
-                                required="required"
-                            />
-                        </div>
+                <div
+                    class="wrapper--dev--input"
+                    v-if="
+                        departments.length != '' &&
+                        teacherInWorkshop.department_type ==
+                            'uncommon_department'
+                    "
+                >
+                    <div class="label--dev--width">
+                        <label for="" class="form--label">
+                            دیپارتمنت ها
+                            <span class="label--prefix">*</span>
+                        </label>
                     </div>
+                    <div class="input--dev--width">
+                        <CustomInput
+                            type="select"
+                            @change="
+                                getTeacher(teacherInWorkshop.department_id)
+                            "
+                            v-model="teacherInWorkshop.department_id"
+                            :select-options="departments"
+                            class="mb-2"
+                            required="required"
+                        />
+                    </div>
+                </div>
 
-                    <div class="wrapper--dev--input">
-                        <div class="label--dev--width">
-                            <label for="" class="form--label">
-                                آپلود فایل<span class="label--prefix"></span
-                            ></label>
-                        </div>
-                        <div class="input--dev--width">
-                            <!-- <input type="file" multiple @change="handelFiles" /> -->
-                            <CustomInput
-                                type="file"
-                                @change="
-                                    (file) => {
-                                        teacherInWorkshop.document = file;
-                                    }
-                                "
-                                class="mb-2"
-                            />
-                        </div>
+                <div
+                    class="wrapper--dev--input"
+                    v-if="
+                        (departments.length != '' ||
+                            department_out_faculties.length != '') &&
+                        teacherInWorkshop.department_type != ''
+                    "
+                >
+                    <div class="label--dev--width">
+                        <label for="" class="form--label">
+                            استادان
+                            <span class="label--prefix">*</span></label
+                        >
+                    </div>
+                    <div class="input--dev--width">
+                        <CustomInput
+                            type="select"
+                            v-model="teacherInWorkshop.teacher_id"
+                            :select-options="teachers"
+                            class="mb-2"
+                            required="required"
+                        />
+                    </div>
+                </div>
+
+                <div class="wrapper--dev--input">
+                    <div class="label--dev--width">
+                        <label for="" class="form--label">
+                            ورکشاپ ها
+                            <span class="label--prefix">*</span>
+                        </label>
+                    </div>
+                    <div class="input--dev--width">
+                        <CustomInput
+                            type="select"
+                            :selectOptions="workshops"
+                            v-model="teacherInWorkshop.workshop_id"
+                            class="mb-2"
+                            required="required"
+                        />
+                    </div>
+                </div>
+
+                <div class="wrapper--dev--input">
+                    <div class="label--dev--width">
+                        <label for="" class="form--label">
+                            آپلود فایل<span class="label--prefix"></span
+                        ></label>
+                    </div>
+                    <div class="input--dev--width">
+                        <!-- <input type="file" multiple @change="handelFiles" /> -->
+                        <CustomInput
+                            type="file"
+                            @change="
+                                (file) => {
+                                    teacherInWorkshop.document = file;
+                                }
+                            "
+                            class="mb-2"
+                        />
                     </div>
                 </div>
             </div>
+
             <footer class="bg-gray-100 py-4 md:flex gap-5">
                 <button
                     type="submit"
@@ -282,25 +303,74 @@
 <script setup>
 import { computed, onMounted, ref, useSlots } from "vue";
 import CustomInput from "../../../components/core/CustomInput.vue";
-import useCommitStore from "../../../stores/pdc/commit/commitStore";
-import useTeacherInCommit from "../../../stores/pdc/teacherInCommit/teacherInCommitStore";
+import useDepartmentStore from "../../../stores/department/deparmentStore";
+import { useFacultyStore } from "../../../stores/faculties/facultyStore";
+
 import useTeacherInWorkshop from "../../../stores/pdc/teacherInWorshop/teacherInWorkshopStore";
 const teacherInWorkshopStore = useTeacherInWorkshop();
-const teacherInCommitStore = useTeacherInCommit();
+const facultyStore = useFacultyStore();
+const departmentStore = useDepartmentStore();
 
 const teacherInWorkshop = computed(
     () => teacherInWorkshopStore.teacherInWorkshop
 );
 
 onMounted(() => {
-    teacherInCommitStore.getTeachers();
+    facultyStore.getAllFaculty();
+    if (teacherInWorkshop.value.faculty_id != "") {
+        departmentStore.getFacultyDepartment(
+            teacherInWorkshopStore.value.faculty_id
+        );
+        if (teacherInWorkshopStore.value.department_id != "") {
+            teacherInWorkshopStore.getTeacher(
+                teacherInWorkshopStore.value.department_id
+            );
+        }
+    } else {
+        departmentStore.departmentHasOutFaculties();
+    }
     teacherInWorkshopStore.getWorkshops();
 });
 
+function getDepartment(id) {
+    departmentStore.getFacultyDepartment(id);
+}
+
+function getTeacher(id) {
+    teacherInWorkshopStore.getTeacher(id);
+}
+
+const department_type = ref([
+    {
+        key: "common_department",
+        text: "دیپارمنت های  عمومی",
+    },
+
+    {
+        key: "uncommon_department",
+        text: "دیپارمنت های غیر عمومی",
+    },
+]);
+
+const faculties = computed(() =>
+    facultyStore.listFaculty.map((f) => ({ key: f.id, text: f.name }))
+);
+
+const departments = computed(() =>
+    departmentStore.faculty_department.map((d) => ({ key: d.id, text: d.name }))
+);
+
+const department_out_faculties = computed(() =>
+    departmentStore.department_has_out_facilities.map((d) => ({
+        key: d.id,
+        text: d.name,
+    }))
+);
+
 const teachers = computed(() =>
-    teacherInCommitStore.teachers.map((teacher) => ({
-        key: teacher.id,
-        text: teacher.name + " " + teacher.lname,
+    teacherInWorkshopStore.teacher_department.map((c) => ({
+        key: c.id,
+        text: c.name + " " + c.lname,
     }))
 );
 
@@ -309,9 +379,9 @@ const workshops = computed(() =>
         key: workshop.id,
         text:
             workshop.topic +
-            "  " +
+            "  تایم شروع:- " +
             workshop.start_time +
-            "  " +
+            " تایم ختم:- " +
             workshop.end_time,
     }))
 );

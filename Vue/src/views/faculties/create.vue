@@ -1,7 +1,7 @@
 <template>
     <div class="mt-10 mb-10 w-full">
         <div class="flex items-center justify-between w-full">
-            <div>
+            <div >
                 <router-link
                     :to="{ name: 'app.faculty.list' }"
                     class="header--button"
@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <form @submit.prevent="onSubmit">
+        <form @submit.prevent="onSubmit" enctype="multipart/form-data">
             <div class="w-full py-8 bg-white shadow mt-8 px-4">
                 <!-- display message area -->
                 <div
@@ -117,15 +117,14 @@
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
                             <label class="form--label"
-                                >تاریخ تأسیس<span class="label--prefix"
-                                    >*</span
-                                ></label
-                            >
+                                >نام ریس فاکولته
+                                <span class="label--prefix">*</span>
+                            </label>
                         </div>
                         <div class="input--dev--width">
                             <CustomInput
-                                type="date"
-                                v-model="faculty.date"
+                                type="text"
+                                v-model="faculty.director_name"
                                 class="mb-2"
                                 required="required"
                             />
@@ -134,19 +133,65 @@
 
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
-                            <label
-                                class="form--label"
-                                >توضیحات<span class="label--prefix"
+                            <label class="form--label"
+                                >تخلص ریس فاکولته
+                                <span class="label--prefix">*</span>
+                            </label>
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                type="text"
+                                v-model="faculty.director_lname"
+                                class="mb-2"
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label class="form--label"
+                                >تاریخ تأسیس<span class="label--prefix"
                                     >*</span
                                 ></label
                             >
                         </div>
-                        <div
-                            class="input--dev--width"
-                        >
+                        <div class="input--dev--width">
+                            <DatePicker
+                                v-model="faculty.date"
+                                class="mb-2"
+                                required="required"
+                                placeholder=" تاریخ تأسیس"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label class="form--label"
+                                >توضیحات
+                                <span class="label--prefix">*</span></label
+                            >
+                        </div>
+                        <div class="input--dev--width">
                             <CustomInput
                                 type="textarea"
                                 v-model="faculty.description"
+                                class="mb-2"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label class="form--label"
+                                >عکس ریس<span class="label--prefix"></span
+                            ></label>
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                type="file"
+                                @change="(file) => (faculty.photo = file)"
                                 class="mb-2"
                             />
                         </div>
@@ -198,6 +243,7 @@
 
 <script setup>
 import { computed, ref, useSlots } from "vue";
+import DatePicker from "vue3-persian-datetime-picker";
 import CustomInput from "../../components/core/CustomInput.vue";
 import { useFacultyStore } from "../../stores/faculties/facultyStore";
 
@@ -207,8 +253,5 @@ const faculty = computed(() => facultyStore.faculty);
 
 function onSubmit() {
     facultyStore.createFaculty(faculty.value);
-    faculty.value.date = "";
-    faculty.value.name = "";
-    faculty.value.description = "";
 }
 </script>

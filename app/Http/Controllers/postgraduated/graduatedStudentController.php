@@ -23,18 +23,21 @@ class graduatedStudentController extends Controller
     public function index()
     {
 
+
         $search = request('');
         $per_page = request('per_page', 10);
         $sortField = request('sortField', 'id');
         $sortDirection = request('sortDirection', 'DESC');
+        $year = request('year', '');
         $data = GraduatedStudent::query()
-            ->where('phone', 'like', "%{$search}%")
-            ->orWhere('email', 'like', "%{$search}%")
-            ->orWhere('address', 'like', "%{$search}%")
-            ->join("users", "students.user_id", "users.user_id")
-            ->join("post_programs", "students.program_id", "post_programs.id")
-            ->select("students.*", "post_programs.program_name as program_name", "users.name as uname")
-            ->orderBy("post_programs.$sortField", $sortDirection)
+            ->where('graduated_students.graduated_year', 'like', "%{$year}")
+            ->where('graduated_students.name', 'like', "%{$search}")
+            ->where('graduated_students.lname', 'like', "%{$search}")
+            ->join("users", "graduated_students.user_id", "users.id")
+            ->join("post_graduated_programs", "graduated_students.program_id", "post_graduated_programs.id")
+            ->join("students", "graduated_students.student_id", "students.id")
+            ->select("graduated_students.*", "post_graduated_programs.program_name as program_name", "users.name as uname", "students.name as name", "students.lname as lname", "students.fname as fname")
+            ->orderBy("graduated_students.$sortField", $sortDirection)
             ->paginate($per_page);
 
         return GraduatedStudentResource::collection($data);
@@ -43,19 +46,19 @@ class graduatedStudentController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'percentage' => 'required',
-            'graduation_year' => 'required',
-            'diploma_id' => 'required',
-            'program_id' => 'required',
+            'graduated_year' => 'required',
+            'diplome_id' => 'required',
             'thesis_guide_teacher' => 'required',
             'thesis_mark' => 'required',
             'attribute' => 'required',
         ], [
             'percentage.required' => 'فلید فصدی کلی الزامی می باشد',
-            'graduation_year.required' => 'فلید تخلص سال فراغات  الزامی می باشد',
+            'graduated_year.required' => 'فلید  سال فراغات  الزامی می باشد',
             'fname.required' => 'فلید نام پدر الزامی می باشد',
-            'diploma_id.required' => 'فلید  آدی دیپلوم  الزامی می باشد',
+            'diplome_id.required' => 'فلید  آدی دیپلوم  الزامی می باشد',
             'thesis_guide_teacher.required' => 'فلید شماره تماس الزامی می باشد',
             'attribute.required' => 'فیلد خوصیات الزامی می باشد',
             'thesis_mark.required' => 'فیلد نمره تیسز  الزامی می باشد'
@@ -63,30 +66,33 @@ class graduatedStudentController extends Controller
 
         DB::beginTransaction();
         try {
-
             $user_id = Auth::user()->id;
             $student_id  = $request->student_id;
             $student = Student::find($student_id);
             $student->status = '2';
             $student->save();
 
+            //$check_data = GraduatedStudent::where('student_id', '=', $student->id)->get()->first();
             $graduated_student = new GraduatedStudent();
-            $graduated_student->email = $student->email;
-            $graduated_student->phone = $student->phone;
-            $graduated_student->address = $student->address;
+            $graduated_student->name = $student->name;
+            $graduated_student->lname = $student->lname;
+            $graduated_student->fname = $student->fname;
             $graduated_student->percentage = $request->percentage;
-            $graduated_student->graduation_year = $request->graduation_year;
-            $graduated_student->diploma_id = $request->diploma_id;
+            $graduated_student->attribute = $request->attribute;
+            $graduated_student->graduated_year = $request->graduated_year;
+            $graduated_student->diplome_id = $request->diplome_id;
             $graduated_student->thesis_guide_teacher = $request->thesis_guide_teacher;
             $graduated_student->thesis_mark = $request->thesis_mark;
-            $graduated_student->studnet_id = $request->studnet_id;
-            $graduated_student->program_id = $request->program_id;
+            $graduated_student->student_id = $student->id;
+            $graduated_student->program_id = $student->program_id;
             $graduated_student->user_id = $user_id;
             $result = $graduated_student->save();
+
             DB::commit();
         } catch (Exception  $e) {
             $result = $e;
             DB::rollBack();
+            return $result;
         }
         if ($result) {
             return response([
@@ -94,16 +100,16 @@ class graduatedStudentController extends Controller
             ], 200);
         } else {
             return response([
-                'message' => 'اطلاعات موفقانه راجستر  نشد دوباره تلاش نماید'
-            ], 200);
+                'error' => 'اطلاعات موفقانه راجستر  نشد دوباره تلاش نماید'
+            ], 304);
         }
     }
 
 
     public function edit($id = '')
     {
-        $student = Student::find($id);
-        return new StudentResource($student);
+        $data  = GraduatedStudent::find($id);
+        return $data;
     }
 
     public function update(Request $request)
@@ -111,16 +117,16 @@ class graduatedStudentController extends Controller
 
         $request->validate([
             'percentage' => 'required',
-            'graduation_year' => 'required',
-            'diploma_id' => 'required',
+            'graduated_year' => 'required',
+            'diplome_id' => 'required',
             'program_id' => 'required',
             'thesis_guide_teacher' => 'required',
             'thesis_mark' => 'required',
             'attribute' => 'required',
         ], [
             'percentage.required' => 'فلید فصدی کلی الزامی می باشد',
-            'graduation_year.required' => 'فلید تخلص سال فراغات  الزامی می باشد',
-            'diploma_id.required' => 'فلید  آدی دیپلوم  الزامی می باشد',
+            'graduated_year.required' => 'فلید  سال فراغات  الزامی می باشد',
+            'diplome_id.required' => 'فلید  آدی دیپلوم  الزامی می باشد',
             'program_id.required' => 'فیلد برنامه تحصیلی الزامی می باشد',
             'thesis_guide_teacher.required' => 'فلید شماره تماس الزامی می باشد',
             'attribute.required' => 'فیلد خوصیات الزامی می باشد',
@@ -128,11 +134,9 @@ class graduatedStudentController extends Controller
         ]);
 
         $graduated_student = GraduatedStudent::find($request->id);
-
         $graduated_student->percentage = $request->percentage;
-        $graduated_student->graduation_year = $request->graduation_year;
-        $graduated_student->diploma_id = $request->diploma_id;
-        $graduated_student->program_id = $request->program_id;
+        $graduated_student->graduated_year = $request->graduated_year;
+        $graduated_student->diplome_id = $request->diplome_id;
         $graduated_student->thesis_guide_teacher = $request->thesis_guide_teacher;
         $graduated_student->thesis_mark = $request->thesis_mark;
         $graduated_student->attribute = $request->attribute;

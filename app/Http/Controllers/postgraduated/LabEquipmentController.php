@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\LabEquipmentResource;
 use App\Models\Lab;
 use App\Models\LabEquipment;
+use App\Models\LabTools;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\CssSelector\Node\FunctionNode;
 
 class LabEquipmentController extends Controller
@@ -19,13 +21,14 @@ class LabEquipmentController extends Controller
         $per_page = request('per_page', 10);
         $sortField = request('sortField', 'id');
         $sortDirection = request('sortDirection', 'DESC');
-        $data = LabEquipment::query()
-            ->where('lab_equipments.name', 'like', "%{$search}%")
-            ->orWhere('lab_equipments.entry_date', 'like', "%{$search}%")
-            ->join('users', 'lab_equipments.user_id', 'users.id')
-            ->join('labs', 'lab_equipment.lab_id', 'labs.id')
-            ->select('lab_equipments.*', 'users.name as uname', 'labs.name as lname')
-            ->orderBy("lab_equipments.$sortField", $sortDirection)
+        $data = LabTools::query()
+            ->where('lab_tools.name', 'like', "%{$search}%")
+            ->orWhere('lab_tools.entry_date', 'like', "%{$search}%")
+            ->join('users', 'lab_tools.user_id', 'users.id')
+            ->join('labs', 'lab_tools.lab_id', 'labs.id')
+            ->join('post_graduated_programs', 'lab_tools.lab_id', 'post_graduated_programs.id')
+            ->select('lab_tools.*', 'users.name as uname', 'labs.name as lname', 'post_graduated_programs.program_name as program_name')
+            ->orderBy("lab_tools.$sortField", $sortDirection)
             ->paginate($per_page);
 
         return LabEquipmentResource::collection($data);
@@ -47,13 +50,14 @@ class LabEquipmentController extends Controller
             'quantity.required' => 'فیلد تعداد الزامی می باشد'
         ]);
 
-        $labEquipment = new LabEquipment();
+        $user_id = Auth::user()->id;
+        $labEquipment = new LabTools();
         $labEquipment->name = $request->name;
         $labEquipment->entry_date = $request->entry_date;
         $labEquipment->description = $request->description;
         $labEquipment->quantity = $request->quantity;
         $labEquipment->lab_id = $request->lab_id;
-        $labEquipment->user_id = $request->user_id;
+        $labEquipment->user_id = $user_id;
         $labEquipment->save();
 
         return response()->json([
@@ -70,7 +74,7 @@ class LabEquipmentController extends Controller
 
     public function edit($id)
     {
-        $labEquipment = LabEquipment::find($id);
+        $labEquipment = LabTools::find($id);
         return $labEquipment;
     }
 
@@ -89,7 +93,7 @@ class LabEquipmentController extends Controller
             'quantity.required' => 'فیلد تعداد الزامی می باشد'
         ]);
 
-        $labEquipment = LabEquipment::find($request->id);
+        $labEquipment = LabTools::find($request->id);
         $labEquipment->name = $request->name;
         $labEquipment->entry_date = $request->entry_date;
         $labEquipment->description = $request->description;
@@ -101,12 +105,12 @@ class LabEquipmentController extends Controller
         if ($result) {
             return response()->json([
                 'success' => true,
-                'message' => 'اطلاعات موفقانه ذخیره گردید'
+                'message' => 'اطلاعات موفقانه ویرایش گردید'
             ], 200);
         } else {
             return response()->json([
                 'success' => false,
-                'message' => 'اطلاعات موفقانه ذخیره نشد دوباره تلاش نماید'
+                'message' => 'اطلاعات موفقانه ویرایش نشد دوباره تلاش نماید'
             ], 304);
         }
     }
@@ -122,7 +126,7 @@ class LabEquipmentController extends Controller
     public function destroy($id)
     {
         // Attempt to delete the record
-        $result = LabEquipment::destroy($id);
+        $result = LabTools::destroy($id);
 
         // Check if the deletion was successful
         if ($result) {

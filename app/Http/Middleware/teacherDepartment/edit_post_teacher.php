@@ -4,6 +4,7 @@ namespace App\Http\Middleware\teacherDepartment;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class edit_post_teacher
@@ -15,6 +16,13 @@ class edit_post_teacher
      */
     public function handle(Request $request, Closure $next): Response
     {
-        return $next($request);
+        foreach (Auth::user()->permissions as $permission) {
+            if ($permission->permission_name == 'create_pdc') {
+                return $next($request);
+            }
+        }
+        return response([
+            'message' => 'شما صلاحیت کامل برای انجام این کار را ندارید'
+        ], 403);
     }
 }

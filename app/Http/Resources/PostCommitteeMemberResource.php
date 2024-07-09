@@ -19,6 +19,8 @@ class PostCommitteeMemberResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'lname' => $this->lname,
+            'email' => $this->email,
+            'address' => $this->address,
             'phone' => $this->phone,
             'commit_name' => $this->commit_name,
             'faculty' => $this->faculty,

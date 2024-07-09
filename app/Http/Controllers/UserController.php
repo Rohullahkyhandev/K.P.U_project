@@ -7,6 +7,7 @@ use App\Http\Resources\UserResource;
 use App\Models\Chance_Amiryat;
 use App\Models\permission;
 use App\Models\User;
+use App\Models\User_Permission;
 use App\Models\userpermission;
 use Exception;
 use Illuminate\Http\Request;
@@ -42,18 +43,20 @@ class UserController extends Controller
         $search = request('search', '');
         $data = User::query()
             ->where('users.name', 'like', "%{$search}%")
-            ->join("chance__amiryats", "users.dep_id", "chance__amiryats.id")
-            ->select("users.*", "chance__amiryats.display_name as dname")
+            ->leftjoin("chance__amiryats", "users.dep_id", "chance__amiryats.id")
+            ->leftjoin("faculties", "users.faculty_id", "faculties.id")
+            ->leftjoin("departments", "users.department_id", "departments.id")
+            ->select("users.*", "chance__amiryats.display_name as dname", 'faculties.name as fname', 'departments.name as department_name')
             ->orderBy("users.$sortField", $sortDirection)
             ->paginate($per_page);
 
         return UserResource::collection($data);
     }
 
-    public function create()
-    {
-        return view('users.create');
-    }
+    // public function create()
+    // {
+    //     return view('users.create');
+    // }
 
     public function store(Request $request)
     {
@@ -61,25 +64,37 @@ class UserController extends Controller
 
         $rules = $this->validation();
         Validator::make($request->all(), $rules)->validate();
-        $path = '';
+        $photo = '';
         $photo_path = '';
-        if ($request->file('photo')) {
-            $path = $request->file('photo')->store('/', 'users');
-            $photo_path = asset(Storage::url('users/' . $path));
+        if ($request->photo) {
+            $photo = $request->photo->store('/', 'users');
+            $photo_path = asset(Storage::url('users/' . $photo));
         }
         $user = new User();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->position = $request->position;
-        $user->photo = $path;
+        $user->photo = $photo;
         $user->photo_path = $photo_path;
-        $user->user_type = $request->dep_id;
-        $user->dep_id = $request->dep_id;
+        $user->user_type = $request->user_type;
+        if ($request->user_type == 'fifth_department') {
+            $user->dep_id = $request->dep_id;
+        }
+        if (
+            $request->user_type == 'faculty_user'
+        ) {
+            $user->faculty_id = $request->faculty_id;
+        }
+        if (
+            $request->user_type == 'department_user'
+        ) {
+            $user->department_id = $request->department_id;
+        }
         $user->password = $request->password;
         $result = $user->save();
         if ($result) {
-            return response()->json([
-                'res' => 'یوزر موفقانه راجستر گردید'
+            return response([
+                'message' => 'یوزر موفقانه راجستر گردید'
             ]);
         }
     }
@@ -104,6 +119,8 @@ class UserController extends Controller
             'password' => 'nullable|min:8|string|confirmed',
             'position' => 'required|string|max:100',
             'user_type' => 'required',
+            'faculty_id' => 'nullable',
+            'dep_id' => 'nullable',
         ]);
 
         DB::beginTransaction();
@@ -112,22 +129,40 @@ class UserController extends Controller
             $photo = $user->photo;
             $photo_path = $user->photo_path;
             if ($request->photo != '') {
-                if (is_file(storage_path('/app/public/users/' . $photo))) {
-                    unlink(storage_path('/app/public/users/' . $photo));
+                if (is_file(storage_path('/app/public/users/' . $user->photo))) {
+                    unlink(storage_path('app/public/users/' . $user->photo));
                 }
                 $photo = $request->photo->store('/', 'users');
                 $photo_path = asset(Storage::url('users/' . $photo));
             }
-            $result = User::find($request->id)->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'position' => $request->position,
-                'photo' => $photo,
-                'photo_path' => $photo_path,
-                'user_type' => $request->dep_id,
-                'dep_id' => $request->dep_id,
-                'password' => $request->password,
-            ]);
+            $password = $user->password;
+            if ($request->password != '') {
+                $password = bcrypt($request->password);
+            }
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->position = $request->position;
+            $user->photo = $photo;
+            $user->password = $password;
+            $user->photo_path = $photo_path;
+            $user->user_type = $request->user_type;
+            if ($request->user_type == 'fifth_department') {
+                $user->dep_id = $request->dep_id;
+                $user->faculty_id = null;
+                $user->department_id = null;
+            }
+            if ($request->user_type == 'faculty_user') {
+                $user->faculty_id = $request->faculty_id;
+                $user->dep_id = null;
+                $user->department_id = null;
+            }
+            if ($request->user_type == 'department_user') {
+                $user->department_id = $request->department_id;
+                $user->faculty_id = null;
+                $user->dep_id = null;
+            }
+            $result = $user->save();
+
             DB::commit();
         } catch (Exception $e) {
             $result = 0;
@@ -148,13 +183,13 @@ class UserController extends Controller
         $request->validate([
             'permission_id' => ['required'],
         ]);
-        $check_permission = userpermission::where('permission_id', '=', $request->permission_id)->where('user_id', '=', $request->user_id)->get()->first();
+        $check_permission = User_Permission::where('permission_id', '=', $request->permission_id)->where('user_id', '=', $request->user_id)->get()->first();
         if ($check_permission != '') {
             return response([
-                'res' => 'صلاحیت قبلا وجود دارد'
+                'res' => 'صلاحیت  از قبلا وجود دارد'
             ], 200);
         }
-        $permission = new userpermission();
+        $permission = new  User_Permission();
         $permission->permission_id = $request->permission_id;
         $permission->user_id = $request->user_id;
         $result = $permission->save();
@@ -172,13 +207,13 @@ class UserController extends Controller
     ///  list user permission
     public function get_user_permission($user_id = '')
     {
-        $permissions = permission::query()
+        $permissions = Permission::query()
             ->orderBy('id', 'ASC')
             ->get();
 
         $result = [];
         foreach ($permissions as $permission) {
-            $userPermission = userpermission::where('permission_id', '=', $permission->id)->where('user_id', '=', $user_id)->orderBy('id', 'ASC')->get()->first();
+            $userPermission = User_Permission::where('permission_id', '=', $permission->id)->where('user_id', '=', $user_id)->orderBy('id', 'ASC')->get()->first();
             if ($userPermission != '') {
                 continue;
             }
@@ -193,11 +228,11 @@ class UserController extends Controller
     {
         $id = request('id');
         $per_page = request('per_page', 10);
-        $permissions =  userpermission::query()
-            ->join('users', 'userpermissions.user_id', '=', 'users.id')
-            ->join('permissions', 'userpermissions.permission_id', '=', 'permissions.id')
-            ->where('userpermissions.user_id', '=', $id)
-            ->select('userpermissions.*', 'users.name as uname', 'permissions.display_name')
+        $permissions =  User_Permission::query()
+            ->join('users', 'user__permissions.user_id', '=', 'users.id')
+            ->join('permissions', 'user__permissions.permission_id', '=', 'permissions.id')
+            ->where('user__permissions.user_id', '=', $id)
+            ->select('user__permissions.*', 'users.name as uname', 'permissions.display_name')
             ->paginate($per_page);
         return  PermissionResource::collection($permissions);
     }
@@ -205,7 +240,7 @@ class UserController extends Controller
 
     public function delete_permission($id = '')
     {
-        $result = userpermission::where('user_id', '=', $id)->delete();
+        $result = User_Permission::where('user_id', '=', $id)->delete();
         return $result;
     }
 
@@ -223,8 +258,7 @@ class UserController extends Controller
 
     public function deletePermission($id = '')
     {
-
-        $result = userpermission::destroy($id);
+        $result = User_Permission::destroy($id);
         return $result;
     }
 }

@@ -10,4 +10,10 @@ class Faculty extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    // teacher
+    public function teacher()
+    {
+        return $this->hasMany(Teacher::class);
+    }
 }

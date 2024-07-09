@@ -48,7 +48,7 @@ class TeacherController extends Controller
             'birth_date' => 'required:date:max:100',
             'academic_rank' => 'required:string:max:100',
             'hire_date' => 'required:date:max:100',
-            'nic' => 'required:string:max:100',
+            'nic' => 'required:string:max:100|unique:teachers',
             'education_field' => 'required:string:max:100',
         ];
 
@@ -59,35 +59,103 @@ class TeacherController extends Controller
 
     public function index()
     {
-        $per_page = request('perPage', 10);
-        $department_id = request('department_id');
+        $per_page = request('per_page', 10);
+        $department_id = request('department_id', '');
+        $program_id = request('program_id', '');
         $search = request('search', '');
         $sortField = request('sortField', 'id');
         $sortDirection = request('sortDirection', 'DESC');
 
-        $data = Teacher::query()
+        $currentUser = Auth::user();
+
+        if ($currentUser->user_type == 'fifth_department' && $currentUser->dep_id == 4) {
+            $data = Teacher::query()
+                ->distinct()
+                ->where('teachers.program_id', 'like', "%{$program_id}%")
+                ->whereAny([
+                    'teachers.name',
+                    'teachers.lname',
+                    'teachers.fatherName',
+                    'teachers.code_bast',
+                    'teachers.nic',
+                ], 'LIKE',  "%{$search}%")
+                ->leftJoin('departments', 'teachers.department_id', 'departments.id')
+                ->leftJoin('post_graduated_programs', 'teachers.program_id', 'post_graduated_programs.id')
+                ->leftJoin('users', 'teachers.user_id', 'users.id')
+                ->leftJoin('promotions', 'promotions.teacher_id', 'teachers.id')
+                ->leftJoin('teacher_qualifications', 'teachers.id', 'teacher_qualifications.teacher_id')
+                ->leftJoin('faculties', 'teachers.faculty_id', 'faculties.id')
+                ->select('teachers.*', 'promotions.date as date', 'post_graduated_programs.program_name as pname',  'post_graduated_programs.degree_type as degree_type', 'promotions.attachment_path as attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department', 'teacher_qualifications.education_ as education', 'users.name as uname')
+                ->whereIn('teachers.teaching_status',  ['post-graduated', 'both'])
+                ->orderBy("teachers.$sortField", $sortDirection)
+                ->paginate($per_page);
+            return TeacherResource::collection($data);
+        }
+
+        $data = DB::table('teachers')
+        ->where('teachers.department_id', 'like', "%{$department_id}%")
+        ->whereAny([
+            'teachers.name',
+            'teachers.lname',
+            'teachers.fatherName',
+            'teachers.code_bast',
+            'teachers.nic',
+        ], 'LIKE',  "%{$search}%")
+        ->leftJoin('departments', 'teachers.department_id', 'departments.id')
+        ->leftJoin('post_graduated_programs', 'teachers.program_id', 'post_graduated_programs.id')
+        ->leftJoin('users', 'teachers.user_id', 'users.id')
+        ->leftJoin('promotions', 'promotions.teacher_id', 'teachers.id')
+        ->leftJoin('teacher_qualifications', 'teachers.id', '=', 'teacher_qualifications.teacher_id')
+        ->leftJoin('faculties', 'teachers.faculty_id', 'faculties.id')
+        ->select('teachers.*', 'promotions.date as date', 'post_graduated_programs.program_name as pname',  'post_graduated_programs.degree_type as degree_type', 'promotions.attachment_path as attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department', 'teacher_qualifications.education_ as education', 'users.name as uname')
+        ->orderBy("teachers.$sortField", $sortDirection)
             ->distinct()
-            ->where('teachers.name', 'like', "%{$search}%")
-            ->where('teachers.department_id', '=', $department_id)
-            ->orWhere('teachers.lname', 'like', "%{$search}%")
-            ->join('departments', 'teachers.department_id', 'departments.id')
-            ->join('users', 'teachers.user_id', 'users.id')
-            // ->distinct()
-            ->leftJoin('promotions', 'promotions.teacher_id', 'teachers.id')
-            ->leftJoin('teacher_qualifications', 'teachers.id', 'teacher_qualifications.teacher_id')
-            ->join('faculties', 'teachers.faculty_id', 'faculties.id')
-            ->select('teachers.*', 'promotions.date as date', 'promotions.attachment_path as attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department', 'teacher_qualifications.education_ as education', 'users.name as uname')
-            ->orderBy("teachers.$sortField", $sortDirection)
             ->paginate($per_page);
         return TeacherResource::collection($data);
     }
 
 
+    // get the teache information acc specific department
+    public function getDepartmentTeacher($id)
+    {
+        $data = Teacher::where('department_id', '=', $id)->get();
+        return $data;
+    }
+
 
     public function store(Request $request)
     {
-        $rules = $this->validation();
-        Validator::make($request->all(), $rules)->validate();
+
+
+        $validate_date_of_birth = (date('Y') - substr($request->birth_date, 0, 3));
+        if ($validate_date_of_birth < 25) {
+            return response([
+                'error' => 'سن شما کوچکتر از حد قابل قبول است'
+            ], 304);
+        }
+
+        $request->validate([
+            'code_bast' => 'required|string|max:10|unique:teachers,code_bast',
+            'name' => 'required|string|max:100',
+            'lname' => 'required|string|max:100',
+            'fatherName' => 'required|string|max:100',
+            'grandFathername' => 'required|string|max:100',
+            'email' => 'email|string|max:100|unique:teachers',
+            'phone' => 'required|string|max:14',
+            'gender' => 'required|string',
+            'main_address'  => 'required|string|max:100',
+            'current_address'  => 'required|string|max:100',
+            'birth_date' => 'required|date|max:100',
+            'academic_rank' => 'required|string|max:100',
+            'hire_date' => 'required|date|max:100',
+            'nic' => 'required|string|max:13',
+            'teaching_status' => 'required',
+            // 'related_part' => 'required',
+            // 'program_id' => 'required',
+            // 'department_id' => 'required',
+            // 'faculty_id' => 'required',
+            'education_field' => 'required|string|max:100',
+        ], []);
 
         DB::beginTransaction();
         try {
@@ -112,22 +180,33 @@ class TeacherController extends Controller
             $teacher->birth_date = $request->birth_date;
             $teacher->academic_rank = $request->academic_rank;
             $teacher->hire_date = $request->hire_date;
+            $teacher->teaching_status = $request->teaching_status;
+            $teacher->related_part = $request->related_part;
             $teacher->nic = $request->nic;
             $teacher->education_field = $request->education_field;
             $teacher->photo = $photo;
             $teacher->photo_path = $photo_path;
-            $teacher->department_id = $request->department_id;
+            if ($request->teaching_status == 'bachelor' || $request->teaching_status == 'both' || $request->teaching_status == 'post-graduated' || $request->related_part == 'common_department') {
+                $teacher->department_id = $request->department_id;
+            }
+            if (($request->teaching_status == 'bachelor' || $request->teaching_status == 'both' || $request->teaching_status == 'post-graduated') || $request->related_part == 'faculty') {
+                $teacher->faculty_id = $request->faculty_id;
+            }
+            if (($request->teaching_status == 'post-graduated' || $request->teaching_status == 'both')) {
+                $teacher->program_id = $request->program_id;
+            }
             $teacher->user_id = $user_id;
-            $teacher->faculty_id = $request->faculty_id;
             $result = $teacher->save();
             DB::commit();
+            $teacher_id  = $teacher->id;
         } catch (Exception $e) {
             DB::rollBack();
             return $e;
         }
         if ($result) {
             return response([
-                'message' => 'درخواست موفقانه انجام شد'
+                'message' => 'درخواست موفقانه انجام شد',
+                'teacher_id' => $teacher_id,
             ]);
         }
     }
@@ -143,6 +222,26 @@ class TeacherController extends Controller
 
     public function update(Request $request)
     {
+        $request->validate([
+            'code_bast' => 'required|string|max:10',
+            'name' => 'required|string|max:100',
+            'lname' => 'required|string|max:100',
+            'fatherName' => 'required|string|max:100',
+            'grandFathername' => 'required|string|max:100',
+            'email' => 'email|string|max:100',
+            'phone' => 'required|string|max:14',
+            'gender' => 'required|string',
+            'main_address'  => 'required|string|max:100',
+            'current_address'  => 'required|string|max:100',
+            'birth_date' => 'required|date|max:100',
+            'academic_rank' => 'required|string|max:100',
+            'hire_date' => 'required|date|max:100',
+            'nic' => 'required|string|max:13',
+            'teaching_status' => 'required',
+            'related_part' => 'required',
+            'education_field' => 'required|string|max:100',
+        ], []);
+
         DB::beginTransaction();
         try {
             $id = $request->id;
@@ -156,7 +255,7 @@ class TeacherController extends Controller
                 $photo = $request->photo->store('/', 'teacher_photo');
                 $photo_path = asset(Storage::url('teacher_photo/' . $photo));
             }
-            $user_id = Auth::id();
+            //$user_id = Auth::id();
             $teacher->code_bast  = $request->code_bast;
             $teacher->name  = $request->name;
             $teacher->lname = $request->lname;
@@ -170,13 +269,21 @@ class TeacherController extends Controller
             $teacher->birth_date = $request->birth_date;
             $teacher->academic_rank = $request->academic_rank;
             $teacher->hire_date = $request->hire_date;
+            $teacher->teaching_status = $request->teaching_status;
+            $teacher->related_part = $request->related_part;
             $teacher->nic = $request->nic;
             $teacher->education_field = $request->education_field;
             $teacher->photo = $photo;
             $teacher->photo_path = $photo_path;
-            $teacher->department_id = $request->department_id;
-            $teacher->user_id = $user_id;
-            $teacher->faculty_id = $request->faculty_id;
+            if ($request->teaching_status == 'bachelor' || $request->teaching_status == 'both' || $request->teaching_status == 'post-graduated' || $request->related_part == 'common_department') {
+                $teacher->department_id = $request->department_id;
+            }
+            if (($request->teaching_status == 'bachelor' || $request->teaching_status == 'both' || $request->teaching_status == 'post-graduated') || $request->related_part == 'faculty') {
+                $teacher->faculty_id = $request->faculty_id;
+            }
+            if (($request->teaching_status == 'post-graduated' || $request->teaching_status == 'both')) {
+                $teacher->program_id = $request->program_id;
+            }
             $result = $teacher->save();
             DB::commit();
         } catch (Exception $e) {
@@ -196,13 +303,13 @@ class TeacherController extends Controller
 
 
     // just destory teacher information
-    public function destory($id = '')
+    public function destroy($id = '')
     {
         $teacher = Teacher::find($id);
         if (is_file(storage_path('app/public/teacher_photo/' . $teacher->photo))) {
             unlink(storage_path('app/public/teacher_photo/' . $teacher->photo));
         }
-        $result = Teacher::destroy($id);
+        $result = $teacher->delete();
         return $result;
     }
 
@@ -598,11 +705,11 @@ class TeacherController extends Controller
     {
     }
 
-    // public function downloadTeacher()
-    // {
-    //     $data = Teacher::all();
-    //     return Excel::download(new TeachersExport($data), 'reports.teacherReport.xls');
-    // }
+    public function downloadTeacher()
+    {
+        // $data = Teacher::all();
+        return Excel::download(new TeachersExport(), 'teacher.pdf', \Maatwebsite\Excel\Excel::MPDF);
+    }
 }
 
 

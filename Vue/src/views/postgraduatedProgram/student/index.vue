@@ -22,13 +22,17 @@
                     </svg>
                     محصیل جدید
                 </router-link>
-
-                <!-- <router-link
-                    :to="{ name: 'app.teacher.create' }"
-                    class="header--button"
+            </div>
+        </div>
+        <!-- display messages -->
+        <div class="msg--success" v-if="studentStore.msg_success">
+            <div class="flex items-center justify-between px-10 ,mb-3">
+                <div
+                    class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
+                        @click="studentStore.msg_success = ''"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
@@ -38,192 +42,44 @@
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
+                            d="M6 18 18 6M6 6l12 12"
                         />
                     </svg>
-                    راپور
-                </router-link> -->
-
-                <!-- <div class="inset-0 flex items-center justify-center">
-                    <router-link
-                        :to="{ name: 'teacher.report' }"
-                        class="header--button"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-5 h-5"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-                            />
-                        </svg>
-
-                        تهیه راپور
-                    </router-link>
-                </div> -->
-                <!-- <TransitionRoot appear :show="isOpen" as="template">
-                    <Dialog as="div" @close="closeModal" class="relative z-10">
-                        <TransitionChild
-                            as="template"
-                            enter="duration-300 ease-out"
-                            enter-from="opacity-0"
-                            enter-to="opacity-100"
-                            leave="duration-200 ease-in"
-                            leave-from="opacity-100"
-                            leave-to="opacity-0"
-                        >
-                            <div class="fixed inset-0 bg-black/25" />
-                        </TransitionChild>
-
-                        <div class="fixed inset-0 overflow-y-auto">
-                            <div
-                                class="flex min-h-full items-center justify-center p-4 text-center"
-                            >
-                                <TransitionChild
-                                    as="template"
-                                    enter="duration-300 ease-out"
-                                    enter-from="opacity-0 scale-95"
-                                    enter-to="opacity-100 scale-100"
-                                    leave="duration-200 ease-in"
-                                    leave-from="opacity-100 scale-100"
-                                    leave-to="opacity-0 scale-95"
-                                >
-                                    <DialogPanel
-                                        class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all"
-                                    >
-                                        <DialogTitle
-                                            as="h2"
-                                            class="text-lg font-medium leading-6 text-gray-900"
-                                        >
-                                            لطفا فلید های مورد نیاز انتخاب نماید
-                                        </DialogTitle>
-                                        <div
-                                            class="mt-2 flex items-center justify-content-end flex-col"
-                                        >
-                                            <div
-                                                class="flex gap-4"
-                                                v-for="(
-                                                    attribute, index
-                                                ) in attributes"
-                                                :key="index"
-                                            >
-                                                <div
-                                                    class="flex gap-5 items-center justify-end text-left"
-                                                >
-                                                    <Switch
-                                                        v-model="
-                                                            attribute.isActive
-                                                        "
-                                                        :class="
-                                                            attribute.isActive
-                                                                ? 'bg-blue-800'
-                                                                : 'bg-blue-600'
-                                                        "
-                                                        class="relative inline-flex h-[20px] w-[60px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2 focus-visible:ring-white/75"
-                                                    >
-                                                        <span class="sr-only"
-                                                            >Use setting</span
-                                                        >
-                                                        <span
-                                                            aria-hidden="true"
-                                                            :class="
-                                                                attribute.isActive
-                                                                    ? 'translate-x-9'
-                                                                    : 'translate-x-0'
-                                                            "
-                                                            class="pointer-events-none inline-block h-[18px] w-[25px] transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out"
-                                                        />
-                                                    </Switch>
-                                                    <label class="form--label">
-                                                        {{ attribute.text }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="mt-4">
-                                            <button
-                                                type="button"
-                                                class="header--button"
-                                                @click="closeModal"
-                                            >
-                                                DownLoad
-                                            </button>
-                                        </div>
-                                    </DialogPanel>
-                                </TransitionChild>
-                            </div>
-                        </div>
-                    </Dialog>
-                </TransitionRoot> -->
-            </div>
-            <div>
-                <h1 class="text--header">لیست محصلین</h1>
+                </div>
+                <div>
+                    <span>{{ studentStore.msg_success }}</span>
+                </div>
             </div>
         </div>
 
+        <div class="msg--warning" v-if="studentStore.msg_wrang">
+            <div class="flex items-center justify-between px-10 mb-10">
+                <div
+                    class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        @click="studentStore.msg_wrang = ''"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-6 h-6"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M6 18 18 6M6 6l12 12"
+                        />
+                    </svg>
+                </div>
+                <div>
+                    <span>{{ studentStore.msg_wrang }}</span>
+                </div>
+            </div>
+        </div>
+        <!-- end of display message area -->
         <div class="table--wrapper--dev">
-            <!-- display message area -->
-            <div class="msg--success" v-if="studentStore.msg_success">
-                <div class="flex items-center justify-between px-10 ,mb-3">
-                    <div
-                        class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            @click="studentStore.msg_success = ''"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-6 h-6"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M6 18 18 6M6 6l12 12"
-                            />
-                        </svg>
-                    </div>
-                    <div>
-                        <span>{{ studentStore.msg_success }}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="msg--warning" v-if="studentStore.msg_wrang">
-                <div class="flex items-center justify-between px-10 mb-10">
-                    <div
-                        class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            @click="studentStore.msg_wrang = ''"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-6 h-6"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M6 18 18 6M6 6l12 12"
-                            />
-                        </svg>
-                    </div>
-                    <div>
-                        <span>{{ studentStore.msg_wrang }}</span>
-                    </div>
-                </div>
-            </div>
-            <!-- end of display message area -->
             <div class="flex justify-between border-b-2 pb-3 relative">
                 <div>
                     <input
@@ -671,23 +527,18 @@
         </div>
         <br /><br />
 
+        <!-- graduated student list table -->
+        <GraduatedStudentList :open-modal="openModal" />
+
+        <!-- reuseable wrapper modal box -->
         <createGraduatedStudent
             :is-open="isOpen"
             :close-modal="closeModal"
             :title="title"
         >
-            <!-- update form component -->
+            <!-- update form of graduated Student  component  -->
             <updateStudentInfo :student_id="student_id" />
         </createGraduatedStudent>
-
-        <!-- Modal Box -->
-        <!-- <ModalBox
-            :is-pro-open="isProOpen"
-            :close-pro-modal="closeProModal"
-            :openProModal="openProModal"
-            :teacher_id="teacher_id"
-        /> -->
-        <!-- end of Modal box -->
     </div>
 </template>
 
@@ -706,6 +557,7 @@ import { USER_PER_PAGE } from "../../../constant";
 import TableHeaderCell from "../../../components/tableHeader/tableheader.vue";
 import createGraduatedStudent from "../graduatedStudent/Modal.vue";
 import updateStudentInfo from "../graduatedStudent/create.vue";
+import GraduatedStudentList from "../graduatedStudent/index.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 // import { PencilAltIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useRoute } from "vue-router";
@@ -769,8 +621,8 @@ function getStudent(url = null) {
         url,
         search: search.value,
         per_page: perPage.value,
-        sort_field: sortField.value,
-        sort_direction: sortDirection.value,
+        sortField: sortField.value,
+        sortDirection: sortDirection.value,
         department_id: department_id.value,
         program_id: localStorage.getItem("program_id"),
         year: selectYear.value,
@@ -799,71 +651,8 @@ function deleteStudent(id) {
     getStudent();
 }
 
-const enabled = ref(false);
 
-const attributes = ref([
-    {
-        key: "codebast",
-        text: "کود بست",
-        isActive: true,
-    },
 
-    {
-        key: "name",
-        text: "نام",
-        isActive: true,
-    },
-
-    {
-        key: "lname",
-        text: "تخلص ",
-        isActive: true,
-    },
-
-    {
-        key: "fname",
-        text: "نام پدر",
-        isActive: true,
-    },
-
-    {
-        key: "faculty_id",
-        text: "فاکولته",
-        isActive: true,
-    },
-    {
-        key: "department_id",
-        text: "دیمارتمنت",
-        isActive: true,
-    },
-
-    {
-        key: "email",
-        text: "علمی استاد",
-        isActive: true,
-    },
-
-    {
-        key: "adamic_rank",
-        text: "رتبه عملی ",
-        isActive: true,
-    },
-    {
-        key: "phone",
-        text: "شماره تماس",
-        isActive: true,
-    },
-    {
-        key: "join_date",
-        text: "تاریخ تقرر",
-        isActive: true,
-    },
-    {
-        key: "nic",
-        text: "نمبر تٰٰذکره",
-        isActive: true,
-    },
-]);
 
 function msg_success_fun() {}
 function msg_warning_fun() {}

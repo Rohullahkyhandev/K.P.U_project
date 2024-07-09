@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between mb-4">
             <div class="mb-2 flex gap-4">
                 <router-link
-                    :to="{ name: 'app.pdc.teacher_in_workshop.list' }"
+                    :to="{ name: 'app.pdc.workshop.create' }"
                     class="header--button"
                 >
                     <svg
@@ -458,8 +458,8 @@ function getWorkshop(url = null) {
         url,
         search: search.value,
         per_page: perPage.value,
-        sort_field: sortField.value,
-        sort_direction: sortDirection.value,
+        sortField: sortField.value,
+        sortDirection: sortDirection.value,
     });
 }
 

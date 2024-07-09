@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers\PDC;
 
+use App\Exports\CommitMember;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\TeacherController;
 use App\Http\Resources\TeacherInCommitResource;
+use App\Models\Department;
+use App\Models\Faculty;
+use App\Models\PD_Committee;
 use App\Models\PDCCommittee;
 use App\Models\PDCTeacherInCommitee;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Excel;
 
 class TeacherInCommitController extends Controller
 {
@@ -26,11 +31,13 @@ class TeacherInCommitController extends Controller
 
 
         $data = PDCTeacherInCommitee::query()
-            // ->where('p_d_c_teacher_in_commitees.', 'like', "%{$search}%")
+            // ->whereAny('p_d_c_teacher_in_commitees.date', 'like', "%{$search}%")
             ->join('users', 'p_d_c_teacher_in_commitees.user_id', 'users.id')
+            ->leftJoin('faculties', 'p_d_c_teacher_in_commitees.faculty_id', 'faculties.id')
+            ->join('departments', 'p_d_c_teacher_in_commitees.department_id', 'departments.id')
             ->join('teachers', 'p_d_c_teacher_in_commitees.teacher_id', 'teachers.id')
-            ->join('p_d_c_committees', 'p_d_c_teacher_in_commitees.commit_id', 'p_d_c_committees.id')
-            ->select('p_d_c_teacher_in_commitees.*', 'users.name as uname', 'teachers.name as name', 'teachers.lname as lname', 'teachers.email as email',  'teachers.phone as phone', 'p_d_c_committees.name as cname')
+            ->join('p_d__committees', 'p_d_c_teacher_in_commitees.commit_id', 'p_d__committees.id')
+            ->select('p_d_c_teacher_in_commitees.*', 'faculties.name as faculty_name', 'departments.name as department_name', 'users.name as uname', 'teachers.name as name', 'teachers.lname as lname', 'teachers.email as email',  'teachers.phone as phone', 'p_d__committees.name as cname')
             ->orderBy("p_d_c_teacher_in_commitees.$sortField", $sortDirection)
             ->paginate($per_page);
 
@@ -42,13 +49,13 @@ class TeacherInCommitController extends Controller
 
     public function getCommit()
     {
-        $data = PDCCommittee::all();
+        $data = PD_Committee::all();
         return $data;
     }
 
-    public function getTeacher()
+    public function getTeacher($id = '')
     {
-        $data = Teacher::all();
+        $data = Teacher::where('department_id', '=', $id)->get();
         return $data;
     }
 
@@ -59,11 +66,15 @@ class TeacherInCommitController extends Controller
         $request->validate([
             "teacher_id" => 'required',
             "commit_id" => 'required',
+            "faculty_id" => 'nullable',
+            "department_id" => 'required',
             "attachment" => 'nullable|mimes:png,jpg,mp3,mp4,pdf,docx"',
 
         ], [
             'teacher_id.required' => 'فلد استاد الزامی می باشد',
             'commit_id.required' => 'فلد کمیته الزامی می باشد',
+            "faculty_id" => 'فلید فاکولته الزامی  می باشد',
+            "department_id" => 'فلید دیپارمنت الزامی می باشد',
             'attachment' => "فارمت فایل باید شامل این فارمت ها باشد png,jpg,mp3,mp4,pdf,docx"
 
         ]);
@@ -76,10 +87,20 @@ class TeacherInCommitController extends Controller
             $attachment_path = asset(Storage::url('/pdc/teacher_in_commit/' . $attachment));
         }
 
+        if ($request->faculty_id != null) {
+            $faculty = Faculty::find($request->faculty_id);
+        }
+
+        $department = Department::find($request->department_id);
+
+
         $user_id = Auth::id();
         $teacher_inCommit = new PDCTeacherInCommitee();
         $teacher_inCommit->teacher_id = $request->teacher_id;
         $teacher_inCommit->commit_id = $request->commit_id;
+        $teacher_inCommit->department_type = $request->department_type;
+        $teacher_inCommit->faculty_id  = $request->faculty_id;
+        $teacher_inCommit->department_id  = $request->department_id;
         $teacher_inCommit->attachment = $attachment;
         $teacher_inCommit->attachment_path = $attachment_path;
         $teacher_inCommit->user_id = $user_id;
@@ -130,6 +151,9 @@ class TeacherInCommitController extends Controller
         $user_id = Auth::id();
         $teacher_inCommit->teacher_id = $request->teacher_id;
         $teacher_inCommit->commit_id = $request->commit_id;
+        $teacher_inCommit->department_type = $request->department_type;
+        $teacher_inCommit->faculty_id  = $request->faculty_id;
+        $teacher_inCommit->department_id  = $request->department_id;
         $teacher_inCommit->attachment = $attachment;
         $teacher_inCommit->attachment_path = $attachment_path;
         $teacher_inCommit->user_id = $user_id;
@@ -137,11 +161,11 @@ class TeacherInCommitController extends Controller
 
         if ($result) {
             return response([
-                'message' => 'دیتا در آرشیف موفقانه ویرایش گردید'
+                'message' => 'دیتا   موفقانه ویرایش گردید'
             ], 200);
         } else {
             return response([
-                'message' => 'دیتا در آرشیف  ویرایش نشد دوباره تلاش نماید'
+                'message' => 'دیتا    ویرایش نشد دوباره تلاش نماید'
             ], 304);
         }
     }
@@ -154,5 +178,14 @@ class TeacherInCommitController extends Controller
         }
         $result = PDCTeacherInCommitee::destroy($id);
         return $result;
+    }
+
+    // reprot teache in committee
+
+    public function generateReport($type, $report_data)
+    {
+
+        $report_format = request('report_format');
+        return  Excel::download((new CommitMember)->getData($type, $report_data), $report_format == 'pdf' ? 'report.pdf' : 'report.xls');
     }
 }

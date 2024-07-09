@@ -58,16 +58,24 @@ class Kernel extends HttpKernel
 
         'admin' => \App\Http\Middleware\Admin::class,
 
+        'adminsterator' => \App\Http\Middleware\adminsterator::class,
+
         // user
         'view_user' =>  \App\Http\Middleware\user\user_view::class,
         'create_user' =>  \App\Http\Middleware\user\user_create::class,
         'edit_user' =>  \App\Http\Middleware\user\user_edit::class,
         'delete_user' =>  \App\Http\Middleware\user\user_delete::class,
 
+        // document
+        'view_document' => \App\Http\Middleware\document\view_document::class,
+        'create_document' => \App\Http\Middleware\document\create_document::class,
+        'edit_document' => \App\Http\Middleware\document\edit_document::class,
+        'delete_document' => \App\Http\Middleware\document\delete_document::class,
+
 
         // pdc department
         'view_pdc' => \App\Http\Middleware\pdc\view_pdc::class,
-        'create' => \App\Http\Middleware\pdc\create_pdc::class,
+        'create_pdc' => \App\Http\Middleware\pdc\create_pdc::class,
         'edit_pdc' => \App\Http\Middleware\pdc\edit_pdc::class,
         'delete_pdc' => \App\Http\Middleware\pdc\delete_pdc::class,
 

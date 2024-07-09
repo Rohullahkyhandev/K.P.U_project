@@ -5,6 +5,7 @@ namespace App\Http\Controllers\researchDepartment;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\CurriculumResource;
 use App\Models\Curriculum;
+use App\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,11 +26,18 @@ class CurriculumController extends Controller
             ->orWhere('curricula.subject_code', 'like', "%{$search}%")
             ->orWhere('curricula.subject_type', 'like', "%{$search}%")
             ->join('users', 'curricula.user_id', 'users.id')
-            ->join('departments', 'departments.id', 'departments.id')
-            ->select('curricula.*', 'users.name as uname', 'departments.name as name')
+            // ->join('departments', 'departments.id', 'departments.id')
+            ->select('curricula.*', 'users.name as uname')
             ->orderBy("curricula.$sortField", $sortDirection)
             ->paginate($per_page);
         return CurriculumResource::collection($data);
+    }
+
+
+    public function getAllDepartments()
+    {
+        $data  = Department::all();
+        return $data;
     }
 
 
@@ -37,26 +45,28 @@ class CurriculumController extends Controller
     {
         $request->validate([
             'subject_name' => 'required',
-            'subject_code' => 'required',
+            'subject_code' => 'required|unique:curricula',
             'subject_type' => 'required',
-            'user_id' => 'required',
-            'department_id' => 'required',
+            'departments.*' => 'required',
+            'semester' => 'required',
         ], [
             'subject_name.required' => 'فلید نام الزامی می باشد',
             'subject_code.required' => 'فلید کد الزامی می باشد',
             'subject_type.required' => 'فلید نوع الزامی می با��د',
             'user_id.required' => 'فلید کاربر الزامی می باشد',
-            'department_id.required' => 'فلید دانشکده الزامی می باشد',
+            'departments.required' => 'فلید دانشکده الزامی می باشد',
+            'semster.required' => 'فلید سیمستر الزامی می باشد',
         ]);
-
 
         $user_id = Auth::user()->id;
         $curriculum = new Curriculum();
         $curriculum->subject_name = $request->subject_name;
         $curriculum->subject_code = $request->subject_code;
         $curriculum->subject_type = $request->subject_type;
+        $curriculum->subject_credit = $request->subject_credit;
         $curriculum->user_id = $user_id;
-        $curriculum->department_id = $request->department_id;
+        $curriculum->departments = $request->departments;
+        $curriculum->semester = $request->semester;
         $result  = $curriculum->save();
 
         if ($result) {
@@ -82,13 +92,13 @@ class CurriculumController extends Controller
             'subject_code' => 'required',
             'subject_type' => 'required',
             'user_id' => 'required',
-            'department_id' => 'required',
+            'department.*' => 'required',
         ], [
             'subject_name.required' => 'فلید نام الزامی می باشد',
             'subject_code.required' => 'فلید کد الزامی می باشد',
             'subject_type.required' => 'فلید نوع الزامی می با��د',
             'user_id.required' => 'فلید کاربر الزامی می باشد',
-            'department_id.required' => 'فلید دانشکده الزامی می باشد',
+            'department.required' => 'فلید دانشکده الزامی می باشد',
         ]);
 
         $user_id = Auth::user()->id;
@@ -97,7 +107,8 @@ class CurriculumController extends Controller
         $curriculum->subject_code = $request->subject_code;
         $curriculum->subject_type = $request->subject_type;
         $curriculum->user_id = $user_id;
-        $curriculum->department_id = $request->department_id;
+        $curriculum->semester = $request->semester;
+        $curriculum->departments = $request->departments;
         $result  = $curriculum->save();
 
         if ($result) {

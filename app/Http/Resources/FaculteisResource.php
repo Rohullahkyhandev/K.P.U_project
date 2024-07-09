@@ -15,8 +15,14 @@ class FaculteisResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'faculty_id' => $this->faculty_id,
-            'fname' => $this->fname,
+            'id' => $this->id,
+            'name' => $this->name,
+            'date' => $this->date,
+            'description' => $this->description,
+            'director_name' => $this->director_name,
+            'director_lname' => $this->director_lname,
+            'photo' => $this->photo,
+            'photo_path' => $this->photo_path
         ];
     }
 }

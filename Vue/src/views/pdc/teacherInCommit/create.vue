@@ -3,6 +3,7 @@
         <form @submit.prevent="onSubmit">
             <div class="wrapper--dev--form">
                 <!-- display message area -->
+                <!-- display message area -->
                 <div
                     class="msg--success"
                     v-if="teacherInCommitStore.msg_success"
@@ -27,8 +28,30 @@
                                 />
                             </svg>
                         </div>
-                        <div>
-                            <span>{{ teacherInCommitStore.msg_success }}</span>
+                        <div class="flex items-center gap-10">
+                            <div>
+                                <span class="px-4">{{
+                                    teacherInCommitStore.msg_success
+                                }}</span>
+                            </div>
+                            <div
+                                class="bg-white flex items-center justify-center w-10 h-10 rounded-full"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="size-6 text-green-600"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="m4.5 12.75 6 6 9-13.5"
+                                    />
+                                </svg>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -36,7 +59,7 @@
                 <div class="msg--warning" v-if="teacherInCommitStore.msg_wrang">
                     <div class="flex items-center justify-between px-10">
                         <div
-                            class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
+                            class="hover:bg-red-200 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -54,17 +77,148 @@
                                 />
                             </svg>
                         </div>
-                        <div>
-                            <span>{{ teacherInCommitStore.msg_wrang }}</span>
+                        <div class="flex items-center gap-10">
+                            <div>
+                                <span class="px-4">{{
+                                    teacherInCommitStore.msg_wrang
+                                }}</span>
+                            </div>
+                            <div
+                                class="bg-white flex items-center justify-center w-10 h-10 rounded-full"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="size-6 text-red-500"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+                                    />
+                                </svg>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <!-- end of display message area -->
                 <!-- end of display message area -->
 
                 <div>
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
                             <label for="" class="form--label">
+                                نوع دیپارتمنت
+                                <span class="label--prefix">*</span>
+                            </label>
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                type="select"
+                                v-model="teacher_in_commit.department_type"
+                                :select-options="department_type"
+                                class="mb-2"
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        class="wrapper--dev--input"
+                        v-if="
+                            teacher_in_commit.department_type ==
+                            'common_department'
+                        "
+                    >
+                        <div class="label--dev--width">
+                            <label for="" class="form--label">
+                                دیپارمنت های عمومی
+                                <span class="label--prefix">*</span>
+                            </label>
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                @change="
+                                    getTeacher(teacher_in_commit.department_id)
+                                "
+                                type="select"
+                                v-model="teacher_in_commit.department_id"
+                                :select-options="department_out_faculties"
+                                class="mb-2"
+                                required="required"
+                                label=" دیپارتمنت"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        class="wrapper--dev--input"
+                        v-if="
+                            teacher_in_commit.department_type ==
+                            'uncommon_department'
+                        "
+                    >
+                        <div class="label--dev--width">
+                            <label for="" class="form--label">
+                                فاکولته
+                                <span class="label--prefix">*</span>
+                            </label>
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                type="select"
+                                @change="
+                                    getDepartment(teacher_in_commit.faculty_id)
+                                "
+                                v-model="teacher_in_commit.faculty_id"
+                                :select-options="faculties"
+                                class="mb-2"
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        class="wrapper--dev--input"
+                        v-if="
+                            departments.length != '' &&
+                            teacher_in_commit.department_type ==
+                                'uncommon_department'
+                        "
+                    >
+                        <div class="label--dev--width">
+                            <label for="" class="form--label">
+                                دیپارتمنت ها
+                                <span class="label--prefix">*</span>
+                            </label>
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                type="select"
+                                @change="
+                                    getTeacher(teacher_in_commit.department_id)
+                                "
+                                v-model="teacher_in_commit.department_id"
+                                :select-options="departments"
+                                class="mb-2"
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        class="wrapper--dev--input"
+                        v-if="
+                            departments.length != '' ||
+                            department_out_faculties.length != ''
+                        "
+                    >
+                        <div class="label--dev--width">
+                            <label for="" class="form--label">
+                                استادان
                                 <span class="label--prefix">*</span></label
                             >
                         </div>
@@ -99,10 +253,8 @@
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
                             <label for="" class="form--label">
-                                آپلود فایل<span class="label--prefix"
-                                    ></span
-                                ></label
-                            >
+                                آپلود فایل<span class="label--prefix"></span
+                            ></label>
                         </div>
                         <div class="input--dev--width">
                             <CustomInput
@@ -112,7 +264,6 @@
                                         (teacher_in_commit.attachment = file)
                                 "
                                 class="mb-2"
-
                             />
                         </div>
                     </div>
@@ -164,17 +315,69 @@
 <script setup>
 import { computed, onMounted, ref, useSlots } from "vue";
 import CustomInput from "../../../components/core/CustomInput.vue";
+import useDepartmentStore from "../../../stores/department/deparmentStore";
+import { useFacultyStore } from "../../../stores/faculties/facultyStore";
 import useTeacherInCommit from "../../../stores/pdc/teacherInCommit/teacherInCommitStore";
 
 const teacherInCommitStore = useTeacherInCommit();
+const facultyStore = useFacultyStore();
+const departmentStore = useDepartmentStore();
 
 const teacher_in_commit = computed(
     () => teacherInCommitStore.teacher_in_commit
 );
 onMounted(() => {
-    teacherInCommitStore.getTeachers();
+    facultyStore.getAllFaculty();
+    if (teacher_in_commit.value.faculty_id != "") {
+        departmentStore.getFacultyDepartment(
+            teacher_in_commit.value.faculty_id
+        );
+        if (teacher_in_commit.value.department_id != "") {
+            teacherInCommitStore.getTeachers(
+                teacher_in_commit.value.department_id
+            );
+        }
+    } else {
+        teacher_in_commit.value.faculty_id = "";
+        departmentStore.departmentHasOutFaculties();
+    }
     teacherInCommitStore.getCommits();
 });
+
+function getDepartment(id) {
+    departmentStore.getFacultyDepartment(id);
+}
+
+function getTeacher(id) {
+    teacherInCommitStore.getTeachers(id);
+}
+
+const department_type = ref([
+    {
+        key: "common_department",
+        text: "دیپارمنت های  عمومی",
+    },
+
+    {
+        key: "uncommon_department",
+        text: "دیپارمنت های غیر عمومی",
+    },
+]);
+
+const faculties = computed(() =>
+    facultyStore.listFaculty.map((f) => ({ key: f.id, text: f.name }))
+);
+
+const departments = computed(() =>
+    departmentStore.faculty_department.map((d) => ({ key: d.id, text: d.name }))
+);
+
+const department_out_faculties = computed(() =>
+    departmentStore.department_has_out_facilities.map((d) => ({
+        key: d.id,
+        text: d.name,
+    }))
+);
 
 const teachers = computed(() =>
     teacherInCommitStore.teachers.map((c) => ({

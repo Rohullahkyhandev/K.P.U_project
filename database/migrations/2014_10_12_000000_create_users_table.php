@@ -19,12 +19,16 @@ return new class extends Migration
             $table->string('photo');
             $table->string('photo_path');
             $table->string('user_type', 100);
-            // $table->enum('role', ['user', 'admin', 'manager'])->default('user');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->bigInteger('dep_id')->unsigned()->index();
+            $table->string('is_admin')->default('1');
+            $table->bigInteger('dep_id')->unsigned()->nullable()->index();
             $table->foreign('dep_id')->references('id')->on('chance__amiryats')->onDelete("cascade");
+            $table->bigInteger('faculty_id')->nullable()->unsigned()->index();
+            $table->foreign('faculty_id')->references('id')->on('faculties');
+            $table->bigInteger('department_id')->nullable()->unsigned()->index();
+            $table->foreign('department_id')->references('id')->on('departments');
             $table->rememberToken();
             $table->timestamps();
         });

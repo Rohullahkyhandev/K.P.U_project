@@ -53,9 +53,11 @@ class ProgramsController extends Controller
         $program = new PostGraduatedPrograms();
         $program->program_name = $request->program_name;
         $program->degree_type = $request->degree_type;
+        $program->program_type = "test";
         $program->program_duration = $request->program_duration;
         $program->description = $request->description;
         $program->user_id = $user_id;
+        $program->faculty_id = 1;
         $result  = $program->save();
 
         if ($result) {

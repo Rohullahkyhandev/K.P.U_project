@@ -21,8 +21,24 @@ const useTeacherInWorkshop = defineStore("teacher_in_workshop", () => {
         id: "",
         teacher_id: "",
         workshop_id: "",
+        faculty_id: "",
+        department_id: "",
+        department_type: "",
+        workshop_id: "",
         document: "",
     });
+
+    let teacher_department = ref([]);
+    function getTeacher(id) {
+        axiosClient
+            .get(`/pdc/get_teachers/${id}`)
+            .then((res) => {
+                teacher_department.value = res.data;
+            })
+            .catch((err) => {
+                msg_wrang.value = err.response.data.message;
+            });
+    }
 
     function createTeacherInWorkshop(data) {
         loading.value = true;
@@ -36,6 +52,9 @@ const useTeacherInWorkshop = defineStore("teacher_in_workshop", () => {
         var form = new FormData();
         form.append("teacher_id", data.teacher_id);
         form.append("workshop_id", data.workshop_id);
+        form.append("faculty_id", data.faculty_id);
+        form.append("department_id", data.department_id);
+        form.append("department_type", data.department_type);
         form.append("document", document);
 
         data = form;
@@ -125,6 +144,9 @@ const useTeacherInWorkshop = defineStore("teacher_in_workshop", () => {
         form.append("id", data.id);
         form.append("teacher_id", data.teacher_id);
         form.append("workshop_id", data.workshop_id);
+        form.append("faculty_id", data.faculty_id);
+        form.append("department_id", data.department_id);
+        form.append("department_type", data.department_type);
         form.append("document", document);
 
         data = form;
@@ -164,6 +186,8 @@ const useTeacherInWorkshop = defineStore("teacher_in_workshop", () => {
         updateTeacherInWorkshop,
         deleteTeacherInWorkshop,
         getWorkshops,
+        getTeacher,
+        teacher_department,
         teacherInWorkshop,
         teacherInWorkshops,
         workshops,

@@ -36,22 +36,31 @@ return [
             'throw' => false,
         ],
 
+        // faculty director photo
+
+        'faculty/photo' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/faculty/photo'),
+        ],
+
+        // departments manger photo
+        'department/photo' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/department/photo'),
+        ],
+
         // user photos
         'users' => [
             'driver' => 'local',
             'root' => storage_path('app/public/users'),
         ],
 
-        // pdc file and photos
-        'send_document' => [
+        // documents
+        'document/attachment' => [
             'driver' => 'local',
-            'root' => storage_path('app/public/send_document'),
+            'root' => storage_path('app/public/document/attachment'),
         ],
 
-        'received_document' => [
-            'driver' => 'local',
-            'root' => storage_path('app/public/received_document'),
-        ],
 
         'plan' => [
             'driver' => 'local',

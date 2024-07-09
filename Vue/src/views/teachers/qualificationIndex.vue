@@ -275,7 +275,8 @@
                                                         name: 'app.teacher.qualification.edit',
                                                         params: {
                                                             q_id: qualification.id,
-                                                            t_id: $route.params.id,
+                                                            t_id: $route.params
+                                                                .id,
                                                         },
                                                     }"
                                                     :class="[
@@ -423,8 +424,8 @@ function getQualification(url = null) {
         url,
         search: search.value,
         per_page: perPage.value,
-        sort_field: sortField.value,
-        sort_direction: sortDirection.value,
+        sortField: sortField.value,
+        sortDirection: sortDirection.value,
         id: route.params.id,
     });
 }
@@ -450,6 +451,10 @@ function deleteQualification(id) {
     teacherStore.deleteQualification(id);
     getQualification();
 }
+
+// education degrees
+
+
 
 function msg_success_fun() {}
 function msg_warning_fun() {}

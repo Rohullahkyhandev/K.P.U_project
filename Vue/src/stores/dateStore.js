@@ -1,20 +1,20 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
-const useDateStore = defineStore("date", () => {
-    const getCurrentPersianYear = () => {
-        const now = new Date();
-        const gYear = now.getFullYear();
-        const gMonth = now.getMonth() + 1;
-        const gDay = now.getDate();
+let useDateStore = defineStore("date", () => {
+    let getCurrentPersianYear = () => {
+        let now = new Date();
+        let gYear = now.getFullYear();
+        let gMonth = now.getMonth() + 1;
+        let gDay = now.getDate();
 
-        const persianDate = toPersianDate(gYear, gMonth, gDay);
+        let persianDate = toPersianDate(gYear, gMonth, gDay);
         return persianDate.year;
     };
 
     // Conversion function from Gregorian to Persian
-    const toPersianDate = (gYear, gMonth, gDay) => {
-        const gDaysInMonth = [
+    let toPersianDate = (gYear, gMonth, gDay) => {
+        let gDaysInMonth = [
             31,
             (gYear % 4 === 0 && gYear % 100 !== 0) || gYear % 400 === 0
                 ? 29
@@ -30,11 +30,11 @@ const useDateStore = defineStore("date", () => {
             30,
             31,
         ];
-        const pDaysInMonth = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
-        const gDayNo =
+        let pDaysInMonth = [31, 31, 31, 31, 31, 31, 30, 30, 30, 30, 30, 29];
+        let gDayNo =
             gDay + gDaysInMonth.slice(0, gMonth - 1).reduce((a, b) => a + b, 0);
-        const pDayNo = gDayNo - 79;
-        const pYear = gYear - 621;
+        let pDayNo = gDayNo - 79;
+        let pYear = gYear - 621;
         let pMonth, pDay;
 
         if (pDayNo <= 186) {
@@ -50,10 +50,10 @@ const useDateStore = defineStore("date", () => {
     };
 
     // Generate an array of years, e.g., from 1300 to 1500
-    const currentYear = getCurrentPersianYear();
-    const years = Array.from({ length: 101 }, (_, i) => currentYear - 50 + i);
+    let currentYear = getCurrentPersianYear();
+    let years = Array.from({ length: 101 }, (_, i) => currentYear - 50 + i);
 
-    const selectedYear = ref(currentYear);
+    let selectedYear = ref(currentYear);
 
     return {
         selectedYear,

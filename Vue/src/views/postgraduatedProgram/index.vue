@@ -6,7 +6,7 @@
             <div class="flex gap-10">
                 <div>
                     <router-link
-                        :to="{ name: 'app.pdc.commit.create' }"
+                        :to="{ name: 'app.post-graduated.student.list' }"
                         :class="[
                             getCurrentPath === $route.matched
                                 ? 'header--button active--button'
@@ -33,8 +33,7 @@
 
                 <div>
                     <router-link
-
-                        :to="{ name: 'app.post-graduated.student.create' }"
+                        :to="{ name: 'app.post-graduated.student.list' }"
                         :class="[
                             getCurrentPath == $route.matched
                                 ? 'header--button active--button'
@@ -61,7 +60,7 @@
 
                 <div>
                     <router-link
-                        :to="{ name: 'app.pdc.teacher_in_commit.create' }"
+                        :to="{ name: 'app.post-graduated.lab.list' }"
                         :class="[
                             getCurrentPath == $route.matched
                                 ? 'header--button active--button'
@@ -89,7 +88,7 @@
 
                 <div>
                     <router-link
-                        :to="{ name: 'app.pdc.teacher_in_commit.list' }"
+                        :to="{ name: 'app.post-graduated.class_room.list' }"
                         :class="[
                             getCurrentPath == $route.matched
                                 ? 'header--button active--button'

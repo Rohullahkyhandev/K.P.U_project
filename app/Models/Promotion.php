@@ -13,4 +13,10 @@ class Promotion extends Model
         'attachment' => 'array',
         'attachment_path' => 'array'
     ];
+
+    // teacher
+    public function teacher()
+    {
+        return $this->belongsTo(Teacher::class, 'id');
+    }
 }

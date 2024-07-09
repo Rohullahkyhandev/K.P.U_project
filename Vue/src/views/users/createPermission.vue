@@ -114,10 +114,7 @@
                 </div>
             </div>
             <footer class="bg-gray-100 py-4 md:flex gap-5">
-                <button
-                    type="submit"
-                    class="footer--button--submit"
-                >
+                <button type="submit" class="footer--button--submit">
                     ثبت
                 </button>
                 <router-link
@@ -159,6 +156,7 @@ function getUserPermission(id) {
 
 function onSubmit() {
     userStore.createPermission(permission.value);
-    permission.value = "";
+    getUserPermission(route.params.id);
+    permission.value.permission_id = "";
 }
 </script>

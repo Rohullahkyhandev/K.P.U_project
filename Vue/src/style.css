@@ -1,15 +1,26 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
+
+@layer tailwind-base, primevue, tailwind-utilities;
+
+@layer tailwind-base {
+    @tailwind base;
+}
+
+@layer tailwind-utilities {
+    @tailwind components;
+    @tailwind utilities;
+}
 
 /* GLOBAL STYLE */
 
 /* common alert message style */
 .msg--success {
-    @apply bg-green-700 text-white rounded-lg py-3 text-center;
+    @apply bg-green-500 mb-4  z-10 text-white rounded-md py-8 text-center;
 }
 .msg--warning {
-    @apply bg-red-500 text-white py-3 rounded-lg text-center;
+    @apply bg-red-400 mb-4  z-10 text-white py-8 relative rounded-md text-center;
 }
 
 /* header button for navigation */
@@ -37,14 +48,14 @@
 }
 
 .footer--button--submit {
-    @apply bg-indigo-500 mr-10 text-white  hover:bg-indigo-600 focus:ring focus:ring-offset-2 focus:ring-indigo-300 focus:ring-opacity-40 py-2 px-8 cursor-pointer rounded-lg;
+    @apply bg-blue-600 mr-10 text-white  shadow focus:ring focus:ring-offset-2  focus:ring-opacity-40 py-2 px-8 cursor-pointer rounded-lg;
 }
 .footer--button--cancel {
-    @apply bg-gray-400 text-white py-2 px-6 focus:ring focus:ring-offset-2 focus:ring-red-500 focus:ring-opacity-40 cursor-pointer rounded-lg;
+    @apply bg-white text-black shadow py-2 px-6 focus:ring focus:ring-offset-2 focus:ring-red-500 focus:ring-opacity-40 cursor-pointer rounded-lg;
 }
 
 .wrapper--dev--form {
-    @apply w-full py-8 bg-white  shadow mt-6 px-4;
+    @apply w-full py-8 bg-white shadow mt-6 px-4;
 }
 
 .wrapper--dev--input {
@@ -69,19 +80,40 @@
     display: flex !important;
 }
 .header--button.router-link-exact-active {
-    @apply bg-blue-600 rounded-lg;
+    @apply bg-blue-700 rounded-lg;
     display: none !important;
 }
 
 .sidebar-item {
-    @apply rounded-lg py-2 px-4 transition-all duration-100;
+    @apply rounded-lg py-2 px-2 transition-all duration-100 font-bold;
+    font-size: 14px;
+    margin: 0px 5px !important;
 }
 .sidebar-item.router-link-exact-active {
-    @apply bg-indigo-800;
+    @apply bg-blue-700;
 }
 
 /* persian date time picker */
 
 .vpd-main {
-    @apply block rounded-lg shadow w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm;
+    @apply block rounded-lg shadow w-full px-3 py-1.5 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm;
+}
+.form-control {
+    border: none !important;
+}
+
+/* common style for option and input  */
+
+input,
+option,
+textarea {
+    font-size: 16px !important;
+}
+
+::placeholder {
+    font-size: 16px !important;
+}
+
+label {
+    font-size: 16px;
 }

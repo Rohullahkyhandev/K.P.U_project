@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('subject_type');
             $table->string('subject_credit');
             $table->json('departments');
+            $table->string('semester');
             $table->bigInteger('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

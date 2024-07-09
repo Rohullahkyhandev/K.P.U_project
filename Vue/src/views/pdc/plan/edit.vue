@@ -114,11 +114,12 @@
                             >
                         </div>
                         <div class="input--dev--width">
-                            <CustomInput
+                            <DatePicker
                                 type="date"
                                 v-model="plan.date"
                                 class="mb-2"
                                 required="required"
+                                placeholder=" انتخاب تاریخ"
                             />
                         </div>
                     </div>
@@ -205,6 +206,7 @@ import { computed, onMounted, ref, useSlots } from "vue";
 import { useRoute } from "vue-router";
 import CustomInput from "../../../components/core/CustomInput.vue";
 import { usePlanStore } from "../../../stores/pdc/plan/planStore";
+import DatePicker from "vue3-persian-datetime-picker";
 
 const planStore = usePlanStore();
 const route = useRoute();

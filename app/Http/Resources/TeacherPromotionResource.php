@@ -20,8 +20,8 @@ class TeacherPromotionResource extends JsonResource
             'name' => $this->name,
             'lname' => $this->lname,
             'date' => $this->date,
-            'last_academic_rank' => $this->last_academic_rank,
-            'now_academic_rank' => $this->now_academic_rank,
+            'last_rank' => $this->last_rank,
+            'now_rank' => $this->now_rank,
             'attachment_path' => $this->attachment_path,
         ];
     }

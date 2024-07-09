@@ -1,13 +1,13 @@
 <template>
     <div
-        class="w-full shadow-sm h-16 bg-gray-50 shadow relative flex items-center justify-between"
+        class="w-full shadow-sm h-20 bg-gray-50 position-fixed flex items-center justify-between"
     >
         <div>&nbsp;</div>
         <div>&nbsp;</div>
-        <div class="ml-96">
+        <div class="ml-64">
             <Menu as="div" class="relative inline-block text-left w-full">
                 <div
-                    class="h-16 hover:bg-gray-100 transition-colors py-2 px-3 w-full"
+                    class="h-20 mb-2 hover:bg-gray-100 flex items-center transition-colors py-2 px-3 w-full"
                 >
                     <MenuButton>
                         <span id="bell--button " class="relative">
@@ -26,8 +26,11 @@
                                 />
                             </svg>
                             <span
-                                class="absolute w-4 h-4 bg-red-500 top-2 left-4 rounded-full"
-                            ></span>
+                                v-if="notificationStore.notificationCounter > 0"
+                                class="absolute flex items-center justify-center text-white w-4 h-4 bg-red-500 top-2 left-4 rounded-full"
+                            >
+                                {{ notificationStore.notificationCounter }}
+                            </span>
                         </span>
                     </MenuButton>
                 </div>
@@ -40,16 +43,24 @@
                     leave-to-class="transform scale-95 opacity-0"
                 >
                     <MenuItems
-                        class="absolute right-0 mt-2 z-20 w-96 h-64 overflow-y-scroll origin-top-right bg-white shadow-lg ring-1 ring-black/5 focus:outline-none"
+                        v-if="notificationStore.notifications.length > 0"
+                        class="absolute left-4  z-20 py-3 w-96 overflow-y-auto origin-top-right bg-white rounded-lg shadow-lg ring-1 ring-black/5 focus:outline-none"
                     >
-                        <div class="px-1 py-1 z-2">
+                        <div></div>
+                        <div
+                            class="px-1 py-1 z-2"
+                            v-for="(
+                                notification, index
+                            ) in notificationStore.notifications"
+                            :key="index"
+                        >
                             <MenuItem v-slot="{ active }">
-                                <router-link
-                                    :to="{ name: 'app.pdc.commit.list' }"
+                                <button
+                                    @click="updateNotification(notification.id)"
                                     :class="[
                                         active
-                                            ? 'bg-gray-200 w-full py-4 px-3 flex border-b items-center justify-between'
-                                            : 'flex w-full items-center py-2 border-b px-3 justify-between',
+                                            ? 'bg-blue-100 w-full  px-3 flex border-b items-center justify-between'
+                                            : 'flex w-full items-center  border-b px-3 justify-between',
                                     ]"
                                 >
                                     <span class="flex gap-3">
@@ -59,7 +70,7 @@
                                             viewBox="0 0 24 24"
                                             stroke-width="1.5"
                                             stroke="currentColor"
-                                            class="w-6 h-6 text-blue-800"
+                                            class="w-6 h-6 bg-red-400 rounded-full flex items-center justify-center text-white"
                                         >
                                             <path
                                                 stroke-linecap="round"
@@ -67,213 +78,55 @@
                                                 d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
                                             />
                                         </svg>
-                                        <span class="text-red-300"
-                                            >New Commit Created
+                                        <span class=""
+                                            >مکتوب جدید با شماره &nbsp;
+                                            <router-link
+                                                :to="{
+                                                    name: 'app.document.farwarded.list',
+                                                }"
+                                                >{{
+                                                    notification.number
+                                                }}</router-link
+                                            >
+                                            <!-- <span
+                                                v-if="
+                                                    notification.fname != null
+                                                "
+                                            >
+                                                {{ notification.fname }}</span
+                                            >
+                                            <span
+                                                v-if="
+                                                    notification.chance != null
+                                                "
+                                            >
+                                                {{ notification.cname }}</span
+                                            > -->
                                         </span>
                                     </span>
                                     <div>
                                         <img
-                                            :src="auth.user.data.photo_path"
+                                            :src="notification.photo_path"
                                             class="rounded-full w-10 h-10"
                                             alt=""
                                         />
                                         <span
                                             class="text-blue-300"
                                             style="font-size: 12px"
-                                            >{{ auth.user.data.name }}</span
+                                            >{{ notification.uname }}</span
                                         >
                                     </div>
-                                </router-link>
-                            </MenuItem>
-                        </div>
-
-                        <div class="px-1 py-1 z-2">
-                            <MenuItem v-slot="{ active }">
-                                <router-link
-                                    :to="{ name: 'app.pdc.commit.list' }"
-                                    :class="[
-                                        active
-                                            ? 'bg-gray-200 w-full py-4 px-3 flex border-b items-center justify-between'
-                                            : 'flex w-full items-center py-2 border-b px-3 justify-between',
-                                    ]"
-                                >
-                                    <span class="flex gap-3">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke-width="1.5"
-                                            stroke="currentColor"
-                                            class="w-6 h-6 text-blue-800"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
-                                            />
-                                        </svg>
-                                        <span class="text-red-300"
-                                            >New Commit Created
-                                        </span>
-                                    </span>
-                                    <div>
-                                        <img
-                                            :src="auth.user.data.photo_path"
-                                            class="rounded-full w-10 h-10"
-                                            alt=""
-                                        />
-                                        <span
-                                            class="text-blue-300"
-                                            style="font-size: 12px"
-                                            >{{ auth.user.data.name }}</span
-                                        >
-                                    </div>
-                                </router-link>
-                            </MenuItem>
-                        </div>
-
-                        <div class="px-1 py-1 z-2">
-                            <MenuItem v-slot="{ active }">
-                                <router-link
-                                    :to="{ name: 'app.pdc.commit.list' }"
-                                    :class="[
-                                        active
-                                            ? 'bg-gray-200 w-full py-4 px-3 flex border-b items-center justify-between'
-                                            : 'flex w-full items-center py-2 border-b px-3 justify-between',
-                                    ]"
-                                >
-                                    <span class="flex gap-3">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke-width="1.5"
-                                            stroke="currentColor"
-                                            class="w-6 h-6 text-blue-800"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
-                                            />
-                                        </svg>
-                                        <span class="text-red-300"
-                                            >New Commit Created
-                                        </span>
-                                    </span>
-                                    <div>
-                                        <img
-                                            :src="auth.user.data.photo_path"
-                                            class="rounded-full w-10 h-10"
-                                            alt=""
-                                        />
-                                        <span
-                                            class="text-blue-300"
-                                            style="font-size: 12px"
-                                            >{{ auth.user.data.name }}</span
-                                        >
-                                    </div>
-                                </router-link>
-                            </MenuItem>
-                        </div>
-
-                        <div class="px-1 py-1 z-2">
-                            <MenuItem v-slot="{ active }">
-                                <router-link
-                                    :to="{ name: 'app.pdc.commit.list' }"
-                                    :class="[
-                                        active
-                                            ? 'bg-gray-200 w-full py-4 px-3 flex border-b items-center justify-between'
-                                            : 'flex w-full items-center py-2 border-b px-3 justify-between',
-                                    ]"
-                                >
-                                    <span class="flex gap-3">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke-width="1.5"
-                                            stroke="currentColor"
-                                            class="w-6 h-6 text-blue-800"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
-                                            />
-                                        </svg>
-                                        <span class="text-red-300"
-                                            >New Commit Created
-                                        </span>
-                                    </span>
-                                    <div>
-                                        <img
-                                            :src="auth.user.data.photo_path"
-                                            class="rounded-full w-10 h-10"
-                                            alt=""
-                                        />
-                                        <span
-                                            class="text-blue-300"
-                                            style="font-size: 12px"
-                                            >{{ auth.user.data.name }}</span
-                                        >
-                                    </div>
-                                </router-link>
-                            </MenuItem>
-                        </div>
-
-                        <div class="px-1 py-1 z-2">
-                            <MenuItem v-slot="{ active }">
-                                <router-link
-                                    :to="{ name: 'app.pdc.commit.list' }"
-                                    :class="[
-                                        active
-                                            ? 'bg-gray-200 w-full py-4 px-3 flex border-b items-center justify-between'
-                                            : 'flex w-full items-center py-2 border-b px-3 justify-between',
-                                    ]"
-                                >
-                                    <span class="flex gap-3">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke-width="1.5"
-                                            stroke="currentColor"
-                                            class="w-6 h-6 text-blue-800"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"
-                                            />
-                                        </svg>
-                                        <span class="text-red-300"
-                                            >Is trying to delete crucial data.
-                                        </span>
-                                    </span>
-                                    <div>
-                                        <img
-                                            :src="auth.user.data.photo_path"
-                                            class="rounded-full w-10 h-10"
-                                            alt=""
-                                        />
-                                        <span
-                                            class="text-blue-300"
-                                            style="font-size: 12px"
-                                            >{{ auth.user.data.name }}</span
-                                        >
-                                    </div>
-                                </router-link>
+                                </button>
                             </MenuItem>
                         </div>
                     </MenuItems>
                 </transition>
             </Menu>
         </div>
-        <div class="absolute left-4 w-56 text-right">
+        <div class="absolute left-4 ml-15 w-56 text-right">
             <Menu as="div" class="relative inline-block text-left w-full">
                 <div
-                    class="h-16 hover:bg-gray-100 transition-colors py-2 px-3 w-full"
+                    class="h-20 hover:bg-gray-100 transition-colors py-3 flex items-center px-3 w-full"
                 >
                     <MenuButton>
                         <div
@@ -315,6 +168,7 @@
                         </div>
                     </MenuButton>
                 </div>
+
                 <transition
                     enter-active-class="transition duration-100 ease-out"
                     enter-from-class="transform scale-95 opacity-0"
@@ -324,7 +178,7 @@
                     leave-to-class="transform scale-95 opacity-0"
                 >
                     <MenuItems
-                        class="absolute right-0 mt-2 w-56 origin-top-right bg-white shadow-lg ring-1 ring-black/5 focus:outline-none"
+                        class="absolute right-0  w-56 origin-top-right bg-white shadow-lg ring-1 ring-black/5 focus:outline-none"
                     >
                         <div class="px-1 py-1">
                             <MenuItem v-slot="{ active }">
@@ -333,15 +187,10 @@
                                         active
                                             ? 'bg-red-500 text-white'
                                             : 'text-gray-900',
-                                        'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                                        'group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm',
                                     ]"
                                     @click="logout"
                                 >
-                                    <EditIcon
-                                        :active="active"
-                                        class="mr-2 h-5 w-5 text-violet-400"
-                                        aria-hidden="true"
-                                    />
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
@@ -365,14 +214,10 @@
                                         active
                                             ? 'bg-blue-500 text-white'
                                             : 'text-gray-900',
-                                        'group flex w-full items-center rounded-md px-2 py-2 text-sm',
+                                        'group flex w-full items-center gap-3 rounded-md px-2 py-2 text-sm',
                                     ]"
                                 >
-                                    <DuplicateIcon
-                                        :active="active"
-                                        class="mr-2 h-5 w-5 text-violet-400"
-                                        aria-hidden="true"
-                                    />
+
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
@@ -400,15 +245,44 @@
 
 <script setup>
 import { Menu, MenuItem, MenuItems, MenuButton } from "@headlessui/vue";
-import { onMounted, ref } from "vue";
+import Notification from "./Notification.vue";
+import { onMounted, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAuthStore } from "../stores/auth";
+import useDocumentStore from "../stores/documents/documentStore";
 const rotateProfile = ref(false);
+
 const router = useRouter();
 const auth = useAuthStore();
+const notificationStore = useDocumentStore();
 onMounted(() => {
     auth.getUser();
+    Notify();
+    countNotify();
 });
+
+// const notifications = computed(() => {
+//     notificationStore.notifications;
+// });
+
+// do this job  for specified time
+function Notify() {
+    setInterval(() => {
+        notificationStore.getNotification();
+    }, 2000 * 4);
+}
+
+// do this job  for specified time
+function countNotify() {
+    setInterval(() => {
+        notificationStore.countNotification();
+    }, 2000 * 4);
+}
+
+function updateNotification(id) {
+    notificationStore.updateNotification(id);
+}
+
 function logout() {
     auth.logout();
     router.push({ name: "login" });

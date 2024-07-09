@@ -48,6 +48,35 @@
                     </option>
                 </select>
             </template>
+            <template v-else-if="type === 'select2'">
+                <select
+                    dir="ltr"
+                    :id="id"
+                    multiple
+                    :value="props.modelValue"
+                    @change="onChange($event.target.value)"
+                    :required="required"
+                    :name="name"
+                    :class="inputClasses"
+                >
+                    <option
+                        value=""
+                        disabled
+                        selected
+                        class="flex items-center justify-between float-end"
+                    >
+                        انتخاب
+                        {{ label }}
+                    </option>
+                    <option
+                        v-for="option in selectOptions"
+                        :value="option.key"
+                        :key="option"
+                    >
+                        {{ option.text }}
+                    </option>
+                </select>
+            </template>
             <template v-else-if="type === 'textarea'">
                 <textarea
                     :type="type"

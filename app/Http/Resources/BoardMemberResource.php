@@ -21,6 +21,7 @@ class BoardMemberResource extends JsonResource
             'fname' => $this->fname,
             'phone' => $this->phone,
             'email' => $this->email,
+            'address' => $this->address,
             'board_name' => $this->board_name,
             'uname' => $this->uname,
         ];

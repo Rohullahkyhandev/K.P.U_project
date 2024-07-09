@@ -17,9 +17,11 @@ class DepartmentResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'date' => $this->date,
+            'manger_name' => $this->manger_name,
+            'manager_lname' => $this->manager_lname,
+            'photo_path' => $this->photo_path,
+            'date' => substr($this->date, 0, 4) . ' ه,ش',
             'description' => $this->description,
-            'uname' => $this->uname,
             'fname' => $this->fname,
         ];
     }

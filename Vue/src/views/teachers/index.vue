@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-10 m-8">
+    <div class="mt-10">
         <div class="flex items-center justify-between mb-8">
             <div class="flex items-center gap-5">
                 <router-link
@@ -229,57 +229,31 @@
                     <input
                         v-model="search"
                         @change="getTeacher(null)"
-                        class="appearance-none relative block w-48 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="جستجوی بر اساس نام,تخلص"
+                        class="appearance-none relative block w-48 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        placeholder="جستجوی بر اساس تمام فلید ها"
                     />
                 </div>
 
-                <div>
-                    <!-- <div
-                        class="bg-white z-20 absolute shadow text-right right-3 w-64 py-4"
-                    >
-                        <ul class="flex items-center flex-col">
-                            <li
-                                class="flex items-center text-left"
-                                v-for="(attribute, index) in attributes"
-                                :key="index"
-                            >
-                                <div class="ml-3">
-                                    <input
-                                        :checked="
-                                            attribute.isActive ? true : false
-                                        "
-                                        type="checkbox"
-                                        @change="
-                                            () =>
-                                                (attribute.isActive =
-                                                    !attribute.isActive)
-                                        "
-                                    />
-                                </div>
-                                <div class="text-right">
-                                    <span>{{ attribute.text }}</span>
-                                </div>
-                            </li>
-                            <input type="checkbox" @change="selectToggle" />
-                        </ul>
-                    </div> -->
-                    <!-- <select
-                        v-model="department_id"
+                <div v-if="authStore.user.data.dep_id == 4">
+                    <Select
+                        v-model="program"
                         @change="getTeacher(null)"
-                        class="appearance-none relative block w-75 px-10 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    >
-                        <option value="" disabled selected>
-                            نمایش اطلاعات استادان براساس دیپارتمنت
-                        </option>
-                        <option
-                            v-for="(index, department) in departments"
-                            :key="index"
-                            :value="department.id"
-                        >
-                            {{ department.name }}
-                        </option>
-                    </select> -->
+                        :options="programs"
+                        optionLabel="name"
+                        placeholder="فلیتر کردن استادان براساس برنامه"
+                        class="w-full md:w-80 py-1 rounded-lg"
+                    />
+                </div>
+
+                <div v-else>
+                    <Select
+                        v-model="department"
+                        @change="getTeacher(null)"
+                        :options="departments"
+                        optionLabel="name"
+                        placeholder="فلیتر کردن استادان براساس دیپارمنت"
+                        class="w-full md:w-80 py-1 rounded-lg"
+                    />
                 </div>
 
                 <div class="flex items-center">
@@ -289,7 +263,7 @@
                         dir="ltr"
                         @change="getTeacher(null)"
                         v-model="perPage"
-                        class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        class="appearance-none relative block w-24 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     >
                         <option value="5" selected>5</option>
                         <option value="10" selected>10</option>
@@ -308,7 +282,7 @@
                             field="id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('id')"
+                            @click="sortTeacher('id')"
                         >
                             شماره.
                         </TableHeaderCell>
@@ -317,7 +291,7 @@
                             field="code_bast"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('code_bast')"
+                            @click="sortTeacher('code_bast')"
                         >
                             کود بست
                         </TableHeaderCell>
@@ -326,34 +300,43 @@
                             field="name"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('name')"
+                            @click="sortTeacher('name')"
                         >
                             نام
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="email"
+                            field="lname"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('id')"
+                            @click="sortTeacher('lname')"
                         >
                             تخلص
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="‌fname"
+                            field="fatherName"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('‌fname')"
+                            @click="sortTeacher('fatherName')"
                         >
                             نام پدر
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
+                            field="education_field"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortTeacher('education_field')"
+                        >
+                            ریشته تحصلی
                         </TableHeaderCell>
 
                         <TableHeaderCell
                             field="id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('id')"
+                            @click="sortTeacher('id')"
                         >
                             سویه تحصلی
                         </TableHeaderCell>
@@ -364,7 +347,7 @@
                             field="id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('id')"
+                            @click="sortTeacher('id')"
                         >
                             فاکولته
                         </TableHeaderCell>
@@ -373,34 +356,33 @@
                             field="id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('id')"
+                            @click="sortTeacher('id')"
                         >
                             دیپارتمنت
                         </TableHeaderCell>
-
                         <TableHeaderCell
                             field="id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('id')"
+                            @click="sortTeacher('id')"
                         >
-                            ایمل آدرس
+                            برنامه فوق لیسانس
                         </TableHeaderCell>
 
                         <TableHeaderCell
                             field="id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('id')"
+                            @click="sortTeacher('id')"
                         >
-                            شماره تماس
+                            شیفت تدریس
                         </TableHeaderCell>
 
                         <TableHeaderCell
                             field="id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('id')"
+                            @click="sortTeacher('id')"
                         >
                             تاریخ استخدام
                         </TableHeaderCell>
@@ -409,7 +391,7 @@
                             field="status"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('status')"
+                            @click="sortTeacher('status')"
                         >
                             وضعیت
                         </TableHeaderCell>
@@ -418,7 +400,7 @@
                             field="action"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('acs')"
+                            @click="sortTeacher('acs')"
                         >
                             کابر
                         </TableHeaderCell>
@@ -427,7 +409,7 @@
                             field="action"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('acs')"
+                            @click="sortTeacher('acs')"
                         >
                             عملیات
                         </TableHeaderCell>
@@ -435,7 +417,7 @@
                 </thead>
                 <tbody v-if="teachers.loading || !teachers.data?.length">
                     <tr>
-                        <td colspan="11">
+                        <td colspan="15">
                             <Spinner v-if="teachers.loading" />
                             <p v-else class="text-center py-8 text-gray-700">
                                 نتیجه ای پیدا نشد
@@ -459,59 +441,86 @@
                         </td>
 
                         <td class="border-b p-2 border">
-                            {{ teacher.fatherName }}
+                            {{ teacher.fname }}
                         </td>
 
                         <td class="border-b p-2 border">
-                            <span
-                                class="bg-blue-500 text-white px-4 px-2 rounded-lg"
-                                v-if="teacher.education != ''"
-                                >{{ teacher.education }}</span
-                            >
+                            {{ teacher.education_field }}
                         </td>
 
-                        <td class="border-b p-2 px-8 border">
-                            <span
-                                class="font-semibold"
-                                v-if="teacher.academic_rank != null"
-                            >
-                                رتبه عملی: {{ teacher.academic_rank }}
-                            </span>
-                            <br />
-                            <span
-                                class="font-semibold"
-                                v-if="teacher.date != null"
-                                >تاریخ ترفیع:{{ teacher.date }}</span
-                            >
-                            <br />
-                            <span
-                                class="font-semibold flex items-center gap-3"
-                                v-if="teacher.attachment_path != null"
-                            >
-                                دانلود اسناد:
-                                <a
+                        <td class="border-b p-2 border">
+                            <ul>
+                                <li
                                     v-for="(
-                                        path, index
-                                    ) in teacher.attachment_path"
+                                        education_degree, index
+                                    ) in education_degrees"
                                     :key="index"
-                                    class="bg-blue-600 block w-8 py-2 flex item-center justify-center rounded-lg text-white"
-                                    :href="path"
+                                    :class="[
+                                        teacher.education ==
+                                        education_degree.text
+                                            ? 'bg-blue-500 text-white px-4  rounded-lg'
+                                            : '',
+                                    ]"
                                 >
-                                    <svg
-                                        xmlns=" http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="1.5"
-                                        stroke="currentColor"
-                                        class="w-5 h-5"
+                                    {{ education_degree.text }}
+                                </li>
+                            </ul>
+                        </td>
+
+                        <td
+                            class="border-b flex items-start p-6 border text-start"
+                        >
+                            <ul>
+                                <li v-if="teacher.last_rank != null">
+                                    رتبه قبلی:
+                                    <span class="font-semibold">{{
+                                        teacher.last_rank
+                                    }}</span>
+                                </li>
+
+                                <li v-if="teacher.now_rank != null">
+                                    فعلی رتبه عملی:
+                                    <span class="font-semibold">{{
+                                        teacher.now_rank
+                                    }}</span>
+                                </li>
+
+                                <li v-if="teacher.date != null">
+                                    تاریخ ترفیع:<span class="font-semibold">{{
+                                        teacher.date
+                                    }}</span>
+                                </li>
+
+                                <li
+                                    class="font-semibold flex items-center gap-3"
+                                    v-if="teacher.attachment_path != null"
+                                >
+                                    دانلود اسناد:
+                                    <a
+                                        v-for="(
+                                            path, index
+                                        ) in teacher.attachment_path"
+                                        :key="index"
+                                        class="bg-blue-600 block w-8 py-2 flex item-center justify-center rounded-lg text-white"
+                                        :href="path"
                                     >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
-                                        />
-                                    </svg> </a
-                            ></span>
+                                        <svg
+                                            xmlns=" http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="1.5"
+                                            stroke="currentColor"
+                                            class="w-5 h-5"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                                            />
+                                        </svg>
+                                    </a>
+                                </li>
+                            </ul>
                         </td>
 
                         <td class="border-b p-2 border">
@@ -521,11 +530,28 @@
                             {{ teacher.department }}
                         </td>
                         <td class="border-b p-2 border">
+                            {{ teacher.pname }}
+                        </td>
+                        <td class="border-b p-2 border">
+                            <span v-if="teacher.teaching_stauts == 'bachelor'"
+                                >برنامه های لیسانس</span
+                            >
+                            <span
+                                v-if="
+                                    teacher.teaching_status == 'post-graduated'
+                                "
+                                >برنامه ها فوق لیسانس</span
+                            >
+                            <span v-if="teacher.teaching_status == 'both'"
+                                >هر دو برنامه</span
+                            >
+                        </td>
+                        <!-- <td class="border-b p-2 border">
                             {{ teacher.email }}
                         </td>
                         <td class="border-b p-2 border">
                             {{ teacher.phone }}
-                        </td>
+                        </td> -->
                         <td class="border-b p-2 border">
                             {{ teacher.hire_date }}
                         </td>
@@ -535,7 +561,7 @@
                                 v-if="teacher.status == '1'"
                                 class="block bg-green-400 text-white font-semibold rounded-lg px-5"
                             >
-                                در حال تدریس
+                                مصروف تدریس
                             </span>
                             <span
                                 v-else-if="teacher.status == '2'"
@@ -796,12 +822,19 @@ import Spinner from "../../components/core/Spnnier.vue";
 import { USER_PER_PAGE } from "../../constant";
 import TableHeaderCell from "../../components/tableHeader/tableheader.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import Select from "primevue/select";
 // import { PencilAltIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useRoute } from "vue-router";
 import { useTeacherStore } from "../../stores/teachers/teacherStore";
 import ModalBox from "./ModalBox.vue";
+import useDepartmentStore from "../../stores/department/deparmentStore";
+import { useAuthStore } from "../../stores/auth";
+import useProgramStore from "../../stores/postgraduatedPrograms/programStore";
 
 const teacherStore = useTeacherStore();
+const departmentStore = useDepartmentStore();
+const authStore = useAuthStore();
+const programStore = useProgramStore();
 const route = useRoute();
 
 const perPage = ref(USER_PER_PAGE);
@@ -809,7 +842,7 @@ const search = ref("");
 const teachers = computed(() => teacherStore.Teachers);
 const sortField = ref("updated_at");
 const sortDirection = ref("desc");
-const department_id = ref("");
+const department = ref("");
 
 // let msg_success = ref(computed(() => store.state.msg_success));
 // let msg_warning = ref("");
@@ -838,10 +871,15 @@ function openProModal(id) {
 onMounted(() => {
     getTeacher();
     teacherStore.getAllDepartments();
+    departmentStore.getAllDepartment();
+    programStore.getAllPrograms();
 });
 
 const departments = computed(() =>
-    teacherStore.listDepartment.map((c) => ({ key: c.id, text: c.name }))
+    departmentStore.all_department.map((c) => ({ id: c.id, name: c.name }))
+);
+const programs = computed(() =>
+    programStore.listProgram.map((c) => ({ id: c.id, name: c.program_name }))
 );
 
 function getForPage(ev, link) {
@@ -857,13 +895,13 @@ function getTeacher(url = null) {
         url,
         search: search.value,
         per_page: perPage.value,
-        sort_field: sortField.value,
-        sort_direction: sortDirection.value,
-        department_id: department_id.value,
+        sortField: sortField.value,
+        sortDirection: sortDirection.value,
+        department_id: department.value.id,
     });
 }
 
-function sortUsers(field) {
+function sortTeacher(field) {
     if (field === sortField.value) {
         if (sortDirection.value === "desc") {
             sortDirection.value = "asc";
@@ -885,80 +923,25 @@ function deleteTeacher(id) {
     getTeacher();
 }
 
-const enabled = ref(false);
-
-const attributes = ref([
+// education degres
+const education_degrees = ref([
     {
-        key: "codebast",
-        text: "کود بست",
-        isActive: true,
-    },
-
-    {
-        key: "name",
-        text: "نام",
-        isActive: true,
-    },
-
-    {
-        key: "lname",
-        text: "تخلص ",
-        isActive: true,
-    },
-
-    {
-        key: "fname",
-        text: "نام پدر",
-        isActive: true,
-    },
-
-    {
-        key: "faculty_id",
-        text: "فاکولته",
-        isActive: true,
+        key: "لیسانس",
+        text: "لسیانس",
     },
     {
-        key: "department_id",
-        text: "دیمارتمنت",
-        isActive: true,
-    },
-
-    {
-        key: "email",
-        text: "علمی استاد",
-        isActive: true,
-    },
-
-    {
-        key: "adamic_rank",
-        text: "رتبه عملی ",
-        isActive: true,
+        key: "ماستر",
+        text: "ماستر",
     },
     {
-        key: "phone",
-        text: "شماره تماس",
-        isActive: true,
-    },
-    {
-        key: "join_date",
-        text: "تاریخ تقرر",
-        isActive: true,
-    },
-    {
-        key: "nic",
-        text: "نمبر تٰٰذکره",
-        isActive: true,
+        key: "دوکتور",
+        text: "دوکتور",
     },
 ]);
 
+const enabled = ref(false);
 function msg_success_fun() {}
 function msg_warning_fun() {}
-
-function selectToggle() {
-    attributes.value.map((item) => {
-        item.isActive = !item.isActive;
-    });
-}
 </script>
 
 <style scoped></style>

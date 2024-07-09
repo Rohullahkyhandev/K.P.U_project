@@ -1,11 +1,11 @@
 <template>
     <TransitionRoot appear :show="isOpen" as="template">
-        <Dialog as="div" @close="closeModal" class="relative z-10">
+        <Dialog as="div" @close="closeModal" class="relative z-10 mr-10">
             <TransitionChild
                 as="template"
                 enter="duration-300 ease-out"
-                enter-from="opacity-0"
-                enter-to="opacity-100"
+                enter-from="opacity-20"
+                enter-to="opacity-50"
                 leave="duration-200 ease-in"
                 leave-from="opacity-100"
                 leave-to="opacity-0"
@@ -78,6 +78,5 @@ const props = defineProps({
         type: String,
         required: true,
     },
-
 });
 </script>

@@ -4,7 +4,7 @@ import router from "./routes";
 
 const axiosClient = axios.create({
     // baseURL: `https://chance.kpu-conferences.com/NewUnvesityPro/public/api`
-    baseURL: "http://127.0.0.1:8000/api",
+    baseURL: "http://localhost/ViceChancellor/public/api",
 });
 
 axiosClient.interceptors.request.use((config) => {

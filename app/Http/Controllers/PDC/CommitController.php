@@ -4,7 +4,7 @@ namespace App\Http\Controllers\PDC;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PDC_CommitRsource;
-use App\Models\PDCCommittee;
+use App\Models\PD_Committee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -22,12 +22,12 @@ class CommitController extends Controller
         $sortDirection = request('sortDirection', 'DESC');
         $search = request('search', '');
 
-        $data = PDCCommittee::query()
-            ->where('p_d_c_committees.date', 'like', "%{$search}%")
-            ->orWhere('p_d_c_committees.name', 'like', "%{$search}%")
-            ->join('users', 'p_d_c_committees.user_id', 'users.id')
-            ->select('p_d_c_committees.*', 'users.name as uname')
-            ->orderBy("p_d_c_committees.$sortField", $sortDirection)
+        $data = PD_Committee::query()
+            ->where('p_d__committees.date', 'like', "%{$search}%")
+            ->orWhere('p_d__committees.name', 'like', "%{$search}%")
+            ->join('users', 'p_d__committees.user_id', 'users.id')
+            ->select('p_d__committees.*', 'users.name as uname')
+            ->orderBy("p_d__committees.$sortField", $sortDirection)
             ->paginate($per_page);
 
         return PDC_CommitRsource::collection($data);
@@ -36,9 +36,9 @@ class CommitController extends Controller
 
     // get all the commits
 
-    public function getCommit()
+    public function getAllCommit()
     {
-        $data = PDCCommittee::all();
+        $data =  PD_Committee::all();
         return $data;
     }
 
@@ -71,7 +71,7 @@ class CommitController extends Controller
         }
 
         $user_id = Auth::id();
-        $commit = new PDCCommittee();
+        $commit = new PD_Committee();
         $commit->name = $request->name;
         $commit->topic = $request->topic;
         $commit->date = $request->date;
@@ -94,7 +94,7 @@ class CommitController extends Controller
 
     public function edit($id = '')
     {
-        return PDCCommittee::find($id);
+        return PD_Committee::find($id);
     }
 
     public function update(Request $request)
@@ -117,7 +117,7 @@ class CommitController extends Controller
 
 
         $id = $request->id;
-        $commit = PDCCommittee::find($id);
+        $commit = PD_Committee::find($id);
         $attachment = $commit->attachment;
         $attachment_path = $commit->attachment_path;
         if ($request->attachment != '') {
@@ -150,11 +150,11 @@ class CommitController extends Controller
 
     public function destroy($id = '')
     {
-        $commit = PDCCommittee::find($id);
+        $commit = PD_Committee::find($id);
         if (is_file(storage_path('/app/public/pdc/commit/' . $commit->commit_file))) {
             unlink(storage_path('/app/public/pdc/commit/' . $commit->commit_file));
         }
-        $result = PDCCommittee::destroy($id);
+        $result = PD_Committee::destroy($id);
         return $result;
     }
 }

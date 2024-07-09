@@ -95,6 +95,14 @@
                 </div>
                 <!-- end of display message area -->
 
+                <div class="w-full flex items-center justify-center mb-3">
+                    <Steper
+                        :step-one="teacherStore.stepOne"
+                        :step-two="teacherStore.stepTwo"
+                        :step-three="teacherStore.stepThree"
+                    />
+                </div>
+
                 <div class="mt-5">
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
@@ -105,10 +113,12 @@
                         </div>
                         <div class="input--dev--width">
                             <CustomInput
-                                type="text"
+                                type="select"
+                                :select-options="education_degrees"
                                 v-model="qualification.education_"
                                 class="mb-2"
                                 required="required"
+                                label=" مقطع تحصلی"
                             />
                         </div>
                     </div>
@@ -155,10 +165,11 @@
                             </label>
                         </div>
                         <div class="input--dev--width">
-                            <CustomInput
+                            <DatePicker
                                 type="date"
                                 v-model="qualification.graduated_year"
                                 class="mb-2"
+                                placeholder="انتخاب تاریخ"
                                 required="required"
                             />
                         </div>
@@ -212,7 +223,7 @@
                             ></path>
                         </svg>
                     </span>
-                    <span v-else> ثبت </span>
+                    <span v-else> بعدی </span>
                 </button>
                 <router-link
                     :to="{ name: 'app.dashboard' }"
@@ -227,18 +238,34 @@
 <script setup>
 import { computed, onMounted, ref, useSlots } from "vue";
 import { useRoute } from "vue-router";
+import Steper from "../../components/steps.vue";
+import DatePicker from "vue3-persian-datetime-picker";
 import CustomInput from "../../components/core/CustomInput.vue";
 import { useTeacherStore } from "../../stores/teachers/teacherStore";
 // import { EMDatePicker } from '@cafebazaar/emrooz';
 const teacherStore = useTeacherStore();
 const route = useRoute();
 
-const qualification = computed(
-    () => teacherStore.qualification
-);
+const qualification = computed(() => teacherStore.qualification);
 
 function onSubmit() {
     let id = route.params.id;
     teacherStore.createQualification(qualification.value, id);
 }
+
+// education degrees
+const education_degrees = ref([
+    {
+        key: "لیسانس",
+        text: "لسیانس",
+    },
+    {
+        key: "ماستر",
+        text: "ماستر",
+    },
+    {
+        key: "دوکتور",
+        text: "دوکتور",
+    },
+]);
 </script>

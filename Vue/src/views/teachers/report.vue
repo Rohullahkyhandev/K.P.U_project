@@ -24,7 +24,7 @@
                 <th rowspan="3">دانشکده</th>
                 <th rowspan="3">دیپارتمنت</th>
                 <th colspan="2" rowspan="2">مجموع</th>
-                <th
+                <!-- <th
                     colspan="6"
                     style="
                         font-size: 20px;
@@ -33,7 +33,7 @@
                     "
                 >
                     تعداد استادان به تفکیک درجه تحصیل
-                </th>
+                </th> -->
                 <th
                     colspan="12"
                     style="
@@ -44,7 +44,7 @@
                 >
                     تعداد استادان به تفکیک رتبه علمی
                 </th>
-                <th
+                <!-- <th
                     colspan="12"
                     style="
                         font-size: 20px;
@@ -53,23 +53,29 @@
                     "
                 >
                     مصروف تحصیل
-                </th>
+                </th> -->
             </tr>
             <tr>
-                <th colspan="2">داکتر</th>
-                <th colspan="2">ماستر</th>
-                <th colspan="2">لیسانس</th>
+                <!-- <th colspan="2">داکتر</th> -->
+                <!-- <th colspan="2">ماستر</th> -->
+                <!-- <th colspan="2">لیسانس</th> -->
                 <th colspan="2">پوهاند</th>
                 <th colspan="2">پوهنیار</th>
                 <th colspan="2">پوهنمل</th>
                 <th colspan="2">پوهیالی</th>
                 <th colspan="2">نامزاد پوهنیار</th>
-                <th></th>
+                <!-- <th></th>
                 <th></th>
                 <th>ماستر</th>
-                <th>داکتر</th>
+                <th>داکتر</th> -->
             </tr>
             <tr>
+                <!-- <th>ذکور</th>
+                <th>اناث</th>
+                <th>ذکور</th>
+                <th>اناث</th>
+                <th>ذکور</th>
+                <th>اناث</th> -->
                 <th>ذکور</th>
                 <th>اناث</th>
                 <th>ذکور</th>
@@ -82,46 +88,51 @@
                 <th>اناث</th>
                 <th>ذکور</th>
                 <th>اناث</th>
-                <th>ذکور</th>
-                <th>اناث</th>
-                <th>ذکور</th>
-                <th>اناث</th>
-                <th>ذکور</th>
-                <th>اناث</th>
+                <!-- <th></th>
                 <th></th>
-                <th></th>
                 <th>ذکور</th>
-                <th>اناث</th>
+                <th>اناث</th> -->
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td rowspan="1">Science</td>
-                <td>Biology</td>
-                <td>15</td>
+            <!-- Crutail point  -->
+            <tr v-for="(data, index) in reportStore.teacherlist" :key="index">
+                <td >{{ index + 1 }}</td>
+                <td
+                    :rowspan="data.faculty_departments_length"
+                    v-if="index==0"
+                >
+                    {{ data.faculty_name }}
+                </td>
+                <td>{{ data.department_name }}</td>
+                <!-- <td>15</td>
                 <td>10</td>
                 <td>2</td>
                 <td>1</td>
                 <td>3</td>
-                <td>2</td>
-                <td>4</td>
-                <td>3</td>
-                <td>8</td>
-                <td>6</td>
-                <td>5</td>
-                <td>3</td>
-                <td>2</td>
-                <td>1</td>
-                <td>2</td>
-                <td>1</td>
-                <td>2</td>
-                <td>1</td>
-                <td></td>
+                <td>2</td> -->
+                <td>{{ data.total_male_teacher_entire_department }}</td>
+                <td>{{ data.total_female_teacher_entire_department }}</td>
+                <td>{{ data.total_pohand_male_teacher_in_department }}</td>
+                <td>{{ data.total_pohand_female_teacher_in_department }}</td>
+                <td>{{ data.total_pohyali_male_teacher_in_department }}</td>
+                <td>{{ data.total_pohyali_female_teacher_in_department }}</td>
+                <td>{{ data.total_pohanmal_male_teacher_in_department }}</td>
+                <td>{{ data.total_pohanmal_female_teacher_in_department }}</td>
+                <td>
+                    {{ data.total_namzadPohanyar_male_teacher_in_department }}
+                </td>
+                <td>
+                    {{ data.total_namzadPohanyar_female_teacher_in_department }}
+                </td>
+                <td>{{ data.total_pohanyar_male_teacher_in_department }}</td>
+                <td>{{ data.total_pohanyar_female_teacher_in_department }}</td>
+                <!-- <td></td>
                 <td></td>
                 <td>23</td>
-                <td>23</td>
+                <td>23</td> -->
             </tr>
+            <!-- end of that -->
             <tr>
                 <th
                     colspan="26"
@@ -152,7 +163,16 @@
     </table>
 </template>
 
-<script setup></script>
+<script setup>
+import { computed, onMounted, ref } from "vue";
+import usePdcTeacherInCommitReport from "../../stores/report/pdcTeacherInCommitStore";
+
+const reportStore = usePdcTeacherInCommitReport();
+
+onMounted(() => {
+    reportStore.getTeacherList();
+});
+</script>
 
 <style scoped>
 body {

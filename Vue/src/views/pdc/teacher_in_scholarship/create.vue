@@ -149,7 +149,8 @@
                     </div>
                     <div class="w-6/12">
                         <CustomInput
-                            type="text"
+                            type="select"
+                            :select-options="degree_types"
                             v-model="teacherInScholarship.edu_maqta"
                             class="mb-2"
                             required="required"
@@ -161,17 +162,16 @@
                 <div class="wrapper--dev--input">
                     <div class="w-2/12">
                         <label class="form--label">
-                            تاریخ رفت
+                            تاریخ اعزام
                             <span class="label--prefix">*</span>
                         </label>
                     </div>
                     <div class="w-6/12">
-                        <CustomInput
-                            type="date"
+                        <DatePicker
                             v-model="teacherInScholarship.sent_date"
                             class="mb-2"
                             required="required"
-                            label="تاریح رفت "
+                            placeholder="تاریح  اعزام "
                         />
                     </div>
                 </div>
@@ -184,12 +184,11 @@
                         </label>
                     </div>
                     <div class="w-6/12">
-                        <CustomInput
-                            type="date"
+                        <DatePicker
                             v-model="teacherInScholarship.back_date"
                             class="mb-2"
                             required="required"
-                            label="تاریخ برگشت"
+                            placeholder="تاریخ برگشت"
                         />
                     </div>
                 </div>
@@ -198,7 +197,7 @@
                     <div class="label--dev--width">
                         <label class="form--label"
                             >فاکولته
-                            <span class="label--prefix">*</span>
+                            <span class="label--prefix"></span>
                         </label>
                     </div>
                     <div class="input--dev--width">
@@ -210,35 +209,12 @@
                             :selectOptions="faculties"
                             v-model="teacherInScholarship.faculty_id"
                             class="mb-2"
-                            required="required"
                             label="فاکولته"
                         />
                     </div>
                 </div>
 
-                <div class="wrapper--dev--input">
-                    <div class="label--dev--width">
-                        <label class="form--label"
-                            >استادان
-                            <span class="label--prefix">*</span>
-                        </label>
-                    </div>
-                    <div class="input--dev--width">
-                        <CustomInput
-                            type="select"
-                            :selectOptions="teachers"
-                            v-model="teacherInScholarship.teacher_id"
-                            class="mb-2"
-                            required="required"
-                            label=" استاد"
-                        />
-                    </div>
-                </div>
-
-                <div
-                    class="wrapper--dev--input"
-                    v-if="departments.length != ''"
-                >
+                <div class="wrapper--dev--input" v-if="departments.length > 0">
                     <div class="w-2/12">
                         <label class="form--label"
                             >دیپارتمنت
@@ -248,15 +224,63 @@
                     <div class="w-6/12">
                         <CustomInput
                             type="select"
-                            :selectOptions="departments"
+                            @change="
+                                getTeacher(teacherInScholarship.department_id)
+                            "
                             v-model="teacherInScholarship.department_id"
+                            :selectOptions="departments"
                             class="mb-2"
                             required="required"
-                            label="دیپارتمنت"
+                            label=" دیپارتمنت"
+                        />
+                    </div>
+                </div>
+                <div
+                    class="wrapper--dev--input"
+                    v-if="teacherInScholarship.faculty_id == ''"
+                >
+                    <div class="w-2/12">
+                        <label class="form--label"
+                            >دیپارتمنت های عمومی
+                            <span class="label--prefix">*</span>
+                        </label>
+                    </div>
+                    <div class="w-6/12">
+                        <CustomInput
+                            type="select"
+                            @change="
+                                getTeacher(teacherInScholarship.department_id)
+                            "
+                            v-model="teacherInScholarship.department_id"
+                            :selectOptions="departments_out_of_faculties"
+                            class="mb-2"
+                            required="required"
+                            label=" دیپارتمنت"
                         />
                     </div>
                 </div>
 
+                <div
+                    class="wrapper--dev--input"
+                    v-if="teacherInScholarship.department_id != ''"
+                >
+                    <div class="label--dev--width">
+                        <label class="form--label"
+                            >استادان
+                            <span class="label--prefix">*</span>
+                        </label>
+                    </div>
+                    <div class="input--dev--width">
+                        <CustomInput
+                            type="select"
+                            v-model="teacherInScholarship.teacher_id"
+                            :select-options="teachers"
+                            class="mb-2"
+                            required="required"
+                            label=" استاد"
+                        />
+                    </div>
+                </div>
                 <div class="wrapper--dev--input">
                     <div class="label--dev--width">
                         <label class="form--label"
@@ -323,48 +347,83 @@
 <script setup>
 import { computed, onMounted, ref, useSlots } from "vue";
 import { useRoute } from "vue-router";
+import DatePicker from "vue3-persian-datetime-picker";
 import CustomInput from "../../../components/core/CustomInput.vue";
 import { useTeacherStore } from "../../../stores/teachers/teacherStore";
 import useTeacherInScholarship from "../../../stores/pdc/teacher_in_scholarship/teacherInScholarshipStore";
+import { useFacultyStore } from "../../../stores/faculties/facultyStore";
+import useDepartmentStore from "../../../stores/department/deparmentStore";
 import useTeacherInCommit from "../../../stores/pdc/teacherInCommit/teacherInCommitStore";
 
 // import DatePicker from "vue3-persian-datetime-picker";
-const teacherStore = useTeacherStore();
-const teacherInScholarshipStore = useTeacherInScholarship();
 const teacherInCommitStore = useTeacherInCommit();
+const teacherInScholarshipStore = useTeacherInScholarship();
+const facultyStore = useFacultyStore();
+const departmentStore = useDepartmentStore();
+
 const route = useRoute();
+
+onMounted(() => {
+    facultyStore.getAllFaculty();
+    if (teacherInScholarship.value.faculty_id != "") {
+        departmentStore.getFacultyDepartment(
+            teacherInScholarship.value.faculty_id
+        );
+        if (teacherInScholarship.value.department_id != "") {
+            teacherInCommitStore.getTeachers(
+                teacherInScholarship.value.department_id
+            );
+        }
+    } else {
+        departmentStore.departmentHasOutFaculties();
+        if (teacherInScholarship.value.department_id != "") {
+            teacherInCommitStore.getTeachers(
+                teacherInScholarship.value.department_id
+            );
+        }
+    }
+});
+
 const teacherInScholarship = computed(
     () => teacherInScholarshipStore.teacherInScholarship
 );
 
-onMounted(() => {
-    teacherInCommitStore.getTeachers();
-    teacherStore.getFaculties();
-    if (teacherInScholarship.value.faculty_id != "") {
-        teacherStore.getDepartments(teacherInScholarship.value.faculty_id);
-    }
-});
+const degree_types = [
+    {
+        key: "ماستری",
+        text: "ماستری",
+    },
 
-const departments = computed(() =>
-    teacherStore.departments.map((c) => ({
-        key: c.department_id,
-        text: c.department_name,
-    }))
-);
-const faculties = computed(() =>
-    teacherStore.faculties.map((c) => ({ key: c.faculty_id, text: c.fname }))
-);
+    {
+        key: "دوکتورا",
+        text: "دوکتورا",
+    },
+];
 
-const teachers = computed(() =>
-    teacherInCommitStore.teachers.map((c) => ({
+const departments_out_of_faculties = computed(() =>
+    departmentStore.department_has_out_facilities.map((c) => ({
         key: c.id,
-        text: c.name + " " + c.lname,
+        text: c.name,
     }))
 );
 
 function getFaculty(id) {
-    teacherStore.getDepartments(id);
+    departmentStore.getFacultyDepartment(id);
 }
+
+function getTeacher(id) {
+    teacherInCommitStore.getTeachers(id);
+}
+const departments = computed(() =>
+    departmentStore.faculty_department.map((c) => ({ key: c.id, text: c.name }))
+);
+const faculties = computed(() =>
+    facultyStore.listFaculty.map((c) => ({ key: c.id, text: c.name }))
+);
+
+const teachers = computed(() =>
+    teacherInCommitStore.teachers.map((c) => ({ key: c.id, text: c.name  +" "+c.lname }))
+);
 
 function onSubmit() {
     teacherInScholarshipStore.createTeacherInScholarship(

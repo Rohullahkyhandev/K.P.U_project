@@ -17,10 +17,12 @@ class LabEquipmentResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'lname' => $this->lname,
             'description' => $this->description,
             'quantity' => $this->quantity,
             'entry_date' => $this->entry_date,
             'program_name' => $this->program_name,
+            'status' => $this->stuats,
             'uname' => $this->uname,
         ];
     }

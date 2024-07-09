@@ -24,6 +24,12 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    /// relationship
+    public function permissions()
+    {
+        return   $this->belongsToMany(Permission::class, 'user__permissions');
+    }
+
     protected $hidden = [
         'password',
         'remember_token',
@@ -40,10 +46,10 @@ class User extends Authenticatable
     ];
 
 
-    /// relationship
 
-    public function permission()
+    // teacher
+    public function teacher()
     {
-        $this->belongsToMany(permission::class, 'user_permissions');
+        return $this->hasMany(Teacher::class, 'user_id');
     }
 }

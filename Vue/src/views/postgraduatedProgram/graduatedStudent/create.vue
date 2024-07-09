@@ -102,7 +102,7 @@
                         <div class="input--dev--width">
                             <CustomInput
                                 type="text"
-                                v-model="graduatedStudent.diploma_id"
+                                v-model="graduatedStudent.diplome_id"
                                 class="mb-2"
                                 required="required"
                             />
@@ -168,11 +168,11 @@
                             <span class="label--prefix">*</span>
                         </label>
                     </div>
+
                     <div class="input--dev--width">
                         <select
                             class="block rounded-lg shadow w-full px-3 py-2.5 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                            v-model="selectYear"
-                            @change="getStudent(null)"
+                            v-model="graduatedStudent.graduated_year"
                         >
                             <option
                                 value=""
@@ -277,6 +277,7 @@ onMounted(() => {
 });
 
 const student = computed(() => studentStore.student);
+graduatedStudent.value.student_id = props.student_id;
 
 // get just the year
 

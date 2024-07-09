@@ -20,8 +20,8 @@ const useGraduatedStudent = defineStore("graduatedStudent", () => {
     let graduatedStudent = ref({
         id: "",
         percentage: "",
-        graduation_year: "",
-        diploma_id: "",
+        graduated_year: "",
+        diplome_id: "",
         thesis_mark: "",
         thesis_guide_teacher: "",
         attribute: "",
@@ -30,13 +30,18 @@ const useGraduatedStudent = defineStore("graduatedStudent", () => {
 
     function createGraduatedStudent(data) {
         loading.value = true;
-
+        // data.value.student_id = id;
         axiosClient
             .post("/graduated_student/create", data)
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
-                graduatedStudent.value = "";
+                graduatedStudent.value.attribute = "";
+                graduatedStudent.value.diploma_id = "";
+                graduatedStudent.value.graduation_year = "";
+                graduatedStudent.value.percentage = "";
+                graduatedStudent.value.thesis_guide_teacher = "";
+                graduatedStudent.value.thesis_mark = "";
             })
             .catch((err) => {
                 loading.value = false;
@@ -53,7 +58,7 @@ const useGraduatedStudent = defineStore("graduatedStudent", () => {
         program_id = "",
         year = "",
     } = {}) {
-        graduatedStudent.value.loading = true;
+        graduatedStudents.value.loading = true;
         url = url || `/graduated_student/${program_id}`;
 
         const params = {
@@ -73,23 +78,23 @@ const useGraduatedStudent = defineStore("graduatedStudent", () => {
                 },
             })
             .then((response) => {
-                studnets.value.loading = false;
+                graduatedStudents.value.loading = false;
                 setGraduatedStudent(response.data);
             })
             .catch((err) => {
-                graduatedStudent.value.loading = false;
+                graduatedStudents.value.loading = false;
                 console.log(err);
             });
     }
 
     function setGraduatedStudent(data) {
         if (data) {
-            graduatedStudent.value.data = data.data;
-            graduatedStudent.value.links = data.meta?.links;
-            graduatedStudent.value.to = data.meta.to;
-            graduatedStudent.value.from = data.meta.from;
-            graduatedStudent.value.current_page = data.meta.current_page;
-            graduatedStudent.value.total = data.meta.total;
+            graduatedStudents.value.data = data.data;
+            graduatedStudents.value.links = data.meta?.links;
+            graduatedStudents.value.to = data.meta.to;
+            graduatedStudents.value.from = data.meta.from;
+            graduatedStudents.value.current_page = data.meta.current_page;
+            graduatedStudents.value.total = data.meta.total;
         }
     }
 

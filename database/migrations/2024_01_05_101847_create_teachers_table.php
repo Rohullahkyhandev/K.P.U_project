@@ -30,11 +30,15 @@ return new class extends Migration
             $table->string('status', 10)->default('1');
             $table->string('academic_rank', 100);
             $table->string('photo');
+            $table->string('teaching_status', 100);
+            $table->string('related_part', 100);
             $table->string('photo_path');
-            $table->bigInteger('faculty_id')->unsigned()->index();
-            $table->bigInteger('department_id')->unsigned()->index();
+            $table->bigInteger('faculty_id')->unsigned()->nullable()->index();
+            $table->bigInteger('department_id')->unsigned()->nullable()->index();
+            $table->bigInteger('program_id')->unsigned()->nullable()->index();
             $table->foreign('faculty_id')->references('id')->on('faculties')->onDelete('cascade');
             $table->foreign('department_id')->references('id')->on('departments')->onDelete('cascade');
+            $table->foreign('program_id')->references('id')->on('post_graduated_programs')->onDelete('cascade');
             $table->bigInteger('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();

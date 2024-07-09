@@ -28,10 +28,7 @@
 
         <div class="table--wrapper--dev">
             <!-- display message area -->
-            <div
-                class="msg--success"
-                v-if="teacherInCommitStore.msg_success"
-            >
+            <div class="msg--success" v-if="teacherInCommitStore.msg_success">
                 <div class="flex items-center justify-between px-10">
                     <div
                         class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
@@ -58,10 +55,7 @@
                 </div>
             </div>
 
-            <div
-                class="msg--warning"
-                v-if="teacherInCommitStore.msg_wrang"
-            >
+            <div class="msg--warning" v-if="teacherInCommitStore.msg_wrang">
                 <div class="flex items-center justify-between px-10">
                     <div
                         class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
@@ -160,12 +154,30 @@
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="date"
+                            field="name"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="storeTeacherInCommit('date')"
+                            @click="storeTeacherInCommit('name')"
                         >
                             شماره تماس
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
+                            field="faculty_name"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="storeTeacherInCommit('faculty_name')"
+                        >
+                            فاکولته
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
+                            field="department_name"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="storeTeacherInCommit('department_name')"
+                        >
+                            دیپارتمنت
                         </TableHeaderCell>
 
                         <TableHeaderCell
@@ -225,6 +237,7 @@
                         v-for="(
                             teacherInCommit, index
                         ) of teacherInCommits.data"
+                        :key="index"
                     >
                         <td class="border-b p-3">{{ index + 1 }}</td>
 
@@ -241,6 +254,14 @@
                         </td>
                         <td class="border p-3">
                             {{ teacherInCommit.phone }}
+                        </td>
+
+                        <td class="border p-3">
+                            {{ teacherInCommit.faculty_name }}
+                        </td>
+
+                        <td class="border p-3">
+                            {{ teacherInCommit.department_name }}
                         </td>
 
                         <td class="border p-3">
@@ -475,8 +496,8 @@ function getTeacherInCommit(url = null) {
         url,
         search: search.value,
         per_page: perPage.value,
-        sort_field: sortField.value,
-        sort_direction: sortDirection.value,
+        sortField: sortField.value,
+        sortDirection: sortDirection.value,
     });
 }
 

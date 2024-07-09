@@ -9,14 +9,20 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\FromView;
 
-class TeachersExport implements FromView
+class TeachersExport implements FromCollection
 {
-    protected $data;
+    // protected $data;
 
-    public function __construct($data)
+    public function collection()
     {
-        $this->data = $data;
+        return Teacher::all();
     }
+
+
+    // public function __construct($data)
+    // {
+    //     $this->data = $data;
+    // }
 
     // /**
     //  * @return \Illuminate\Support\Collection
@@ -30,8 +36,8 @@ class TeachersExport implements FromView
     //  * @return Builder|EloquentBuilder|Relation|ScoutBuilder
     //  */
 
-    public function view(): View
-    {
-        return view('reports.teacherReport', ['data' => $this->data]);
-    }
+    // public function view(): View
+    // {
+    //     return view('reports.teacherReport', ['data' => $this->data]);
+    // }
 }

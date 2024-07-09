@@ -96,7 +96,7 @@
                     <input
                         v-model="search"
                         @change="getPlan(null)"
-                        class="appearance-none relative block w-48 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        class="appearance-none relative block w-48 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                         placeholder="جستجوی بر اساس تاریخ"
                     />
                 </div>
@@ -107,7 +107,7 @@
                         @change="getPlan(null)"
                         v-model="perPage"
                         dir="ltr"
-                        class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                        class="appearance-none relative block w-24 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     >
                         <option value="5" selected>5</option>
                         <option value="10" selected>10</option>
@@ -147,7 +147,7 @@
                             :sortField="sortField"
                             @click="sortUsers('id')"
                         >
-                            توضحات
+                            توضیحات
                         </TableHeaderCell>
 
                         <TableHeaderCell
@@ -157,15 +157,6 @@
                             @click="sortUsers('id')"
                         >
                             تاریخ
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="id"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('id')"
-                        >
-                            فایل پلان
                         </TableHeaderCell>
 
                         <TableHeaderCell
@@ -198,7 +189,7 @@
                     </tr>
                 </tbody>
                 <tbody class="border" v-else>
-                    <tr v-for="(plan, index) of plans.data">
+                    <tr v-for="(plan, index) of plans.data" :key="index">
                         <td class="border-b p-2">{{ index + 1 }}</td>
 
                         <td class="border p-2">
@@ -210,25 +201,6 @@
 
                         <td class="border p-2">
                             {{ plan.date }}
-                        </td>
-
-                        <td class="border p-2">
-                            <a :href="plan.document_path">
-                                <svg
-                                    xmlns=" http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke-width="1.5"
-                                    stroke="currentColor"
-                                    class="w-5 h-5"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
-                                    />
-                                </svg>
-                            </a>
                         </td>
 
                         <td class="border p-2">
@@ -270,6 +242,36 @@
                                     <MenuItems
                                         class="absolute z-10 left-4 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                     >
+                                        <div class="px-1 py-1">
+                                            <MenuItem v-slot="{ active }">
+                                                <a
+                                                    :href="plan.document_path"
+                                                    :class="[
+                                                        active
+                                                            ? 'bg-blue-800 text-white'
+                                                            : 'text-gray-900',
+                                                        'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
+                                                    ]"
+                                                >
+                                                    <svg
+                                                        xmlns=" http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke-width="1.5"
+                                                        stroke="currentColor"
+                                                        class="w-5 h-5"
+                                                    >
+                                                        <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+                                                        />
+                                                    </svg>
+                                                    دانلود فایل
+                                                </a>
+                                            </MenuItem>
+                                        </div>
+
                                         <div class="px-1 py-1">
                                             <MenuItem v-slot="{ active }">
                                                 <router-link
@@ -390,6 +392,9 @@ import { USER_PER_PAGE } from "../../../constant";
 import TableHeaderCell from "../../../components/tableHeader/tableheader.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 // import { PencilAltIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
+
+const download_url = ref(`http://localhost:8000/api/`);
+
 import { useRoute } from "vue-router";
 import { usePlanStore } from "../../../stores/pdc/plan/planStore";
 
@@ -419,8 +424,8 @@ function getPlan(url = null) {
         url,
         search: search.value,
         per_page: perPage.value,
-        sort_field: sortField.value,
-        sort_direction: sortDirection.value,
+        sortField: sortField.value,
+        sortDirection: sortDirection.value,
     });
 }
 

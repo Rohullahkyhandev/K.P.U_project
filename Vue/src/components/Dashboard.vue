@@ -1,11 +1,13 @@
 <template>
     <div class="min-w-full mt-6">
-        <div>
-            <h1 class="text-3xl font-bold mb-7 text-gray-700">داشبورد</h1>
+        <div class="m-4">
+            <h1 class="text-3xl font-bold mb-7 text-gray-700">
+                داشبورد آمریت پی.دی.سی
+            </h1>
         </div>
         <div
             v-if="msg_welcome"
-            class="min-w-96 items-center flex justify-between gap-4 mb-4 bg-indigo-400 font-bold py-2 rounded-sm px-8"
+            class="min-w-96 items-center m-4 bg-indigo-300 rounded-lg shadow-lg flex justify-between gap-4 mb-4 font-bold py-10 px-8"
         >
             <div>
                 <svg
@@ -24,33 +26,35 @@
                     />
                 </svg>
             </div>
-
             <div>
                 <h1 class="text-3xl">
-                    به داشبورد سیستم خوش آمدید {{ authStore.user.data.name }}
+                    به سیستم خوش آمدید {{ authStore.user.data.name }}
                 </h1>
             </div>
-            <div>
-                <img
-                    src="../../public/pencil-revision.svg"
-                    class="w-20"
-                    alt=""
-                />
-            </div>
+            <div></div>
         </div>
-        <Three />
-        <br />
-        <Uploader />
+        <!-- <Combobox /> -->
+        <!-- PDC DASHBOARD COMPONENT  -->
+        <PDCDashboard />
+        <!-- chart -->
+        <PDCChart />
+        <!-- TEACHER DEPARTMENT DASHBOARD -->
+        <!-- POSTGRADUATED DEPARTMENT DASHBOARD -->
+
+        <!-- RESEARCH DEPARTMENT DASHBOARD -->
     </div>
 </template>
 <script setup>
-import Three from "./Three.vue";
-import Uploader from "./Uploader.vue";
-// import LinerChart from '../views/liner.vue';
-// import BarChart from '../views/Bar.vue';
-// import PieChart from '../views/pie.vue';
-// import RadarChart from '../views/rader.vue';
-// import SectureChart from '../views/sectur.vue';
+// dashboards
+import PDCDashboard from "../views/dashboards/PDCDashboard.vue";
+import PDCChart from "../views/dashboards/chart.vue";
+
+import Message from "./Message.vue";
+
+const msg_success = ref("Hello, how are you man");
+const msg_wrang = ref("Hello, how are you man");
+
+import Combobox from "./Combox.vue";
 
 import { computed, onMounted, ref } from "vue";
 import { useAuthStore } from "../stores/auth";
@@ -74,4 +78,10 @@ function getCurrentPermission() {
 }
 
 let msg_welcome = ref(true);
+
+const isOpen = ref(false);
+const url = ref("./path/pdf/name.pdf");
+function openPDF() {
+    isOpen.value = true;
+}
 </script>

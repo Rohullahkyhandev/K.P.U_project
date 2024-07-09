@@ -22,7 +22,7 @@ class BoradController extends Controller
         $sortDirection = request('sortDirection', 'DESC');
         $limit = 100;
 
-        $data   = Board::query()
+        $data = Board::query()
             ->where('boards.name', 'like',  "%{$search}%")
             ->orWhere('boards.director', 'like', "%{$search}%")
             ->join('users', 'boards.user_id', 'users.id')

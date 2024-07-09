@@ -2,9 +2,9 @@
     <div class="flex min-h-screen" dir="rtl">
         <!-- navbar  -->
         <Sidebar />
-        <div class="flex items-center bg-gray-300 flex-grow flex-col">
+        <div class="flex items-center bg-gray-200 flex-grow flex-col">
             <Navbar />
-            <div class="mb-auto" style="width: 90%">
+            <div class="mb-auto" style="width: 95%">
                 <router-view></router-view>
             </div>
             <Footer />
