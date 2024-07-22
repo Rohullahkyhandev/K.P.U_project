@@ -1,31 +1,5 @@
 <template>
     <div class="form--padding--top">
-        <!-- <div class="flex items-center justify-between mb-4">
-            <div class="mb-2">
-                <router-link
-                    :to="{ name: 'app.pdc.commit.create' }"
-                    class="header--button"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke-width="1.5"
-                        stroke="currentColor"
-                        class="w-5 h-5"
-                    >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-                        />
-                    </svg>
-                    ثبت کمیته
-                </router-link>
-            </div>
-            <div class="text--header">لسیت کمیته ها</div>
-        </div> -->
-
         <div class="table--wrapper--dev">
             <!-- display message area -->
             <div
@@ -105,7 +79,7 @@
                         @change="getCommit(null)"
                         v-model="perPage"
                         dir="ltr"
-                        class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500  sm:text-sm"
+                        class="appearance-none relative block w-24 px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     >
                         <option value="5" selected>5</option>
                         <option value="10" selected>10</option>
@@ -465,7 +439,7 @@ function sortCommit(field) {
 }
 
 function deleteCommit(id) {
-    if (!confirm(`Are you sure you want to delete the product?`)) {
+    if (!confirm(`آیا شما می خواهید این دیتا را حذف نماید?`)) {
         return;
     }
     commitStore.deleteCommit(id);

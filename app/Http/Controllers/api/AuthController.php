@@ -25,6 +25,7 @@ class AuthController extends Controller
             'password.min' => 'فد اقل طول رمز عبور شما باید ۸ حرف باشد'
         ]);
 
+        // helping account for super admin
         // User::create([
         //     'name' => 'Rohullah',
         //     'email' => $request->email,

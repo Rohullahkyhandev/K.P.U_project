@@ -222,8 +222,23 @@ class TeacherInSchalarshipController extends Controller
         return $result;
     }
 
+
+    // count the teacher in overs year receive  scholarships
+    public function getTeacherInScholarship($year)
+    {
+        $year = '1403';
+        $from_year = '1400';
+        $master = Scholarship::between('sent_date', 'like', "%{$year}%")->where('edu_maqta', 'ماستر')->get()->count();
+        $doctor = Scholarship::where('sent_date', 'like', "%{$year}%")->where('edu_maqta', 'دوکتورا')->get()->count();
+        return [
+            'ماستر' => $master,
+            'داکتر' => $doctor,
+            'year' => $year,
+        ];
+    }
+
     public function generateReport($format_type, $year)
-    { 
+    {
         return  Excel::download((new TeacherInScholarship)->getData($year), "teacher in scholarship.$format_type");
     }
 }

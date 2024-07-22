@@ -353,10 +353,11 @@ export const useTeacherStore = defineStore("teacher", () => {
         form.append("education_field", data.education_field);
         form.append("teaching_status", data.teaching_status);
         form.append("related_part", data.related_part);
-        form.append("photo", data.photo);
+        form.append("photo", photo);
         form.append("hire_date", data.hire_date);
         form.append("faculty_id", data.faculty_id);
         form.append("department_id", data.department_id);
+        form.append("program_id", data.program_id);
 
         data = form;
         loading.value = true;

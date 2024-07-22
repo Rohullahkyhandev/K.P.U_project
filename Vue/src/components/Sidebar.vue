@@ -16,7 +16,7 @@
                         class="sidebar-item flex items-center justify-start gap-3"
                     >
                         <svg
-                            class="fill-stroke h-6 w-6"
+                            class="fill-stroke h-5 w-5"
                             width="24"
                             height="24"
                             viewBox="0 0 24 24"
@@ -56,12 +56,9 @@
                     </router-link>
                 </li>
 
-                <li
-                    class="text-white transition-colors py-2 px-4"
-                    v-if="administrator || view_pdc"
-                >
+                <li class="text-white transition-colors py-2 px-4">
                     <router-link
-                        :to="{ name: 'app.maktob.list' }"
+                        :to="{ name: 'app.document.list' }"
                         class="sidebar-item flex items-center justify-start gap-3"
                     >
                         <svg
@@ -70,7 +67,7 @@
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
                             stroke="currentColor"
-                            class="w-6 h-6"
+                            class="w-5 h-5"
                         >
                             <path
                                 stroke-linecap="round"
@@ -94,8 +91,8 @@
                             id="icon1"
                             :class="[
                                 pdcToggle == true
-                                    ? 'rotate-180 transform w-6 h-6 transition'
-                                    : 'transform w-6 h-6',
+                                    ? 'rotate-180 transform w-5 h-5 transition'
+                                    : 'transform w-5 h-5',
                             ]"
                             width="24"
                             height="24"
@@ -115,7 +112,7 @@
                     </button>
 
                     <ul class="mr-3 transition-all" v-if="pdcToggle">
-                        <li class="mt-3 transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{ name: 'app.pdc.plan.list' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -126,7 +123,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -137,7 +134,7 @@
                                 <span>پلان ها</span>
                             </router-link>
                         </li>
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{ name: 'app.pdc.commit.list' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -148,7 +145,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -160,7 +157,7 @@
                             </router-link>
                         </li>
 
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{ name: 'app.pdc.workshop.create' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -171,7 +168,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -183,7 +180,7 @@
                             </router-link>
                         </li>
 
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{
                                     name: 'app.pdc.teacher_in_scholarship.create',
@@ -196,7 +193,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -225,7 +222,7 @@
                             :class="[
                                 teacherToggle == true
                                     ? 'rotate-180 transform w-6 h-6 transition'
-                                    : 'transform w-6 h-6',
+                                    : 'transform w-5 h-5',
                             ]"
                             width="24"
                             height="24"
@@ -255,7 +252,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -277,7 +274,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -300,7 +297,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="size-6"
+                                    class="size-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -316,6 +313,9 @@
                 </li>
 
                 <li
+                    v-if="
+                        administrator == true || view_quality_assurance == true
+                    "
                     class="transition-colors cursor-pointer w-full px-3 py-2 text-white"
                 >
                     <button
@@ -326,8 +326,8 @@
                             id="icon3"
                             :class="[
                                 qualityToggle == true
-                                    ? 'rotate-180 transform w-6 h-6 transition'
-                                    : 'transform w-6 h-6',
+                                    ? 'rotate-180 transform w-5 h-5 transition'
+                                    : 'transform w-5 h-5',
                             ]"
                             width="24"
                             height="24"
@@ -346,7 +346,7 @@
                         <span>آمریت تضمین کیفیت</span>
                     </button>
                     <ul class="mr-3 transition-all" v-if="qualityToggle">
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1rounded">
                             <router-link
                                 :to="{ name: 'app.criteria.create' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -357,14 +357,15 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="size-5"
                                 >
                                     <path
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
-                                        d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 0 1 0 3.75H5.625a1.875 1.875 0 0 1 0-3.75Z"
+                                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                                     />
                                 </svg>
+
                                 <span>معیارات اصلی</span>
                             </router-link>
                         </li>
@@ -372,6 +373,7 @@
                 </li>
 
                 <li
+                    v-if="administrator == true || view_post_graduated == true"
                     class="transition-colors cursor-pointer w-full px-3 py-2 text-white"
                 >
                     <button
@@ -402,7 +404,7 @@
                         <span>آمریت فوق لیسانس </span>
                     </button>
                     <ul class="mr-3 transition-all" v-if="postToggle">
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{ name: 'app.post.list' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -426,7 +428,7 @@
                             </router-link>
                         </li>
 
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{ name: 'app.teacher.list' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -437,7 +439,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -449,7 +451,7 @@
                             </router-link>
                         </li>
 
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{
                                     name: 'app.post-graduated.student.create',
@@ -462,7 +464,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -475,7 +477,7 @@
                             </router-link>
                         </li>
 
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{
                                     name: 'app.post-graduated.commit.create',
@@ -488,7 +490,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -501,7 +503,7 @@
                             </router-link>
                         </li>
 
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{
                                     name: 'app.post-graduated.board.list',
@@ -514,7 +516,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="size-6"
+                                    class="size-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -527,7 +529,7 @@
                             </router-link>
                         </li>
 
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{ name: 'app.post-graduated.lab.list' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -538,7 +540,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -551,7 +553,7 @@
                             </router-link>
                         </li>
 
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{
                                     name: 'app.post-graduated.class_room.list',
@@ -564,7 +566,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -580,6 +582,10 @@
                 </li>
 
                 <li
+                    v-if="
+                        administrator == true ||
+                        view_research_department == true
+                    "
                     class="transition-colors cursor-pointer w-full px-3 py-2 text-white"
                 >
                     <button
@@ -591,8 +597,8 @@
                             id="icon5"
                             :class="[
                                 researchToggle == true
-                                    ? 'rotate-180 transform w-6 h-6 transition'
-                                    : 'transform w-6 h-6',
+                                    ? 'rotate-180 transform w-5 h-5 transition'
+                                    : 'transform w-5 h-5',
                             ]"
                             viewBox="0 0 24 24"
                             fill="none"
@@ -609,9 +615,9 @@
                         <span>آمریت تحقیقات علمی</span>
                     </button>
                     <ul class="mr-3 transition-all" v-if="researchToggle">
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
-                                :to="{ name: 'app.dashboard' }"
+                                :to="{ name: 'app.research.tresearch.list' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
                             >
                                 <svg
@@ -620,7 +626,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -632,9 +638,9 @@
                             </router-link>
                         </li>
 
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
-                                :to="{ name: 'app.dashboard' }"
+                                :to="{ name: 'app.research.interpub.list' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
                             >
                                 <svg
@@ -643,7 +649,7 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="w-5 h-5"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -656,7 +662,7 @@
                             </router-link>
                         </li>
 
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{ name: 'app.research.curriculum.list' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
@@ -667,23 +673,52 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="size-5"
                                 >
                                     <path
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
-                                        d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"
+                                        d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
                                     />
                                 </svg>
 
                                 <span> کریکولم </span>
                             </router-link>
                         </li>
+
+                        <li class="transition-colors px-2 py-1 rounded">
+                            <router-link
+                                :to="{ name: 'app.research.lab.list' }"
+                                class="sidebar-item flex items-center justify-start gap-3"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="w-5 h-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23-.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"
+                                    />
+                                </svg>
+
+                                <span>لابرتورا ها</span>
+                            </router-link>
+                        </li>
                     </ul>
                 </li>
 
                 <li
-                    class="transition-colors cursor-pointer w-full px-3 py-2 text-white"
+                    v-if="
+                        view_pdc ||
+                        view_teacher_department ||
+                        view_research_department
+                    "
+                    class="mr-3 transition-colors cursor-pointer w-full px-1 py-1 text-white"
                 >
                     <button
                         :to="{ name: 'app.dashboard' }"
@@ -694,8 +729,8 @@
                             id="icon5"
                             :class="[
                                 reportToggle == true
-                                    ? 'rotate-180 transform w-6 h-6 transition'
-                                    : 'transform w-6 h-6',
+                                    ? 'rotate-180 transform w-5 h-5 transition'
+                                    : 'transform w-5 h-5',
                             ]"
                             viewBox="0 0 24 24"
                             fill="none"
@@ -711,8 +746,10 @@
                         </svg>
                         <span> راپور </span>
                     </button>
-                    <ul class="mr-3 transition-all" v-if="reportToggle">
-                        <li class="transition-colors py-2 px-4 rounded">
+                    <ul class="mr-1 transition-all" v-if="reportToggle">
+                        <li
+                            class="transition-colors py-1 px-3 whitespace-nowrap rounded"
+                        >
                             <router-link
                                 :to="{
                                     name: 'app.pdc.report.teacher_in_commit',
@@ -725,19 +762,22 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="size-5"
                                 >
                                     <path
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
-                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
                                     />
                                 </svg>
-                                <span> راپور استادان در کمیته ها</span>
+
+                                <span> راپور اعضای کمیته ها</span>
                             </router-link>
                         </li>
 
-                        <li class="transition-colors py-2 px-4 rounded">
+                        <li
+                            class="transition-colors py-1 px-3 whitespace-nowrap rounded"
+                        >
                             <router-link
                                 :to="{
                                     name: 'app.pdc.report.teacher_in_scholarship',
@@ -750,15 +790,16 @@
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
                                     stroke="currentColor"
-                                    class="w-6 h-6"
+                                    class="size-5"
                                 >
                                     <path
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
-                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
                                     />
                                 </svg>
-                                <span> راپور استادان در بورسیه ها</span>
+
+                                <span> راپور بورسیه ها</span>
                             </router-link>
                         </li>
                     </ul>
@@ -767,7 +808,7 @@
                 <li class="transition-colors py-2 px-4 rounded text-white">
                     <router-link
                         :to="{
-                            name: 'app.post.employee.create',
+                            name: 'app.employee.list',
                         }"
                         class="sidebar-item flex items-center justify-start gap-3"
                     >
@@ -799,7 +840,7 @@
                         class="sidebar-item flex items-center justify-start gap-3"
                     >
                         <svg
-                            class="fill-stroke w-6 h-6"
+                            class="fill-stroke w-5 h-5"
                             width="24"
                             height="24"
                             viewBox="0 0 24 24"
@@ -847,8 +888,17 @@ const administrator = computed(
 );
 
 const view_pdc = computed(() => userStore.permission_current.view_pdc);
+const view_post_graduated = computed(
+    () => userStore.permission_current.view_post_graduated
+);
 const view_teacher_department = computed(
     () => userStore.permission_current.view_teacher_department
+);
+const view_quality_assurance = computed(
+    () => userStore.permission_current.view_quality_assurance
+);
+const view_research_department = computed(
+    () => userStore.permission_current.view_research_department
 );
 
 function getCurrentPermission() {

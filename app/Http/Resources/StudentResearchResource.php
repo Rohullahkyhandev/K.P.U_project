@@ -24,6 +24,7 @@ class StudentResearchResource extends JsonResource
             'teacher_name' => $this->teacher_name,
             'teacher_lname' => $this->teacher_lname,
             'uname' => $this->uname,
+            'attachment_path' => $this->attachment_path,
         ];
     }
 }

@@ -264,8 +264,8 @@ const education_degrees = ref([
         text: "ماستر",
     },
     {
-        key: "دوکتور",
-        text: "دوکتور",
+        key: "داکتر",
+        text: "داکتر",
     },
 ]);
 </script>

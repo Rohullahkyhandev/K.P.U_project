@@ -13,15 +13,12 @@ class InternatinalPublishmentController extends Controller
 {
 
 
-
-
     public function index()
     {
         $search = request('search', '');
         $per_page  = request('per_page', 10);
         $sortField  = request('sortField', 'id');
         $sortDirection = request('sortDirection', 'DESC');
-
         $data = InternationalPublishment::query()
             ->where('international_publishments.author', 'like', "%{$search}%")
             ->orWhere('international_publishments.title', 'like', "%{$search}%")
@@ -34,41 +31,36 @@ class InternatinalPublishmentController extends Controller
         return InternatinalPublishmentResource::collection($data);
     }
 
-
     public function store(Request $request)
     {
+
         $request->validate([
             'author' => 'required',
             'author_assesstance' => 'required',
             'journal' => 'required',
-            'link' => 'required',
+            'journal_website_link' => 'required',
             'title' => 'required',
             'faculty_id' => 'required',
             'department_id' => 'required',
-            'attachments' => 'nullable|mimes:pdf,jpg,png,jpeg,gif|size:6000',
+            'attachment' => 'required|mimes:jpg,jpeg,png,bmp,gif,svg,pdf|max:2048'
         ], [
             'author.required' => 'فلید نام الزامی می باشد',
             'author_assesstance.required' => 'فلید نام همکار نویسنده الزامی می باشد',
             'journal.required' => 'فلید نام مجله الزامی می باشد',
-            'link.required' => 'فلید لینک الزامی می باشد',
+            'journal_website_link.required' => 'فلید لینک الزامی می باشد',
             'title.required' => 'فلید عنوان الزامی می باشد',
             'faculty_id.required' => 'فلید دانشکده الزامی می باشد',
             'department_id.required' => 'فلید بخش الزامی می باشد',
-            'attachments.mimes' => 'mimes:pdf,jpg,png,jpeg,gif  فیلد اسناد باید این فارمت ها داشته باشد:',
-            'attachments.size' => 'حجم فایل های آپلود شده باید بیشتر از 6 MB نباشد'
+            // 'attachment.mimes' => 'jpg,png,jpeg,gif,pdf  فیلد اسناد باید این فارمت ها داشته باشد:',
+            'attachment.size' => 'حجم فایل های آپلود شده باید بیشتر از 6 MB نباشد'
         ]);
 
-        $attachments = [];
-        $attachment_paths  = [];
+        $attachment = null;
+        $attachment_path = null;
 
-        if ($request->hasFile('attachments')) {
-
-            foreach ($request->file('attachments') as $attachment) {
-                $document = $attachment->store('/', 'research_department/teacher_research');
-                $document_path = asset(Storage::url('research_department/teacher_research/' . $document));
-                $attachments[] = $document;
-                $attachment_paths[] = $document_path;
-            }
+        if ($request->attachment != '') {
+            $attachment = $request->attachment->store('/', 'research_department/teacher_research');
+            $attachment_path  = asset(Storage::url('research_department/teacher_research/' . $attachment));
         }
 
         $user_id = Auth::user()->id;
@@ -76,10 +68,10 @@ class InternatinalPublishmentController extends Controller
         $internatinal_publishment->author = $request->author;
         $internatinal_publishment->author_assesstance = $request->author_assesstance;
         $internatinal_publishment->journal_name = $request->journal;
-        $internatinal_publishment->journal_link_website = $request->link;
+        $internatinal_publishment->journal_link_website = $request->journal_website_link;
         $internatinal_publishment->title = $request->title;
-        $internatinal_publishment->attachments = json_encode($attachments);
-        $internatinal_publishment->attachment_paths = $attachment_paths;
+        $internatinal_publishment->attachment = $attachment;
+        $internatinal_publishment->attachment_path = $attachment_path;
         $internatinal_publishment->faculty_id = $request->faculty_id;
         $internatinal_publishment->department_id = $request->department_id;
         $internatinal_publishment->user_id = $user_id;
@@ -103,7 +95,6 @@ class InternatinalPublishmentController extends Controller
 
     public function update(Request $request)
     {
-
         $request->validate([
             'author' => 'required',
             'author_assesstance' => 'required',
@@ -112,7 +103,7 @@ class InternatinalPublishmentController extends Controller
             'title' => 'required',
             'faculty_id' => 'required',
             'department_id' => 'required',
-            'attachments' => 'nullable|mimes:pdf,jpg,png,jpeg,gif|size:6000',
+            'attachment' => 'nullable|mimes:pdf,jpg,png,jpeg,gif|size:6000',
         ], [
             'author.required' => 'فلید نام الزامی می باشد',
             'author_assesstance.required' => 'فلید نام همکار نویسنده الزامی می باشد',
@@ -121,25 +112,21 @@ class InternatinalPublishmentController extends Controller
             'title.required' => 'فلید عنوان الزامی می باشد',
             'faculty_id.required' => 'فلید دانشکده الزامی می باشد',
             'department_id.required' => 'فلید دیپارتمنت الزامی می باشد',
-            'attachments.mimes' => 'mimes:pdf,jpg,png,jpeg,gif  فیلد اسناد باید این فارمت ها داشته باشد:',
-            'attachments.size' => 'حجم فایل های آپلود شده باید بیشتر از 6 MB نباشد'
+            'attachment.mimes' => 'mimes:pdf,jpg,png,jpeg,gif  فیلد اسناد باید این فارمت ها داشته باشد:',
+            'attachment.size' => 'حجم فایل های آپلود شده باید بیشتر از 6 MB نباشد'
         ]);
 
         $internatinal_publishment = InternationalPublishment::find($request->id);
-        $attachments[] = $internatinal_publishment->attachments;
-        $attachment_paths[]  = $internatinal_publishment->attachment_paths;
+        $attachment = $internatinal_publishment->attachment;
+        $attachment_path  = $internatinal_publishment->attachment_path;
 
         if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $attachment) {
-                if (is_file(storage_path('app/public/research_department/teacher_research/' . $attachment))) {
-                    Storage::delete('app/public/research_department/teacher_research/' . $attachment);
-                }
-
-                $document = $attachment->store('/', 'research_department/teacher_research');
-                $document_path = asset(Storage::url('research_department/teacher_research/' . $document));
-                $attachments[] = $document;
-                $attachment_paths[] = $document_path;
+            if (is_file(storage_path('app/public/research_department/teacher_research/' . $attachment))) {
+                Storage::delete('app/public/research_department/teacher_research/' . $attachment);
             }
+
+            $attachment = $request->attachment->store('/', 'research_department/teacher_research');
+            $attachment_path = asset(Storage::url('research_department/teacher_research/' . $attachment));
         }
 
         $internatinal_publishment->author = $request->author;
@@ -147,8 +134,8 @@ class InternatinalPublishmentController extends Controller
         $internatinal_publishment->journal_name = $request->journal;
         $internatinal_publishment->journal_link_website = $request->link;
         $internatinal_publishment->title = $request->title;
-        $internatinal_publishment->attachments = json_encode($attachments);
-        $internatinal_publishment->attachment_paths = $attachment_paths;
+        $internatinal_publishment->attachment = $attachment;
+        $internatinal_publishment->attachment_path = $attachment_path;
         $internatinal_publishment->faculty_id = $request->faculty_id;
         $internatinal_publishment->department_id = $request->department_id;
         $result = $internatinal_publishment->save();
@@ -168,23 +155,11 @@ class InternatinalPublishmentController extends Controller
     public function destroy($id)
     {
         $internatinal_publishment = InternationalPublishment::find($id);
-        $attachments[] = json_decode($internatinal_publishment->attachments);
-        $attachment_paths[] = json_decode($internatinal_publishment->attachment_paths);
-
-        foreach ($attachments as $attachment) {
-            if (is_file(storage_path('app/public/research_department/teacher_research/' . $attachment))) {
-                Storage::delete('app/public/research_department/teacher_research/' . $attachment);
-            }
+        $attachment = $internatinal_publishment->attachment;
+        if (is_file(storage_path('app/public/research_department/teacher_research/' . $attachment))) {
+            Storage::delete('app/public/research_department/teacher_research/' . $attachment);
         }
-
-        foreach ($attachment_paths as $attachment_path) {
-            if (is_file(storage_path('app/public/research_department/teacher_research/' . $attachment_path))) {
-                Storage::delete('app/public/research_department/teacher_research/' . $attachment_path);
-            }
-        }
-
         $result = $internatinal_publishment->delete();
-
         return $result;
     }
 }

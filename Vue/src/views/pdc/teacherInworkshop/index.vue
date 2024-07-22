@@ -204,7 +204,7 @@
                             :sortField="sortField"
                             @click="sortTeacherInWorkshop('department_id')"
                         >
-                             دیپارتمنت
+                            دیپارتمنت
                         </TableHeaderCell>
 
                         <TableHeaderCell
@@ -538,7 +538,7 @@ function sortTeacherInWorkshop(field) {
 }
 
 function deleteTeacherInWorkshop(id) {
-    if (!confirm(`Are you sure you want to delete the product?`)) {
+    if (!confirm(`آیا شما می خواهید این دیتا را حذف نماید?`)) {
         return;
     }
     teacherInWorkshopStore.deleteTeacherInWorkshop(id);

@@ -4,7 +4,7 @@
             <div class="flex items-center justify-center gap-6">
                 <router-link
                     :to="{ name: 'app.faculty.list' }"
-                    class="bg-blue-600 py-2 px-3 flex items-center justify-center gap-3 rounded-lg shadow text-white focus:ring focus:ring-blue-400"
+                    class="header--button"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +24,7 @@
                 </router-link>
                 <router-link
                     :to="{ name: 'app.department.create' }"
-                    class="bg-red-400 py-2 px-3 flex items-center justify-center gap-3 rounded-lg shadow text-white focus:ring focus:ring-blue-400"
+                    class="header--button"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -47,7 +47,7 @@
                         name: 'app.teacher.create',
                         params: { id: $route.params.id },
                     }"
-                    class="bg-indigo-500 py-2 px-3 flex items-center justify-center gap-3 rounded-lg shadow text-white focus:ring focus:ring-blue-400"
+                    class="header--button"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"

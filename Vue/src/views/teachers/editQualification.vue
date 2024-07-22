@@ -105,7 +105,8 @@
                         </div>
                         <div class="input--dev--width">
                             <CustomInput
-                                type="text"
+                                type="select"
+                                :select-options="education_degrees"
                                 v-model="qualification.education_"
                                 class="mb-2"
                                 required="required"
@@ -155,7 +156,7 @@
                             </label>
                         </div>
                         <div class="input--dev--width">
-                            <CustomInput
+                            <DatePicker
                                 type="date"
                                 v-model="qualification.graduated_year"
                                 class="mb-2"
@@ -229,7 +230,7 @@ import { computed, onMounted, ref, useSlots } from "vue";
 import { useRoute } from "vue-router";
 import CustomInput from "../../components/core/CustomInput.vue";
 import { useTeacherStore } from "../../stores/teachers/teacherStore";
-// import { EMDatePicker } from '@cafebazaar/emrooz';
+import DatePicker from "vue3-persian-datetime-picker";
 const teacherStore = useTeacherStore();
 const route = useRoute();
 
@@ -238,6 +239,21 @@ onMounted(() => {
 });
 
 const qualification = computed(() => teacherStore.qualification);
+
+const education_degrees = ref([
+    {
+        key: "داکتر",
+        text: "داکتر",
+    },
+    {
+        key: "ماستر",
+        text: "ماستر",
+    },
+    {
+        key: "لیسانس",
+        text: "لیسانس",
+    },
+]);
 
 function onSubmit() {
     let id = route.params.q_id;

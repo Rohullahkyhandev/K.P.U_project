@@ -27,7 +27,7 @@ export const useUserStore = defineStore("user", () => {
         password_confirmation: "",
         photo: "",
         faculty_id: "",
-        // department_id: "",
+        department_id: "",
     });
 
     let permissions = ref({
@@ -48,12 +48,36 @@ export const useUserStore = defineStore("user", () => {
         create_pdc: false,
         delete_pdc: false,
         edit_pdc: false,
-
         // teacher department permissions
         view_teacher_department: false,
         create_teacher_department: false,
         delete_teacher_department: false,
         edit_teacher_department: false,
+        // employee permissions
+        view_employee: false,
+        create_employee: false,
+        edit_employee: false,
+        delete_employee: false,
+        // post graduated
+        view_post_graduated: false,
+        create_post_graduated: false,
+        edit_post_graduated: false,
+        delete_post_graduated: false,
+        // student permissions
+        view_student: false,
+        create_student: false,
+        edit_student: false,
+        delete_student: false,
+        // scholarship permissions
+        view_scholarship: false,
+        create_scholarship: false,
+        edit_scholarship: false,
+        delete_scholarship: false,
+
+        // quality assurance department
+        view_quality_assurance: false,
+        // research department
+        view_research_department: false,
     });
 
     function getCurrentPermission() {
@@ -77,6 +101,22 @@ export const useUserStore = defineStore("user", () => {
                     permission_current.value.edit_teacher_department = true;
                 } else if (item.id === 13) {
                     permission_current.value.delete_teacher_department = true;
+                } else if (item.id === 25) {
+                    permission_current.value.view_employee = true;
+                } else if (item.id === 26) {
+                    permission_current.value.create_employee = true;
+                } else if (item.id === 27) {
+                    permission_current.value.edit_employee = true;
+                } else if (item.id === 28) {
+                    permission_current.value.delete_employee = true;
+                } else if (item.id === 30) {
+                    permission_current.value.view_post_graduated = true;
+                } else if (item.id === 31) {
+                    permission_current.value.create_post_graduated = true;
+                } else if (item.id === 32) {
+                    permission_current.value.view_quality_assurance = true;
+                } else if (item.id === 33) {
+                    permission_current.value.view_research_department = true;
                 }
             });
         });
@@ -245,6 +285,7 @@ export const useUserStore = defineStore("user", () => {
         form.append("position", data.position);
         form.append("user_type", data.user_type);
         form.append("faculty_id", data.faculty_id);
+        form.append("department_id", data.department_id);
         form.append("password_confirmation", data.password_confirmation);
         form.append("photo", photo);
         data = form;

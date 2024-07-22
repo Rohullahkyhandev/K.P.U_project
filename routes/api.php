@@ -6,6 +6,7 @@ use App\Http\Controllers\criteria\SubCriteriaController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FacultyController;
+use App\Http\Controllers\FarwardDocumentController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PDC\ArchiveController;
 use App\Http\Controllers\PDC\PlanController;
@@ -63,7 +64,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/permission/list/{id}', [UserController::class, 'get_user_permission']);
     Route::get('/user/current/permission', [AuthController::class, 'getCurrentPermission']);
 
-    Route::middleware(['auth:sanctum', 'adminsterator'])->group(function () {
+    Route::middleware(['auth:sanctum', 'administrator'])->group(function () {
         Route::post('/user/create', [UserController::class, 'store']);
         Route::get('/user/edit/{id}', [UserController::class, 'edit']);
         Route::post('/user/update', [UserController::class, 'update']);
@@ -84,7 +85,13 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     // document create routes
     Route::middleware(['auth:sanctum', 'create_document'])->group(function () {
         Route::post('/document/create', [DocumentController::class, 'store']);
+        Route::post('/save_as_enter_document', [DocumentController::class, 'SaveAsEnterDocument']);
         Route::get('/update_notification/{id}', [NotificationController::class, 'updateNotification']);
+    });
+
+    Route::middleware(['auth:sanctum', 'delete_document'])->group(function () {
+        Route::get('/document/delete/{id}', [DocumentController::class, 'destroy']);
+        Route::get('/farwarded_document/delete/{id}', [FarwardDocumentController::class, 'destroy']);
     });
 
 
@@ -280,7 +287,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/get_all_program', [ProgramsController::class, 'getAllProgram']);
         Route::get('/program', [ProgramsController::class, 'index']);
         Route::get('post/teacher', [TeacherController::class, 'index']);
-        Route::get('/studnet/{id}', [studentController::class, 'index']);
+        Route::get('/studnet', [studentController::class, 'index']);
         Route::get('/graduated_student/{id}', [graduatedStudentController::class, 'index']);
         Route::get('/student_research', [StudentResearchController::class, 'index']);
         Route::get('/post_committee', [PostCommitteeController::class, 'index']);
@@ -296,7 +303,22 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         // class rooms
         Route::get('/class_room', [ClassRoomController::class, 'index']);
         // post graduated employees
+    });
+
+
+    // employee update and edit routes
+    Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('/employee', [EmployeeController::class, 'index']);
+    });
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::post('/employee/create', [EmployeeController::class, 'store']);
+    });
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('/employee/edit/{id}', [EmployeeController::class, 'edit']);
+        Route::post('/employee/update', [EmployeeController::class, 'update']);
+    });
+    Route::middleware(['auth:sanctum'])->group(function () {
+        Route::get('/employee/delete/{id}', [EmployeeController::class, 'destroy']);
     });
 
     // post graduated create routes
@@ -312,8 +334,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::post('/lab/create', [LabController::class, 'store']);
         Route::post('/board_member/create', [BoardMemberController::class, 'store']);
         Route::post('/class_room/create', [ClassRoomController::class, 'store']);
-        Route::post('/employee/create', [EmployeeController::class, 'store']);
         Route::post('/lab_equipment/create', [LabEquipmentController::class, 'store']);
+        // teacher route that teach in post graduated Program
+        Route::get('/post/teacher/{id}', [StudentResearchController::class, 'getTeacherData']);
     });
 
     // post graduated edit and update routes
@@ -324,8 +347,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('post/edit/{id}', [TeacherController::class, 'edit']);
         Route::post('post/update/{id}', [TeacherController::class, 'edit']);
         // students routes
-        Route::get('/studnet/edit/{id}', [studentController::class, 'edit']);
-        Route::post('/studnet/update', [studentController::class, 'update']);
+        Route::get('/student/edit/{id}', [studentController::class, 'edit']);
+        Route::post('/student/update', [studentController::class, 'update']);
         // graduated students
         Route::get('/graduated_student/edit/{id}', [graduatedStudentController::class, 'edit']);
         Route::post('/graduated_student/update', [graduatedStudentController::class, 'update']);
@@ -353,9 +376,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         // class room routes
         Route::get('/class_room/edit/{id}', [ClassRoomController::class, 'edit']);
         Route::post('/class_room/update', [ClassRoomController::class, 'update']);
-        // employee update and edit routes
-        Route::get('/employee/edit/{id}', [EmployeeController::class, 'edit']);
-        Route::post('/employee/update', [EmployeeController::class, 'update']);
     });
     // post graduated delete routes
     Route::middleware(['auth:sanctum', 'delete_post_graduated'])->group(function () {
@@ -371,7 +391,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/lab/delete/{id}', [LabController::class, 'destroy']);
         Route::get('/lab_equipment/delete/{id}', [LabEquipmentController::class, 'destroy']);
         Route::get('/class_room/delete/{id}', [ClassRoomController::class, 'destroy']);
-        Route::get('/employee/delete/{id}', [EmployeeController::class, 'destroy']);
     });
 
     // research department view routes
@@ -389,14 +408,14 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     });
 
     // research department create routes
-    Route::middleware(['auth::sanctum', 'create_research_department'])->group(function () {
-        Route::post('/international_publisher/create', [InternatinalPublishmentController::class, 'create']);
-        Route::post('/teacher_research/create', [TeacherResearchController::class, 'create']);
+    Route::middleware(['auth:sanctum', 'create_research_department'])->group(function () {
+        Route::post('/international_publisher/create', [InternatinalPublishmentController::class, 'store']);
+        Route::post('/teacher_research/create', [TeacherResearchController::class, 'store']);
         Route::post('/curriculum/create', [CurriculumController::class, 'store']);
-        Route::post('/research_lab/create', [LabController::class, 'create']);
-        Route::post('/research_project/create', [ResearchProjectController::class, 'create']);
-        Route::post('/specialist_area/create', [SpecailistAreaController::class, 'create']);
-        Route::post('/experiment_detail/create', [ExperimentDetailController::class, 'create']);
+        Route::post('/research_lab/create', [LabController::class, 'store']);
+        Route::post('/research_project/create', [ResearchProjectController::class, 'store']);
+        Route::post('/specialist_area/create', [SpecailistAreaController::class, 'store']);
+        Route::post('/experiment_detail/create', [ExperimentDetailController::class, 'store']);
     });
 
 

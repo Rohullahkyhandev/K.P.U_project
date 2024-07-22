@@ -444,7 +444,7 @@ function sortUsers(field) {
 }
 
 function deletePlan(id) {
-    if (!confirm(`Are you sure you want to delete the product?`)) {
+    if (!confirm(`آیا شما می خواهید این دیتا را حذف نماید?`)) {
         return;
     }
     planStore.deletePlan(id);

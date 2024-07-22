@@ -1,7 +1,7 @@
 <template>
     <th
         @click="$emit('click')"
-        class="border border-red-200 px-2 py-3 text-left bg-gray-200 font-bold"
+        class="border border-blue-300 px-2 py-3 text-left bg-gray-200 font-bold"
         style="font-size: 16px !important"
         :class="[sortField == field ? 'bg-blue-50' : '']"
     >

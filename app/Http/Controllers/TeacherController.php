@@ -93,22 +93,22 @@ class TeacherController extends Controller
         }
 
         $data = DB::table('teachers')
-        ->where('teachers.department_id', 'like', "%{$department_id}%")
-        ->whereAny([
-            'teachers.name',
-            'teachers.lname',
-            'teachers.fatherName',
-            'teachers.code_bast',
-            'teachers.nic',
-        ], 'LIKE',  "%{$search}%")
-        ->leftJoin('departments', 'teachers.department_id', 'departments.id')
-        ->leftJoin('post_graduated_programs', 'teachers.program_id', 'post_graduated_programs.id')
-        ->leftJoin('users', 'teachers.user_id', 'users.id')
-        ->leftJoin('promotions', 'promotions.teacher_id', 'teachers.id')
-        ->leftJoin('teacher_qualifications', 'teachers.id', '=', 'teacher_qualifications.teacher_id')
-        ->leftJoin('faculties', 'teachers.faculty_id', 'faculties.id')
-        ->select('teachers.*', 'promotions.date as date', 'post_graduated_programs.program_name as pname',  'post_graduated_programs.degree_type as degree_type', 'promotions.attachment_path as attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department', 'teacher_qualifications.education_ as education', 'users.name as uname')
-        ->orderBy("teachers.$sortField", $sortDirection)
+            ->where('teachers.department_id', 'like', "%{$department_id}%")
+            ->whereAny([
+                'teachers.name',
+                'teachers.lname',
+                'teachers.fatherName',
+                'teachers.code_bast',
+                'teachers.nic',
+            ], 'LIKE',  "%{$search}%")
+            ->leftJoin('departments', 'teachers.department_id', 'departments.id')
+            ->leftJoin('post_graduated_programs', 'teachers.program_id', 'post_graduated_programs.id')
+            ->leftJoin('users', 'teachers.user_id', 'users.id')
+            ->leftJoin('promotions', 'promotions.teacher_id', 'teachers.id')
+            // ->leftJoin('teacher_qualifications', 'teachers.id', '=', 'teacher_qualifications.teacher_id')
+            ->leftJoin('faculties', 'teachers.faculty_id', 'faculties.id')
+            ->select('teachers.*', 'promotions.date as date', 'post_graduated_programs.program_name as pname',  'post_graduated_programs.degree_type as degree_type', 'promotions.attachment_path as attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department', 'teachers.education_degree as education', 'users.name as uname')
+            ->orderBy("teachers.$sortField", $sortDirection)
             ->distinct()
             ->paginate($per_page);
         return TeacherResource::collection($data);
@@ -246,10 +246,10 @@ class TeacherController extends Controller
         try {
             $id = $request->id;
             $teacher = Teacher::find($id);
-            $photo = null;
-            $photo_path = null;
-            if ($request->photo != '') {
-                if (is_file(storage_path('app/public/teacher_photo/' . $request->photo))) {
+            $photo = $teacher->photo;
+            $photo_path = $teacher->photo_path;
+            if ($request->photo != null) {
+                if (is_file(storage_path('app/public/teacher_photo/' . $photo))) {
                     unlink(storage_path('app/public/teacher_photo/' . $photo));
                 }
                 $photo = $request->photo->store('/', 'teacher_photo');
@@ -330,17 +330,29 @@ class TeacherController extends Controller
             'description' => 'nullable|string'
         ]);
 
-        $user_id = Auth::id();
+        DB::beginTransaction();
+        try {
 
-        $teacher_qualification = new Teacher_qualification();
-        $teacher_qualification->country = $request->country;
-        $teacher_qualification->education_ = $request->education_;
-        $teacher_qualification->graduated_year = $request->graduated_year;
-        $teacher_qualification->university = $request->university;
-        $teacher_qualification->description = $request->description;
-        $teacher_qualification->teacher_id = $id;
-        $teacher_qualification->user_id = $user_id;
-        $result = $teacher_qualification->save();
+            $user_id = Auth::id();
+            $teacher_qualification = new Teacher_qualification();
+            $teacher_qualification->country = $request->country;
+            $teacher_qualification->education_ = $request->education_;
+            $teacher_qualification->graduated_year = $request->graduated_year;
+            $teacher_qualification->university = $request->university;
+            $teacher_qualification->description = $request->description;
+            $teacher_qualification->teacher_id = $id;
+            $teacher_qualification->user_id = $user_id;
+            $result = $teacher_qualification->save();
+
+            // Update the teacher education degree
+            $teacher = Teacher::find($id);
+            $teacher->education_degree = $request->education_;
+            $result = $teacher->save();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $e;
+        }
 
         if ($result) {
             return response([
@@ -385,15 +397,28 @@ class TeacherController extends Controller
             'description' => 'nullable|string'
         ]);
 
-        $user_id = Auth::id();
-        $teacher_qualification = Teacher_qualification::find($id);
-        $teacher_qualification->country = $request->country;
-        $teacher_qualification->education_ = $request->education_;
-        $teacher_qualification->graduated_year = $request->graduated_year;
-        $teacher_qualification->university = $request->university;
-        $teacher_qualification->description = $request->description;
-        $teacher_qualification->user_id = $user_id;
-        $result = $teacher_qualification->save();
+        DB::beginTransaction();
+
+        try {
+
+            $user_id = Auth::id();
+            $teacher_qualification = Teacher_qualification::find($id);
+            $teacher_qualification->country = $request->country;
+            $teacher_qualification->education_ = $request->education_;
+            $teacher_qualification->graduated_year = $request->graduated_year;
+            $teacher_qualification->university = $request->university;
+            $teacher_qualification->description = $request->description;
+            $teacher_qualification->user_id = $user_id;
+            $result = $teacher_qualification->save();
+            // Update the teacher education degree
+            $teacher = Teacher::find($id);
+            $teacher->education_degree = $request->education_;
+            $result = $teacher->save();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $e;
+        }
         if ($result) {
             return response([
                 'message' => 'درخواست موفقانه انجام شد'

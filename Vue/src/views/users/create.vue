@@ -206,8 +206,35 @@
                             <label
                                 for=""
                                 class="block text-gray-500 md:text-left mb-1 md:mb-0"
+                                >فاکولته مربوط<span class="text-red-500 px-2"
+                                    >*</span
+                                ></label
                             >
-                                دیپارتمنت<span class="text-red-500 px-2"
+                        </div>
+                        <div class="w-6/12">
+                            <CustomInput
+                                type="select"
+                                v-model="user.faculty_id"
+                                @change="getFacultyDepartment(user.faculty_id)"
+                                :select-options="faculties"
+                                class="mb-2"
+                                label=" فاکولته مربوط"
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        class="md:flex md:items-center md:justify-center"
+                        v-if="user.user_type == 'department_user'"
+                    >
+                        <div class="w-2/12">
+                            <label
+                                for=""
+                                class="block text-gray-500 md:text-left mb-1 md:mb-0"
+                            >
+                                دیپارمنت های غیر عمومی<span
+                                    class="text-red-500 px-2"
                                     >*</span
                                 ></label
                             >
@@ -217,6 +244,33 @@
                                 type="select"
                                 v-model="user.department_id"
                                 :select-options="departments"
+                                class="mb-2"
+                                label="دیپارتمنت "
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        class="md:flex md:items-center md:justify-center"
+                        v-if="user.user_type == 'common_department_user'"
+                    >
+                        <div class="w-2/12">
+                            <label
+                                for=""
+                                class="block text-gray-500 md:text-left mb-1 md:mb-0"
+                            >
+                                دیپارمنت های عمومی<span
+                                    class="text-red-500 px-2"
+                                    >*</span
+                                ></label
+                            >
+                        </div>
+                        <div class="w-6/12">
+                            <CustomInput
+                                type="select"
+                                v-model="user.department_id"
+                                :select-options="departmentHasOutFaculties"
                                 class="mb-2"
                                 label="دیپارتمنت "
                                 required="required"
@@ -329,9 +383,11 @@ import { useUserStore } from "../../stores/user/userStore";
 const userStore = useUserStore();
 const facultyStore = useFacultyStore();
 const departmentStore = useDepartmentStore();
+
 const user_type = ref([
     { key: "faculty_user", text: " یوزر فاکولته" },
-    { key: "department_user", text: " یوزر دیپارتمنت" },
+    { key: "common_department_user", text: "یوزر دیپارمنت های عمومی " },
+    { key: "department_user", text: "یوزر دیپارمنت غیر عمومی " },
     { key: "fifth_department", text: "آمریت های پنج گانه" },
 ]);
 
@@ -342,7 +398,7 @@ onMounted(() => {
         user.value.user_type == "department_user" &&
         user.value.faculty_id != null
     ) {
-        departmentStore.getFacultyDepartment(user.value.faculty_id);
+        getFacultyDepartment(user.value.faculty_id);
     } else {
         departmentStore.departmentHasOutFaculties();
     }
@@ -352,8 +408,15 @@ const faculties = computed(() =>
     facultyStore.listFaculty.map((f) => ({ key: f.id, text: f.name }))
 );
 
-const departments = computed(() =>
+const departmentHasOutFaculties = computed(() =>
     departmentStore.department_has_out_facilities.map((f) => ({
+        key: f.id,
+        text: f.name,
+    }))
+);
+
+const departments = computed(() =>
+    departmentStore.faculty_department.map((f) => ({
         key: f.id,
         text: f.name,
     }))
@@ -367,6 +430,12 @@ let chanceDepartments = computed(() =>
         text: c.display_name,
     }))
 );
+
+function getFacultyDepartment(id) {
+    if (id) {
+        departmentStore.getFacultyDepartment(id);
+    }
+}
 
 function onSubmit() {
     userStore.createUser(user.value);

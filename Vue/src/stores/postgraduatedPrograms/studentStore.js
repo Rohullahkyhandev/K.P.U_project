@@ -60,7 +60,7 @@ const useStudentStore = defineStore("studnetStore", () => {
         year = "",
     } = {}) {
         studnets.value.loading = true;
-        url = url || `/studnet/${program_id}`;
+        url = url || `/studnet`;
 
         const params = {
             per_page: 10,
@@ -100,7 +100,7 @@ const useStudentStore = defineStore("studnetStore", () => {
     }
 
     function editStudent(id) {
-        axiosClient.get(`/studnet/edit/${id}`).then((res) => {
+        axiosClient.get(`/student/edit/${id}`).then((res) => {
             student.value = res.data;
         });
     }

@@ -94,7 +94,7 @@
 
                                 <tr>
                                     <td class="border-b p-2 font-semibold">
-                                         جنسیت:&nbsp;
+                                        جنسیت:&nbsp;
                                         {{ teacher.gender }}
                                     </td>
                                     <td class="border-b p-2 font-semibold">
@@ -121,13 +121,25 @@
         </div>
 
         <!-- teacher education degree -->
-        <IndexDocument />
+        <IndexDocument
+            v-if="
+                view_teacher == true ||
+                view_post_graduated == true ||
+                administrator == true
+            "
+        />
         <!-- teacher Qualification -->
-        <IndexQualification />
+        <IndexQualification
+            v-if="administrator == true || view_post_graduated == true || view_teacher == true"
+        />
         <!-- teacher Articles -->
-        <IndexArticle />
+        <IndexArticle
+            v-if="administrator == true || view_post_graduated == true"
+        />
         <!-- teacher Literature -->
-        <IndexLiterature />
+        <IndexLiterature
+            v-if="administrator == true || view_post_graduated == true"
+        />
     </div>
 </template>
 <script setup>
@@ -141,13 +153,27 @@ import Sppinner from "../../components/core/Spnnier.vue";
 import { computed, onMounted, ref } from "vue";
 import { useRoute } from "vue-router";
 import { useTeacherStore } from "../../stores/teachers/teacherStore";
+import { useUserStore } from "../../stores/user/userStore";
 
 const teacherStore = useTeacherStore();
+const userStore = useUserStore();
 const route = useRoute();
-
-const teacher = computed(() => teacherStore.teacher);
 
 onMounted(() => {
     teacherStore.getTeacherDetails(route.params.id);
+    userStore.getPermissions();
 });
+
+const administrator = computed(
+    () => userStore.permission_current.administrator
+);
+const view_teacher = computed(
+    () => userStore.permission_current.view_teacher_department
+);
+
+const view_post_graduated = computed(
+    () => userStore.permission_current.view_post_graduated
+);
+
+const teacher = computed(() => teacherStore.teacher);
 </script>

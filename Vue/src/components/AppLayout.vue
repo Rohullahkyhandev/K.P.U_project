@@ -1,5 +1,5 @@
 <template>
-    <div class="flex min-h-screen" dir="rtl">
+    <div class="flex min-h-screen overflow-hidden max-w-full mx-auto" dir="rtl">
         <!-- navbar  -->
         <Sidebar />
         <div class="flex items-center bg-gray-200 flex-grow flex-col">

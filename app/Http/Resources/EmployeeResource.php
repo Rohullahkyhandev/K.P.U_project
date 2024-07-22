@@ -22,14 +22,17 @@ class EmployeeResource extends JsonResource
             'email' => $this->email,
             'phone' => $this->phone,
             'program_name' => $this->program_name,
-            'current_place' => $this->current_place,
-            'main_place' => $this->main_place,
+            'current_address' => $this->current_address,
+            'main_address' => $this->main_address,
             'hire_date' => $this->hire_date,
             'salary' => $this->salary,
             'position' => $this->position,
             'nic' => $this->nic,
+            'gender' => $this->gender,
+            'photo_path' => $this->photo_path,
             'status' => $this->status,
             'uname' => $this->uname,
+            'part_name' => $this->part_name,
 
         ];
     }

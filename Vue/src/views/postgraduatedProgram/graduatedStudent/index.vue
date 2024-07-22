@@ -1,6 +1,6 @@
 <template>
     <div class="mt-10">
-        <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center justify-start mb-8">
             <div class="flex items-center gap-5">
                 <!-- <router-link
                     :to="{ name: 'app.post-graduated.student.create' }"

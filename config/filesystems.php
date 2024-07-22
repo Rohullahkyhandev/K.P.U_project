@@ -36,6 +36,12 @@ return [
             'throw' => false,
         ],
 
+
+        'employee/photo' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/employee/photo'),
+        ],
+
         // faculty director photo
 
         'faculty/photo' => [

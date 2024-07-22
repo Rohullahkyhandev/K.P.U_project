@@ -2,24 +2,40 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import axiosClient from "../../axios";
 import { toast } from "vue3-toastify";
+import router from "../../routes";
 
-const notify = (message) => {
-    toast.success(message, {
-        autoClose: true,
-        // delay: 3000,
-        rtl: true,
-        position: "top-center",
-        theme: "colored",
-        progress: true,
-        style: { "border-radius": "12px" },
-        // style,
-    }); // ToastOptions
+const notify = (message, type) => {
+    if (type == "success") {
+        toast.success(message, {
+            autoClose: true,
+            // delay: 3000,
+            rtl: true,
+            position: "top-center",
+            theme: "colored",
+            progress: true,
+            style: { "border-radius": "12px" },
+            backgroundColor: "linear-gradient(to right, #00b09b, #96c93d)",
+            // style,
+        }); // ToastOptions
+    } else {
+        toast.error(message, {
+            autoClose: true,
+            // delay: 3000,
+            rtl: true,
+            position: "top-center",
+            theme: "colored",
+            progress: true,
+            style: { "border-radius": "12px" },
+            // style,
+        }); // ToastOptions
+    }
 };
 
 const useDocumentStore = defineStore("document", () => {
     let msg_success = ref("");
     let msg_wrang = ref("");
     let loading = ref(false);
+    let type = ref("");
     let documents = ref({
         loading: false,
         data: [],
@@ -83,9 +99,10 @@ const useDocumentStore = defineStore("document", () => {
         axiosClient
             .post("document/create", data)
             .then((response) => {
+                type.value = "success";
                 loading.value = false;
                 // msg_success.value = response.data.message;
-                notify(response.data.message);
+                notify(response.data.message, type.value);
                 if (response.status == 200) {
                     document.value.source = "";
                     document.value.number = "";
@@ -183,6 +200,25 @@ const useDocumentStore = defineStore("document", () => {
             });
     }
 
+    // save as enter document
+    function saveAsEnterDocument(data) {
+        loading.value = true;
+        axiosClient
+            .post(`/save_as_enter_document`, data)
+            .then((response) => {
+                loading.value = false;
+                if (response.status === 200) {
+                    type.value = "success";
+                    notify("مکتوب موفقانه ذخیره گردید", type.value);
+                    getFarwardedDocument();
+                }
+            })
+            .catch((error) => {
+                loading.value = false;
+                type.value = "error";
+                msg_wrang.value = error.response.data.message;
+            });
+    }
     function setFarwardedDocument(data) {
         if (data) {
             farwarded_document.value.data = data.data;
@@ -224,7 +260,6 @@ const useDocumentStore = defineStore("document", () => {
     }
 
     // count notification
-
     let notificationCounter = ref();
     function countNotification() {
         axiosClient
@@ -238,13 +273,52 @@ const useDocumentStore = defineStore("document", () => {
             });
     }
 
+    function deleteDocument(id) {
+        loading.value = true;
+
+        axiosClient
+            .get(`document/delete/${id}`)
+            .then((response) => {
+                type.value = "success";
+                loading.value = false;
+                notify("مکتوب موفقانه حذف گردید", type.value);
+            })
+            .catch((err) => {
+                loading.value = false;
+                type.value = "error";
+                notify(err.response.data.message, type.value);
+            });
+    }
+
+    function deleteFormFarwardList(id) {
+        loading.value = true;
+        axiosClient
+            .get(`farwarded_document/delete/${id}`)
+            .then((response) => {
+                if (response.status == 200) {
+                    loading.value = false;
+                    type.value = "success";
+                    notify("مکتوب موفقانه حذف گردید", type.value);
+                    getFarwardedDocument();
+                }
+            })
+            .catch((err) => {
+                loading.value = false;
+                type.value = "error";
+                notify(err.response.data.message, type.value);
+            });
+    }
+
     return {
         createDocument,
         getDocument,
         getFarwardedDocument,
+        saveAsEnterDocument,
         getNotification,
         countNotification,
         updateNotification,
+        deleteDocument,
+        deleteFormFarwardList,
         farwarded_document,
         notificationCounter,
         notifications,

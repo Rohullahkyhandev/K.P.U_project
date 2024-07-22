@@ -22,11 +22,13 @@ class FarwardedDocumentResource extends JsonResource
             'title' => $this->title,
             'status' => $this->status,
             'uname' => $this->uname,
-            // 'lname' => $this->lname,
+            'lname' => $this->lname,
             'photo_path' => $this->photo_path,
             'fname' => $this->fname,
             'cname' => $this->cname,
-            'created_at' => $this->created_at,
+            'document_id' => $this->document_id,
+            'date' => $this->date,
+            'created_at' => $this->created_at->diffForHumans(),
         ];
     }
 }

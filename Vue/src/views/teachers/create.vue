@@ -136,7 +136,7 @@
                 <div class="mt-5">
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
-                            <label class="form--label"
+                            <label class="form--label" for="code_bast"
                                 >کود بست
                                 <span class="label--prefix">*</span>
                             </label>
@@ -146,6 +146,8 @@
                                 type="text"
                                 v-model="teacher.code_bast"
                                 class="mb-2"
+                                name="code_bast"
+                                id="code_bast"
                                 required="required"
                                 label="کود بست "
                             />
@@ -154,7 +156,7 @@
 
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
-                            <label class="form--label"
+                            <label class="form--label" for="name"
                                 >نام
                                 <span class="label--prefix">*</span>
                             </label>
@@ -164,6 +166,8 @@
                                 type="text"
                                 v-model="teacher.name"
                                 class="mb-2"
+                                id="name"
+                                name="name"
                                 required="required"
                                 label="نام"
                             />
@@ -394,6 +398,8 @@
                         <DatePicker
                             v-model="teacher.hire_date"
                             class="mb-2"
+                            :local="DariLocalConfig"
+                            format="YYYY-MM-DD"
                             required="required"
                             placeholder="تاریخ استخدام"
                         />
@@ -648,6 +654,7 @@ import { useFacultyStore } from "../../stores/faculties/facultyStore";
 import useProgramStore from "../../stores/postgraduatedPrograms/programStore";
 import useDepartmentStore from "../../stores/department/deparmentStore";
 // import DatePicker from "vue3-persian-datetime-picker";
+import DariLocalConfig from "../../stores/Dari";
 const teacherStore = useTeacherStore();
 const facultyStore = useFacultyStore();
 const programStore = useProgramStore();
@@ -725,8 +732,8 @@ const parts = [
 
 const academic_ranks = ref([
     {
-        text: "نامزاد پوهنیار",
-        key: "نامزاد پوهنیار",
+        text: "نامزد پوهنیار",
+        key: "نامزد پوهنیار",
     },
     {
         text: "پوهیالی",

@@ -67,7 +67,7 @@
                         تهیه راپور
                     </router-link>
                 </div>
-                <TransitionRoot appear :show="isOpen" as="template">
+                <!-- <TransitionRoot appear :show="isOpen" as="template">
                     <Dialog as="div" @close="closeModal" class="relative z-10">
                         <TransitionChild
                             as="template"
@@ -161,14 +161,14 @@
                             </div>
                         </div>
                     </Dialog>
-                </TransitionRoot>
+                </TransitionRoot> -->
             </div>
             <div>
                 <h1 class="text--header">لیست استادان</h1>
             </div>
         </div>
 
-        <div class="table--wrapper--dev">
+        <div class="table--wrapper--dev bg-red-500 overflow-x-hidden">
             <!-- display message area -->
             <div class="msg--success" v-if="teacherStore.msg_success">
                 <div class="flex items-center justify-between px-10 ,mb-3">
@@ -275,7 +275,7 @@
                     <span class="ml-3">پیداشد {{ teachers.total }} دیتا</span>
                 </div>
             </div>
-            <table class="table-auto w-full border">
+            <table class="table-auto border">
                 <thead>
                     <tr>
                         <TableHeaderCell
@@ -333,56 +333,63 @@
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="id"
+                            field=""
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortTeacher('id')"
+                            @click="sortTeacher('')"
                         >
                             سویه تحصلی
                         </TableHeaderCell>
 
-                        <TableHeaderCell> آخرین ترفیع </TableHeaderCell>
-
                         <TableHeaderCell
-                            field="id"
+                            field="faculty_id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortTeacher('id')"
+                            @click="sortTeacher('faculty_id')"
+                        >
+                            آخرین ترفیع
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
+                            field="faculty_id"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortTeacher('faculty_id')"
                         >
                             فاکولته
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="id"
+                            field="department_id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortTeacher('id')"
+                            @click="sortTeacher('department_id')"
                         >
                             دیپارتمنت
                         </TableHeaderCell>
                         <TableHeaderCell
-                            field="id"
+                            field="program_id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortTeacher('id')"
+                            @click="sortTeacher('program_id')"
                         >
                             برنامه فوق لیسانس
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="id"
+                            field="teaching_status"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortTeacher('id')"
+                            @click="sortTeacher('teaching_status')"
                         >
                             شیفت تدریس
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="id"
+                            field="hire_date"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortTeacher('id')"
+                            @click="sortTeacher('hire_date')"
                         >
                             تاریخ استخدام
                         </TableHeaderCell>
@@ -533,16 +540,16 @@
                             {{ teacher.pname }}
                         </td>
                         <td class="border-b p-2 border">
-                            <span v-if="teacher.teaching_stauts == 'bachelor'"
+                            <span v-if="teacher.teaching_status == 'bachelor'"
                                 >برنامه های لیسانس</span
                             >
                             <span
-                                v-if="
+                                v-else-if="
                                     teacher.teaching_status == 'post-graduated'
                                 "
                                 >برنامه ها فوق لیسانس</span
                             >
-                            <span v-if="teacher.teaching_status == 'both'"
+                            <span v-else-if="teacher.teaching_status == 'both'"
                                 >هر دو برنامه</span
                             >
                         </td>
@@ -934,8 +941,8 @@ const education_degrees = ref([
         text: "ماستر",
     },
     {
-        key: "دوکتور",
-        text: "دوکتور",
+        key: "داکتر",
+        text: "داکتر",
     },
 ]);
 

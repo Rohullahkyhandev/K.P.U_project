@@ -42,10 +42,10 @@
                         />
                     </svg>
 
-                    لیست  استادان در ورکشاپ
+                    لیست استادان در ورکشاپ
                 </router-link>
             </div>
-            <div class="text--header">لسیت   ورکشاپ ها</div>
+            <div class="text--header">لسیت ورکشاپ ها</div>
         </div>
 
         <div
@@ -478,7 +478,7 @@ function sortUsers(field) {
 }
 
 function deleteWorkshop(id) {
-    if (!confirm(`Are you sure you want to delete the product?`)) {
+    if (!confirm(`شما می خواهید این دیتا را حذف نماید?`)) {
         return;
     }
     workshopStore.deleteWorkshop(id);

@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between mb-8">
             <div class="flex items-center gap-4">
                 <router-link
-                    :to="{ name: 'app.maktob.create' }"
+                    :to="{ name: 'app.document.create' }"
                     class="header--button"
                 >
                     <svg
@@ -42,7 +42,7 @@
                         />
                     </svg>
 
-                    لسیت مکتوب های شریک شده
+                    لسیت مکتوب های تکثیر شده
                 </router-link>
             </div>
             <div>
@@ -271,7 +271,18 @@
                         </td>
 
                         <td class="border p-2">
-                            {{ document.type }}
+                            <span
+                                v-if="document.type == 'صادره'"
+                                class="bg-green-500 text-white rounded py-2 px-3"
+                            >
+                                {{ document.type }}</span
+                            >
+                            <span
+                                v-else
+                                class="bg-yellow-500 text-white rounded py-2 px-3"
+                            >
+                                {{ document.type }}</span
+                            >
                         </td>
 
                         <td class="border p-2">
@@ -389,7 +400,7 @@
                                                 <button
                                                     @click="
                                                         deleteDocument(
-                                                            faculty.id
+                                                            document.id
                                                         )
                                                     "
                                                     :class="[
@@ -473,8 +484,6 @@ import Spinner from "../../components/core/Spnnier.vue";
 import { USER_PER_PAGE } from "../../constant";
 import TableHeaderCell from "../../components/tableHeader/tableheader.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-// import { PencilAltIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
-import pdfviewer from "../../components/PDFViewer.vue";
 import { useRoute } from "vue-router";
 import useDocumentStore from "../../stores/documents/documentStore";
 
@@ -528,14 +537,8 @@ function deleteDocument(id) {
     if (!confirm(`آیا شما می خواهید این دیتا را حذف نماید?`)) {
         return;
     }
-    // documentStore.deleteDocument(id);
+    documentStore.deleteDocument(id);
     getDocument();
-}
-
-const isOpen = false;
-let url = ref("");
-function getUrl(url) {
-    url.value = url;
 }
 
 function msg_success_fun() {}

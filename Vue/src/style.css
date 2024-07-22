@@ -81,13 +81,12 @@
 }
 .header--button.router-link-exact-active {
     @apply bg-blue-700 rounded-lg;
-    display: none !important;
+    /* display: none !important; */
 }
 
 .sidebar-item {
     @apply rounded-lg py-2 px-2 transition-all duration-100 font-bold;
     font-size: 14px;
-    margin: 0px 5px !important;
 }
 .sidebar-item.router-link-exact-active {
     @apply bg-blue-700;
@@ -106,6 +105,7 @@
 
 input,
 option,
+span,
 textarea {
     font-size: 16px !important;
 }

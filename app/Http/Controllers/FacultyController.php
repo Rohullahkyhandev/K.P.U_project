@@ -61,8 +61,6 @@ class FacultyController extends Controller
             $photo = $request->photo->store('', 'faculty/photo');
             $photo_path = asset(Storage::url('faculty/photo/' . $photo));
         }
-
-
         $faculty = new Faculty();
         $faculty->name = $request->name;
         $faculty->date = $request->date;

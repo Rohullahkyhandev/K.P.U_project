@@ -151,7 +151,10 @@
                     </tr>
                 </tbody>
                 <tbody v-else>
-                    <tr v-for="(permission, index) of permissions.data.data">
+                    <tr
+                        v-for="(permission, index) of permissions.data.data"
+                        :key="index"
+                    >
                         <td class="border-b p-2">{{ index + 1 }}</td>
 
                         <td class="border-b p-2">
@@ -263,7 +266,9 @@
                                 ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
                                 : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
                             i === 0 ? 'rounded-l-md' : '',
-                            i === users.links.length - 1 ? 'rounded-r-md' : '',
+                            i === permissions.links.length - 1
+                                ? 'rounded-r-md'
+                                : '',
                             !link.url ? ' bg-gray-100 text-gray-700' : '',
                         ]"
                         v-html="link.label"

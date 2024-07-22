@@ -58,13 +58,20 @@ class Kernel extends HttpKernel
 
         'admin' => \App\Http\Middleware\Admin::class,
 
-        'adminsterator' => \App\Http\Middleware\adminsterator::class,
+        'administrator' => \App\Http\Middleware\adminsterator::class,
 
         // user
         'view_user' =>  \App\Http\Middleware\user\user_view::class,
         'create_user' =>  \App\Http\Middleware\user\user_create::class,
         'edit_user' =>  \App\Http\Middleware\user\user_edit::class,
         'delete_user' =>  \App\Http\Middleware\user\user_delete::class,
+
+        // employee
+        'view_employee' =>  \App\Http\Middleware\employee\view_employee::class,
+        'create_employee' =>  \App\Http\Middleware\employee\create_employee::class,
+        'edit_employee' =>  \App\Http\Middleware\employee\edit_employee::class,
+        'delete_employee' =>  \App\Http\Middleware\employee\delete_employee::class,
+
 
         // document
         'view_document' => \App\Http\Middleware\document\view_document::class,

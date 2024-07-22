@@ -24,7 +24,7 @@
                 </router-link>
             </div>
             <div>
-                <h1 class="text--header">فورم ویرایش کابر</h1>
+                <h1 class="text--header">فورم ویرایش اطلاعات کابر</h1>
             </div>
         </div>
 
@@ -206,8 +206,38 @@
                             <label
                                 for=""
                                 class="block text-gray-500 md:text-left mb-1 md:mb-0"
+                                >فاکولته مربوط<span class="text-red-500 px-2"
+                                    >*</span
+                                ></label
                             >
-                                دیپارتمنت<span class="text-red-500 px-2"
+                        </div>
+                        <div class="w-6/12">
+                            <CustomInput
+                                type="select"
+                                v-model="user.faculty_id"
+                                @change="getFacultyDepartment(user.faculty_id)"
+                                :select-options="faculties"
+                                class="mb-2"
+                                label=" فاکولته مربوط"
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
+                    <div
+                        class="md:flex md:items-center md:justify-center"
+                        v-if="
+                            departments.length > 0 &&
+                            user.user_type == 'department_user'
+                        "
+                    >
+                        <div class="w-2/12">
+                            <label
+                                for=""
+                                class="block text-gray-500 md:text-left mb-1 md:mb-0"
+                            >
+                                دیپارمنت های غیر عمومی<span
+                                    class="text-red-500 px-2"
                                     >*</span
                                 ></label
                             >
@@ -224,13 +254,40 @@
                         </div>
                     </div>
 
+                    <div
+                        class="md:flex md:items-center md:justify-center"
+                        v-if="user.user_type == 'common_department_user'"
+                    >
+                        <div class="w-2/12">
+                            <label
+                                for=""
+                                class="block text-gray-500 md:text-left mb-1 md:mb-0"
+                            >
+                                دیپارمنت های عمومی<span
+                                    class="text-red-500 px-2"
+                                    >*</span
+                                ></label
+                            >
+                        </div>
+                        <div class="w-6/12">
+                            <CustomInput
+                                type="select"
+                                v-model="user.department_id"
+                                :select-options="departmentHasOutFaculties"
+                                class="mb-2"
+                                label="دیپارتمنت "
+                                required="required"
+                            />
+                        </div>
+                    </div>
+
                     <div class="md:flex md:items-center md:justify-center">
                         <div class="w-2/12">
                             <label
                                 for=""
                                 class="block text-gray-500 md:text-left mb-1 md:mb-0"
                                 >رمز عبور<span class="text-red-500 px-2"
-                                    ></span
+                                    >*</span
                                 ></label
                             >
                         </div>
@@ -239,7 +296,7 @@
                                 type="password"
                                 v-model="user.password"
                                 class="mb-2"
-
+                                required="required"
                             />
                         </div>
                     </div>
@@ -250,7 +307,7 @@
                                 for=""
                                 class="block text-gray-500 md:text-left mb-1 md:mb-0"
                                 >تا‌ید رمز عبور<span class="text-red-500 px-2"
-                                    ></span
+                                    >*</span
                                 ></label
                             >
                         </div>
@@ -259,7 +316,7 @@
                                 type="password"
                                 v-model="user.password_confirmation"
                                 class="mb-2"
-
+                                required="required"
                             />
                         </div>
                     </div>
@@ -284,7 +341,7 @@
             </div>
             <footer class="bg-gray-100 py-4 md:flex gap-5">
                 <button type="submit" class="footer--button--submit">
-                    <span v-if="!userStore.loading"> ثبت </span>
+                    <span v-if="!userStore.loading"> ویرایش </span>
                     <span v-else>
                         <svg
                             class="animate-spin -ml-1 h-5 w-5 text-white"
@@ -312,7 +369,7 @@
                 <router-link
                     :to="{ name: 'app.user.list' }"
                     class="footer--button--cancel"
-                    >لغو ثبت</router-link
+                    >لغو ویرایش</router-link
                 >
             </footer>
         </form>
@@ -327,26 +384,29 @@ import useDepartmentStore from "../../stores/department/deparmentStore";
 import { useFacultyStore } from "../../stores/faculties/facultyStore";
 import { useUserStore } from "../../stores/user/userStore";
 
-const userStore = useUserStore();
 const route = useRoute();
+
+const userStore = useUserStore();
 const facultyStore = useFacultyStore();
 const departmentStore = useDepartmentStore();
+
 const user_type = ref([
     { key: "faculty_user", text: " یوزر فاکولته" },
-    { key: "department_user", text: " یوزر دیپارتمنت" },
+    { key: "common_department_user", text: "یوزر دیپارمنت های عمومی " },
+    { key: "department_user", text: "یوزر دیپارمنت غیر عمومی " },
     { key: "fifth_department", text: "آمریت های پنج گانه" },
 ]);
 
 onMounted(() => {
-    facultyStore.getAllFaculty();
-    userStore.getChanceDepartments();
     userStore.editUser(route.params.id);
-    if (
-        user.value.user_type == "department_user" &&
-        user.value.faculty_id != null
-    ) {
-        departmentStore.getFacultyDepartment(user.value.faculty_id);
-    } else {
+    facultyStore.getAllFaculty();
+    if (user.value.user_type == "fifth_department") {
+        userStore.getChanceDepartments();
+    }
+    // if (user.value.user_type == "department_user") {
+    //     departmentStore.getFacultyDepartment(user.value.faculty_id);
+    // }
+    if (user.value.user_type == "common_department_user") {
         departmentStore.departmentHasOutFaculties();
     }
 });
@@ -355,8 +415,15 @@ const faculties = computed(() =>
     facultyStore.listFaculty.map((f) => ({ key: f.id, text: f.name }))
 );
 
-const departments = computed(() =>
+const departmentHasOutFaculties = computed(() =>
     departmentStore.department_has_out_facilities.map((f) => ({
+        key: f.id,
+        text: f.name,
+    }))
+);
+
+const departments = computed(() =>
+    departmentStore.faculty_department.map((f) => ({
         key: f.id,
         text: f.name,
     }))
@@ -370,6 +437,14 @@ let chanceDepartments = computed(() =>
         text: c.display_name,
     }))
 );
+
+setTimeout(() => {
+    getFacultyDepartment(user.value.faculty_id);
+}, 2000);
+
+function getFacultyDepartment(faculty_id) {
+    departmentStore.getFacultyDepartment(faculty_id);
+}
 
 function onSubmit() {
     userStore.updateUser(user.value);

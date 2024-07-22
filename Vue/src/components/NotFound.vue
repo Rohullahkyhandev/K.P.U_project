@@ -1,4 +1,26 @@
 <template>
-    <router-link :to="{ name: 'app.dashboard' }" class="bg-blue-600 text-white font-semibold rounded py-2 px-5 ">Go
-        Back</router-link>
+    <main
+        class="grid  min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8"
+    >
+        <div class="text-center">
+            <p class="text--header text-blue-600">404</p>
+            <h1
+                class="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-5xl"
+            >
+                صفحه پیدا نشد
+            </h1>
+            <p class="mt-6 text-base leading-7 text-gray-600">
+                این ��فحه مورد ن��ر شما یافت نشد.
+            </p>
+            <div class="mt-10 flex items-center justify-center gap-x-6">
+                <router-link
+                    :to="{ name: 'app.dashboard' }"
+                    class="header--button"
+                >
+                    برگشت به داشبورد</router-link
+                >
+
+            </div>
+        </div>
+    </main>
 </template>

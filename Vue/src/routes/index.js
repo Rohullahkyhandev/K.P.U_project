@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import DashboardChart from "../views/liner.vue";
 import Dashboard from "../components/Dashboard.vue";
 import AppLayout from "../components/AppLayout.vue";
 import Login from "../components/Login.vue";
@@ -20,8 +19,8 @@ import CreatePermission from "../views/users/createPermission.vue";
 
 // documents
 import farwardedDocumentList from "../views/documents/fawardedList.vue";
-import createMaktob from "../views/documents/create.vue";
-import listMaktob from "../views/documents/index.vue";
+import DocumentCreate from "../views/documents/create.vue";
+import DocumentList from "../views/documents/index.vue";
 
 // pdc plan
 import CreatePlan from "../views/pdc/plan/create.vue";
@@ -99,10 +98,6 @@ import postBoardEdit from "../views/postgraduatedProgram/board/edit.vue";
 // BOARD MEMBER
 import postBoardMemberList from "../views/postgraduatedProgram/boardMember/index.vue";
 import postBoardMemberEdit from "../views/postgraduatedProgram/boardMember/edit.vue";
-// POST GRADUATED EMPLOYEE OR ALL TEH STUFF ROUTES
-import createEmployee from "../views/postgraduatedProgram/employee/create.vue";
-
-// scholarshipp
 
 // faculty
 import CreateFaculty from "../views/faculties/create.vue";
@@ -147,6 +142,44 @@ import editCurriculum from "../views/researchDepartment/curriculum/edit.vue";
 import pdcTeacherInCommitReport from "../views/reports/pdc_teacher_in_commit.vue";
 import pdcTeacherInScholarshipReport from "../views/reports/pdc_teacher_in_scholarship.vue";
 
+// employee
+import createEmployee from "../views/employee/create.vue";
+import listEmployee from "../views/employee/index.vue";
+import editEmployee from "../views/employee/edit.vue";
+
+// student research
+import createStudentResearch from "../views/postgraduatedProgram/studentResearch/create.vue";
+import editStudentResearch from "../views/postgraduatedProgram/studentResearch/edit.vue";
+
+// import editCurriculum from "../views/researchDepartment/curriculum/edit.vue";
+
+//internationl publishment
+import listinterpublishment from "../views/researchDepartment/interpublishment/index.vue";
+import editInterpublishment from "../views/researchDepartment/interpublishment/edit.vue";
+
+//labaratory
+import listLabaratory from "../views/researchDepartment/labs/index.vue";
+import editLabaratory from "../views/researchDepartment/labs/edit.vue";
+
+//teacher research
+import listTeacherResearch from "../views/researchDepartment/teacherResearch/index.vue";
+import editTeacherResearch from "../views/researchDepartment/teacherResearch/edit.vue";
+
+// tab bar
+import tabHeader from "../views/researchDepartment/table.vue";
+
+//research projects
+import listResearchProject from "../views/researchDepartment/resproject/index.vue";
+import editResearchProject from "../views/researchDepartment/resproject/edit.vue";
+
+//experiment details
+import listExpDetails from "../views/researchDepartment/expdetails/index.vue";
+import editExpDetails from "../views/researchDepartment/expdetails/edit.vue";
+
+//special area
+import listSpecialArea from "../views/researchDepartment/specialarea/index.vue";
+import editSpecialArea from "../views/researchDepartment/specialarea/edit.vue";
+
 const routes = [
     {
         path: "/",
@@ -162,12 +195,6 @@ const routes = [
             requiresAuth: true,
         },
         children: [
-            {
-                path: "chart",
-                name: "app.chart",
-                component: DashboardChart,
-            },
-            // chart
             {
                 path: "dashboard",
                 name: "app.dashboard",
@@ -211,15 +238,15 @@ const routes = [
                 component: farwardedDocumentList,
             },
             {
-                path: "maktob/create",
-                name: "app.maktob.create",
-                component: createMaktob,
+                path: "document/create",
+                name: "app.document.create",
+                component: DocumentCreate,
             },
 
             {
-                path: "maktob/list ",
-                name: "app.maktob.list",
-                component: listMaktob,
+                path: "document/list ",
+                name: "app.document.list",
+                component: DocumentList,
             },
 
             //plan
@@ -428,6 +455,18 @@ const routes = [
                         name: "app.post-graduated.class_room.edit",
                         component: postEditClassRoom,
                     },
+
+                    {
+                        path: "student_research/create/:id",
+                        name: "app.post-graduated.student_research.create",
+                        component: createStudentResearch,
+                    },
+
+                    {
+                        path: "student_research/edit/:id",
+                        name: "app.post-graduated.student_research.edit",
+                        component: editStudentResearch,
+                    },
                 ],
             },
             // post committees
@@ -474,12 +513,6 @@ const routes = [
                 path: "board_member/edit/:id",
                 name: "app.post-graduated.board_member.edit",
                 component: postBoardMemberEdit,
-            },
-            // employee
-            {
-                path: "employee/create",
-                name: "app.post.employee.create",
-                component: createEmployee,
             },
 
             // archive
@@ -622,6 +655,97 @@ const routes = [
                 name: "app.research.curriculum.edit",
                 component: editCurriculum,
             },
+
+            // research department
+            // curriculum
+            {
+                path: "curriculum/list",
+                name: "app.research.curriculum.list",
+                component: listCurriculum,
+            },
+
+            //international publishment
+            {
+                path: "interpub/list",
+                name: "app.research.interpub.list",
+                component: listinterpublishment,
+            },
+            {
+                path: "interpub/edit/:id",
+                name: "app.research.interpub.edit",
+                component: editInterpublishment,
+            },
+            // labaratory
+            {
+                path: "lab/list",
+                name: "app.research.lab.list",
+                component: listLabaratory,
+            },
+            {
+                path: "lab/edit/:id",
+                name: "app.research.lab.edit",
+                component: editLabaratory,
+            },
+            // teacher researchs
+            {
+                path: "tresearch/list",
+                name: "app.research.tresearch.list",
+                component: listTeacherResearch,
+            },
+            {
+                path: "tresearch/edit/:id",
+                name: "app.research.tresearch.edit",
+                component: editTeacherResearch,
+            },
+
+            {
+                path: "research",
+                name: "app.research.tabs",
+                component: tabHeader,
+                redirect: "reseach/lab/list",
+                children: [
+                    {
+                        path: "/research/lab/list",
+                        name: "app.research.lab.list",
+                        component: listLabaratory,
+                    },
+
+                    // research project
+                    {
+                        path: "resproject/list",
+                        name: "app.research.resproject.list",
+                        component: listResearchProject,
+                    },
+                    {
+                        path: "resproject/edit/:id",
+                        name: "app.research.resproject.edit",
+                        component: editResearchProject,
+                    },
+                    // experiment details
+                    {
+                        path: "expdetails/list",
+                        name: "app.research.expdetails.list",
+                        component: listExpDetails,
+                    },
+                    {
+                        path: "expdetails/edit/:id",
+                        name: "app.research.expdetails.edit",
+                        component: editExpDetails,
+                    },
+                    //special area
+                    {
+                        path: "specialarea/list",
+                        name: "app.research.specialarea.list",
+                        component: listSpecialArea,
+                    },
+                    {
+                        path: "specialarea/edit/:id",
+                        name: "app.research.specialarea.edit",
+                        component: editSpecialArea,
+                    },
+                ],
+            },
+
             // reports path
             {
                 path: "pdc/report/teacher_in_commit",
@@ -633,11 +757,28 @@ const routes = [
                 name: "app.pdc.report.teacher_in_scholarship",
                 component: pdcTeacherInScholarshipReport,
             },
+
+            // employee routes
+            {
+                path: "employee/list",
+                name: "app.employee.list",
+                component: listEmployee,
+            },
+            {
+                path: "employee/create",
+                name: "app.employee.create",
+                component: createEmployee,
+            },
+
+            {
+                path: "employee/edit/:id",
+                name: "app.employee.edit",
+                component: editEmployee,
+            },
         ],
     },
 
     // teacher report
-
     {
         path: "/teacher/report",
         name: "teacher.report",

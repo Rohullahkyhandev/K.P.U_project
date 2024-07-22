@@ -91,7 +91,7 @@
                 </div>
 
                 <select
-                    class="appearance-none relative block w-64 flex item-center justify-between text-left px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    class="appearance-none relative w-64 flex item-center justify-between text-left px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     v-model="selectYear"
                     @change="getStudent(null)"
                 >
@@ -105,6 +105,27 @@
                     </option>
                     <option v-for="year in years" :key="year" :value="year">
                         {{ year }} ه,ش
+                    </option>
+                </select>
+
+                <select
+                    class="appearance-none relative w-72 flex item-center justify-between text-left px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                    v-model="program_id"
+                    @change="getStudent(null)"
+                >
+                    <option
+                        value=""
+                        selected
+                        class="flex items-center font-bold justify-between float-end"
+                    >
+                        <span>فیلتر دیتا براساس برنامه ها</span>
+                    </option>
+                    <option
+                        v-for="(program, index) in programs"
+                        :key="index"
+                        :value="program.key"
+                    >
+                        {{ program.text }}
                     </option>
                 </select>
 
@@ -414,6 +435,41 @@
                                             <MenuItem v-slot="{ active }">
                                                 <router-link
                                                     :to="{
+                                                        name: 'app.post-graduated.student_research.create',
+                                                        params: {
+                                                            id: student.id,
+                                                        },
+                                                    }"
+                                                    :class="[
+                                                        active
+                                                            ? 'bg-blue-800 text-white'
+                                                            : 'text-gray-900',
+                                                        'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
+                                                    ]"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke-width="1.5"
+                                                        stroke="currentColor"
+                                                        class="w-5 h-5 text-indigo-500"
+                                                    >
+                                                        <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                                        />
+                                                    </svg>
+                                                    ثبت تحقیق
+                                                </router-link>
+                                            </MenuItem>
+                                        </div>
+
+                                        <div class="px-1 py-1">
+                                            <MenuItem v-slot="{ active }">
+                                                <router-link
+                                                    :to="{
                                                         name: 'app.post-graduated.student.edit',
                                                         params: {
                                                             id: student.id,
@@ -539,6 +595,11 @@
             <!-- update form of graduated Student  component  -->
             <updateStudentInfo :student_id="student_id" />
         </createGraduatedStudent>
+
+        <!-- studen research -->
+        <studentResearchList />
+        <!-- start of studentR  -->
+        <!-- end of studentR  -->
     </div>
 </template>
 
@@ -554,18 +615,20 @@ import {
 import { computed, onMounted, ref } from "vue";
 import Spinner from "../../../components/core/Spnnier.vue";
 import { USER_PER_PAGE } from "../../../constant";
+import CustomInput from "../../../components/core/CustomInput.vue";
 import TableHeaderCell from "../../../components/tableHeader/tableheader.vue";
 import createGraduatedStudent from "../graduatedStudent/Modal.vue";
 import updateStudentInfo from "../graduatedStudent/create.vue";
 import GraduatedStudentList from "../graduatedStudent/index.vue";
+import studentResearchList from "../studentResearch/index.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-// import { PencilAltIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useRoute } from "vue-router";
-// import ModalBox from "./ModalBox.vue";
 import useStudentStore from "../../../stores/postgraduatedPrograms/studentStore";
 import useDateStore from "../../../stores/dateStore";
+import useProgramStore from "../../../stores/postgraduatedPrograms/programStore";
 
 const studentStore = useStudentStore();
+const programStore = useProgramStore();
 const route = useRoute();
 
 // search student accroding ot the admission year
@@ -576,10 +639,10 @@ let selectYear = ref("");
 
 const perPage = ref(USER_PER_PAGE);
 const search = ref("");
+const program_id = ref("");
 const students = computed(() => studentStore.studnets);
 const sortField = ref("updated_at");
 const sortDirection = ref("desc");
-const department_id = ref("");
 
 // let msg_success = ref(computed(() => store.state.msg_success));
 // let msg_warning = ref("");
@@ -600,11 +663,15 @@ function openModal(id) {
 
 onMounted(() => {
     getStudent();
+    programStore.getAllPrograms();
 });
 
-// const departments = computed(() =>
-//     studentStore.listDepartment.map((c) => ({ key: c.id, text: c.name }))
-// );
+const programs = computed(() =>
+    programStore.listProgram.map((program) => ({
+        key: program.id,
+        text: program.program_name,
+    }))
+);
 
 function getForPage(ev, link) {
     ev.preventDefault();
@@ -614,8 +681,6 @@ function getForPage(ev, link) {
     getStudent(link.url);
 }
 
-const program_id = ref("");
-
 function getStudent(url = null) {
     studentStore.getStudent({
         url,
@@ -623,8 +688,7 @@ function getStudent(url = null) {
         per_page: perPage.value,
         sortField: sortField.value,
         sortDirection: sortDirection.value,
-        department_id: department_id.value,
-        program_id: localStorage.getItem("program_id"),
+        program_id: program_id.value,
         year: selectYear.value,
     });
 }
@@ -650,9 +714,6 @@ function deleteStudent(id) {
     studentStore.deleteStudent(id);
     getStudent();
 }
-
-
-
 
 function msg_success_fun() {}
 function msg_warning_fun() {}

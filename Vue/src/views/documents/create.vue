@@ -3,7 +3,7 @@
         <div class="flex items-center justify-between w-full">
             <div>
                 <router-link
-                    :to="{ name: 'app.maktob.list' }"
+                    :to="{ name: 'app.document.list' }"
                     class="header--button"
                 >
                     <svg
@@ -432,7 +432,7 @@
                     <span v-else> ثبت </span>
                 </button>
                 <router-link
-                    :to="{ name: 'app.maktob.list' }"
+                    :to="{ name: 'app.document.list' }"
                     class="footer--button--cancel"
                     >لغو ثبت</router-link
                 >
@@ -466,6 +466,10 @@ const document_types = ref([
 ]);
 
 const parts = ref([
+    {
+        key: "all",
+        text: "همه",
+    },
     {
         key: "faculty",
         text: "فاکولته ها",

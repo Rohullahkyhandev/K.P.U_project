@@ -10,7 +10,7 @@
                 leave-from="opacity-100"
                 leave-to="opacity-0"
             >
-                <div class="fixed inset-0 bg-black/25" />
+                <div class="fixed inset-0 bg-black/25"></div>
             </TransitionChild>
 
             <div class="fixed inset-0 overflow-y-auto">
@@ -35,7 +35,7 @@
                                 class="text--header flex items-end"
                             >
                                 <span
-                                    class="border-b border-block w-full text-start mb-2 mr-3 p-2"
+                                    class="border-b text-xl border-block w-full text-start mb-2 mr-3 p-2"
                                 >
                                     {{ title }}
                                 </span>

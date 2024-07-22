@@ -1,9 +1,7 @@
 <template>
-    <div class="min-w-full mt-6">
-        <div class="m-4">
-            <h1 class="text-3xl font-bold mb-7 text-gray-700">
-                داشبورد آمریت پی.دی.سی
-            </h1>
+    <div class="min-w-full mt-4">
+        <div class="m-2">
+            <h1 class="text-3xl font-bold mb-4 text-gray-700">داشبورد</h1>
         </div>
         <div
             v-if="msg_welcome"
@@ -33,12 +31,12 @@
             </div>
             <div></div>
         </div>
-        <!-- <Combobox /> -->
+        <PDCDashboard v-if="view_pdc == true" />
         <!-- PDC DASHBOARD COMPONENT  -->
-        <PDCDashboard />
         <!-- chart -->
-        <PDCChart />
+        <PDCChart v-if="view_pdc == true" />
         <!-- TEACHER DEPARTMENT DASHBOARD -->
+        <TableView v-if="view_pdc == true" />
         <!-- POSTGRADUATED DEPARTMENT DASHBOARD -->
 
         <!-- RESEARCH DEPARTMENT DASHBOARD -->
@@ -48,13 +46,7 @@
 // dashboards
 import PDCDashboard from "../views/dashboards/PDCDashboard.vue";
 import PDCChart from "../views/dashboards/chart.vue";
-
-import Message from "./Message.vue";
-
-const msg_success = ref("Hello, how are you man");
-const msg_wrang = ref("Hello, how are you man");
-
-import Combobox from "./Combox.vue";
+import TableView from "../views/dashboards/table.vue";
 
 import { computed, onMounted, ref } from "vue";
 import { useAuthStore } from "../stores/auth";
@@ -62,7 +54,8 @@ import { useUserStore } from "../stores/user/userStore";
 
 const authStore = useAuthStore();
 const userStore = useUserStore();
-const admin = computed(() => userStore.permission_current.admin);
+const admin = computed(() => userStore.permission_current.administrator);
+const view_pdc = computed(() => userStore.permission_current.view_pdc);
 
 onMounted(() => {
     getUser();
@@ -78,10 +71,4 @@ function getCurrentPermission() {
 }
 
 let msg_welcome = ref(true);
-
-const isOpen = ref(false);
-const url = ref("./path/pdf/name.pdf");
-function openPDF() {
-    isOpen.value = true;
-}
 </script>

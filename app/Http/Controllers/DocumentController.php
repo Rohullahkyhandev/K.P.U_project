@@ -9,11 +9,13 @@ use App\Models\Department;
 use App\Models\Document;
 use App\Models\Faculty;
 use App\Models\FarwardDocument;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use PhpParser\Comment\Doc;
 
 class DocumentController extends Controller
 {
@@ -79,6 +81,42 @@ class DocumentController extends Controller
                 ->paginate($per_page);
             return DocumentResource::collection($data);
         }
+
+        if ($currentUser->user_type == 'department_user') {
+            $data = Document::query()
+                ->whereAny([
+                    'documents.number',
+                    'documents.title',
+                    'documents.date',
+                    'documents.type',
+                    'documents.source',
+                    'documents.destination',
+                ], 'LIKE', "%{$search}%")
+                ->join('users', 'documents.user_id', 'users.id')
+                ->select('documents.*', 'users.name as uname')
+                ->where('documents.department_id', $currentUser->department_id)
+                ->orderBy("documents.$sortField", $sortDirection)
+                ->paginate($per_page);
+            return DocumentResource::collection($data);
+        }
+
+        if ($currentUser->user_type == 'common_department_user') {
+            $data = Document::query()
+                ->whereAny([
+                    'documents.number',
+                    'documents.title',
+                    'documents.date',
+                    'documents.type',
+                    'documents.source',
+                    'documents.destination',
+                ], 'LIKE', "%{$search}%")
+                ->join('users', 'documents.user_id', 'users.id')
+                ->select('documents.*', 'users.name as uname')
+                ->where('documents.department_id', $currentUser->department_id)
+                ->orderBy("documents.$sortField", $sortDirection)
+                ->paginate($per_page);
+            return DocumentResource::collection($data);
+        }
     }
 
 
@@ -86,7 +124,6 @@ class DocumentController extends Controller
 
     public function farwardParts()
     {
-
         $search = request('search', '');
         $per_page = request('per_page', 10);
         $sortField = request('sortField', 'id');
@@ -99,7 +136,7 @@ class DocumentController extends Controller
                 ->join('documents', 'farward_documents.document_id', 'documents.id')
                 ->join('users', 'farward_documents.user_id', 'users.id')
                 ->join('faculties', 'farward_documents.farwarded_part', '=', 'faculties.id')
-                ->select('farward_documents.*', 'documents.attachment_path as attachment_path', 'documents.number as number', 'documents.title as title',  'users.name as uname')
+                ->select('farward_documents.*', 'documents.id as document_id', 'documents.attachment_path as attachment_path', 'documents.number as number', 'documents.title as title',  'users.name as uname')
                 ->orderBy("farward_documents.$sortField", $sortDirection)
                 ->paginate($per_page);
 
@@ -112,7 +149,29 @@ class DocumentController extends Controller
                 ->where('farward_documents.status', '=', 1)
                 ->join('documents', 'farward_documents.document_id', 'documents.id')
                 ->join('users', 'farward_documents.user_id', 'users.id')
-                ->select('farward_documents.*', 'documents.attachment_path as attachment_path',  'documents.number as number', 'documents.title as title', 'users.name as uname')
+                ->select('farward_documents.*', 'documents.id as document_id', 'documents.attachment_path as attachment_path',  'documents.date as date', 'documents.number as number', 'documents.title as title', 'users.name as uname')
+                ->paginate($per_page);
+            return FarwardedDocumentResource::collection($data);
+        }
+
+        if ($currentUser->user_type == 'common_department_user') {
+            $data =  FarwardDocument::query()
+                ->where('farward_documents.farwarded_part', '=', $currentUser->department_id)
+                ->where('farward_documents.status', '=', 1)
+                ->join('documents', 'farward_documents.document_id', 'documents.id')
+                ->join('users', 'farward_documents.user_id', 'users.id')
+                ->select('farward_documents.*', 'documents.id as document_id', 'documents.attachment_path as attachment_path', 'documents.date as date',  'documents.number as number', 'documents.title as title', 'users.name as uname')
+                ->paginate($per_page);
+            return FarwardedDocumentResource::collection($data);
+        }
+
+        if ($currentUser->user_type == 'department_user') {
+            $data =  FarwardDocument::query()
+                ->where('farward_documents.farwarded_part', '=', $currentUser->department_id)
+                ->where('farward_documents.status', '=', 1)
+                ->join('documents', 'farward_documents.document_id', 'documents.id')
+                ->join('users', 'farward_documents.user_id', 'users.id')
+                ->select('farward_documents.*', 'documents.id as document_id', 'documents.attachment_path as attachment_path', 'documents.date as date',  'documents.number as number', 'documents.title as title', 'users.name as uname')
                 ->paginate($per_page);
             return FarwardedDocumentResource::collection($data);
         }
@@ -121,6 +180,7 @@ class DocumentController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'title' => 'required',
             'number' => 'required|max:100',
@@ -137,7 +197,6 @@ class DocumentController extends Controller
 
         DB::beginTransaction(); //
         try {
-
 
             $attachment = null;
             $attachment_path = null;
@@ -171,14 +230,65 @@ class DocumentController extends Controller
 
             $result =  $document->save();
             $document_id = $document->id;
-            if ($request->type == 'صادره') {
+
+            if ($request->department_part == 'all') {
+                $faculties = Faculty::all();
+                $fifth_departments = Chance_Amiryat::all();
+                $common_departments = Department::where('faculty_id', '=', null)->get();
+                $departments = Department::where('faculty_id', '<>', null)->get();
+
+                foreach ($faculties as $faculty) {
+                    if ($user->faculty_id != $faculty->faculty_id) {
+                        $document_farwarded = new FarwardDocument();
+                        $document_farwarded->document_id = $document_id;
+                        $document_farwarded->user_id = $user->id;
+                        $document_farwarded->farwarded_part = $faculty->id;
+                        $result = $document_farwarded->save();
+                    }
+                }
+
+                foreach ($fifth_departments as $fifth_department) {
+                    if ($user->dep_id != $fifth_department->id) {
+                        $document_farwarded = new FarwardDocument();
+                        $document_farwarded->document_id = $document_id;
+                        $document_farwarded->user_id = $user->id;
+                        $document_farwarded->farwarded_part = $fifth_department->id;
+                        $result = $document_farwarded->save();
+                    }
+                }
+
+                foreach ($common_departments as $common_department) {
+                    if ($user->deaprtment_id != $common_department->id) {
+                        $document_farwarded = new FarwardDocument();
+                        $document_farwarded->document_id = $document_id;
+                        $document_farwarded->user_id = $user->id;
+                        $document_farwarded->farwarded_part = $common_department->id;
+                        $result = $document_farwarded->save();
+                    }
+                }
+
+                foreach ($departments as $department) {
+                    if ($user->department_id != $department->id) {
+                        $document_farwarded = new FarwardDocument();
+                        $document_farwarded->document_id = $document_id;
+                        $document_farwarded->user_id = $user->id;
+                        $document_farwarded->farwarded_part = $department->id;
+                        $result = $document_farwarded->save();
+                    }
+                }
+            }
+
+            if ($request->type == 'صادره' && $request->department_part != 'all') {
+
                 //  farwarded parts
                 foreach ($request->farwarded_parts as $farwarded_part) {
-                    $document_farwarded = new FarwardDocument();
-                    $document_farwarded->document_id = $document_id;
-                    $document_farwarded->user_id = $user->id;
-                    $document_farwarded->farwarded_part = $farwarded_part;
-                    $result = $document_farwarded->save();
+                    if ($user->faculty_id != $farwarded_part || $user->dep_id != $farwarded_part || $user->department_id != $farwarded_part) {
+                        $document_farwarded = new FarwardDocument();
+                        $document_farwarded->document_id = $document_id;
+                        $document_farwarded->user_id = $user->id;
+                        $document_farwarded->farwarded_part = $farwarded_part;
+                        $result = $document_farwarded->save();
+                    }
                 }
             }
 
@@ -190,12 +300,94 @@ class DocumentController extends Controller
 
         if ($result) {
             return response([
-                "message" => "مکتوب موفقنانه ذخیره گردید"
+                "message" => "مکتوب موفقانه ذخیره گردید"
             ], 200);
         } else {
             return response([
-                "error" => "مکتوب موفقنانه ذخیره نشد"
+                "error" => "مکتوب موفقانه ذخیره نشد"
             ], 304);
         }
+    }
+
+    public function SaveAsEnterDocument(Request $request)
+    {
+
+        $request->validate([
+            'date' => 'required|date',
+            'remark' => 'required'
+        ], [
+            'date.required' => 'تاریخ الزامی می باشد ',
+            'remark.required' => 'ملاحظات الزامی می باشد'
+        ]);
+        DB::beginTransaction();
+        try {
+
+            $user = Auth::user();
+            $farwarded_doc = FarwardDocument::find($request->farward_id);
+            $document = Document::find($request->d_id);
+            $newDocument = new Document();
+            $newDocument->number = $document->number;
+            $newDocument->title = $document->title;
+            $newDocument->source = $document->source;
+            $newDocument->destination = $document->destination;
+            $newDocument->date = $document->date;
+            $newDocument->type = 'وارده';
+            $newDocument->part_type = $document->department_part;
+            $newDocument->user_id = $user->id;
+            $newDocument->attachment = $document->attachment;
+            $newDocument->attachment_path = $document->attachment_path;
+            $newDocument->remark = $request->remark;
+
+            $newDocument->description = $request->description;
+            if ($user->user_type == 'faculty_user') {
+                $newDocument->faculty_id = $user->faculty_id;
+            }
+            if ($user->user_type == 'fifth_department') {
+                $newDocument->dep_id = $user->dep_id;
+            }
+            if ($user->user_type == 'department_user') {
+                $newDocument->department_id = $user->department_id;
+            }
+
+            if ($user->user_type == 'common_department_user') {
+                $newDocument->department_id = $user->department_id;
+            }
+
+            $newDocument->save();
+            $farwarded_doc->status = '2';
+            $result = $farwarded_doc->save();
+
+            DB::commit();
+
+            if ($result) {
+                return response([
+                    "message" => "مکتوب موفقنانه ��خیره گردید"
+                ], 200);
+            } else {
+                return response([
+                    "error" => "مکتوب موفقنانه ��خیره نشد"
+                ], 304);
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $e;
+        }
+    }
+
+
+
+
+
+
+
+    public function destroy($id)
+    {
+        $document = Document::find($id);
+        if (is_file(storage_path('app/public/document/attachment/' . $document->attachment))) {
+            unlink(storage_path('app/public/document/attachment/' . $document->attachment));
+        }
+
+        $result = $document->delete();
+        return  $result;
     }
 }

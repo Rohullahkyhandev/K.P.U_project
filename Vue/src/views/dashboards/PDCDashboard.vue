@@ -1,9 +1,9 @@
 <template>
-    <div class="container mx-auto p-4">
+    <div class="container mx-auto p-3">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Sent Documents Card -->
             <div
-                class="bg-gradient-to-r from-green-400 to-green-600 text-white shadow-xl rounded-lg p-6 flex items-center gap-6 space-x-4 transform transition hover:scale-105"
+                class="bg-white text-black shadow-xl rounded-lg p-6 flex items-center gap-6 space-x-4 transform transition hover:scale-105"
             >
                 <div class="flex-shrink-0">
                     <svg
@@ -12,7 +12,7 @@
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
                         stroke="currentColor"
-                        class="w-20 h-20 bg-gray-200 text-blue-500 rounded-full p-3"
+                        class="w-20 h-20 bg-gray-200 text-green-500 rounded-full p-3"
                     >
                         <path
                             stroke-linecap="round"
@@ -22,9 +22,7 @@
                     </svg>
                 </div>
                 <div>
-                    <div class="text-lg font-bold">
-                        مجموعه کلی مکتوب های صادره
-                    </div>
+                    <div class="text-lg font-bold">تعداد مکتوب های صادره</div>
                     <div class="text-2xl font-bold">
                         {{ sentDocuments }}
                     </div>
@@ -33,7 +31,7 @@
 
             <!-- Received Documents Card -->
             <div
-                class="bg-gradient-to-r from-red-400 to-red-600 text-white shadow-xl rounded-lg p-6 flex items-center gap-6 space-x-4 transform transition hover:scale-105"
+                class="bg-gradient-to-r from-gray-200 to-white text-black shadow-xl rounded-lg p-6 flex items-center gap-6 space-x-4 transform transition hover:scale-105"
             >
                 <div class="flex-shrink-0">
                     <svg
@@ -52,9 +50,7 @@
                     </svg>
                 </div>
                 <div>
-                    <div class="text-lg font-bold">
-                        مجموعه کلی مکتوب های وارده
-                    </div>
+                    <div class="text-lg font-bold">تعداد مکتوب های وارده</div>
                     <div class="text-2xl font-bold">
                         {{ receivedDocuments }}
                     </div>
@@ -63,7 +59,7 @@
 
             <!-- total teacher in Scholarships -->
             <div
-                class="bg-gradient-to-r from-indigo-400 to-blue-600 text-white shadow-xl rounded-lg p-6 flex items-center space-x-6 gap-6 transform transition hover:scale-105"
+                class="bg-gradient-to-r from-gray-300 to-white text-black shadow-xl rounded-lg p-6 flex items-center space-x-6 gap-6 transform transition hover:scale-105"
             >
                 <div class="flex-shrink-0">
                     <svg
@@ -82,9 +78,7 @@
                     </svg>
                 </div>
                 <div>
-                    <div class="text-lg font-bold">
-                        مجموعه کلی استادان در بورسیه
-                    </div>
+                    <div class="text-lg font-bold">تعداد استادان در بورسیه</div>
                     <div class="text-2xl font-bold">
                         {{ receivedDocuments }}
                     </div>
@@ -93,7 +87,7 @@
 
             <!-- number of commit -->
             <div
-                class="bg-gradient-to-r from-indigo-400 to-blue-600 text-white shadow-xl rounded-lg p-6 flex items-center gap-6 space-x-4 transform transition hover:scale-105"
+                class="bg-gradient-to-r from-gray-100 to-white text-black shadow-xl rounded-lg p-6 flex items-center gap-6 space-x-4 transform transition hover:scale-105"
             >
                 <div class="flex-shrink-0">
                     <svg
@@ -102,7 +96,7 @@
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
                         stroke="currentColor"
-                        class="w-20 h-20 bg-gray-200 text-blue-500 rounded-full p-3"
+                        class="w-20 h-20 bg-gray-200 text-orange-500 rounded-full p-3"
                     >
                         <path
                             stroke-linecap="round"
@@ -112,7 +106,7 @@
                     </svg>
                 </div>
                 <div>
-                    <div class="text-lg font-bold">تعداد کلی کمته ها</div>
+                    <div class="text-lg font-bold">تعداد کمته ها</div>
                     <div class="text-2xl font-bold">
                         {{ receivedDocuments }}
                     </div>
@@ -121,11 +115,11 @@
 
             <!-- number of data and attachment in archive -->
             <div
-                class="bg-gradient-to-r from-indigo-400 to-blue-600 text-white shadow-xl rounded-lg p-6 flex items-center gap-6 space-x-4 transform transition hover:scale-105"
+                class="bg-gradient-to-r from-gray-100 to-white text-black shadow-xl rounded-lg p-6 flex items-center gap-6 space-x-4 transform transition hover:scale-105"
             >
                 <div class="flex-shrink-0">
                     <svg
-                       class="w-20 h-20 bg-gray-200 text-blue-500 rounded-full p-3"
+                        class="w-20 h-20 bg-gray-200 text-blue-500 rounded-full p-3"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -140,9 +134,35 @@
                     </svg>
                 </div>
                 <div>
-                    <div class="text-lg font-bold">
-                        مجموعه کلی فایل ها در آرشیف
+                    <div class="text-lg font-bold">فایل ها در آرشیف تعداد</div>
+                    <div class="text-2xl font-bold">
+                        {{ receivedDocuments }}
                     </div>
+                </div>
+            </div>
+
+            <!-- number of employee in the pdc department -->
+            <div
+                class="bg-gradient-to-r from-gray-100 to-white text-black shadow-lg rounded-lg p-6 flex items-center gap-6 space-x-4 transform transition hover:scale-105"
+            >
+                <div class="flex-shrink-0">
+                    <svg
+                        class="w-20 h-20 bg-gray-200 text-purple-500 rounded-full p-3"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M7 8h10M7 12h4m1 8H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v9a2 2 0 01-2 2z"
+                        />
+                    </svg>
+                </div>
+                <div>
+                    <div class="text-lg font-bold">تعداد کارمندان</div>
                     <div class="text-2xl font-bold">
                         {{ receivedDocuments }}
                     </div>

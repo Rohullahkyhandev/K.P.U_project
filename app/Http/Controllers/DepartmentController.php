@@ -25,13 +25,14 @@ class DepartmentController extends Controller
         $id = request('id');
 
         if ($id) {
-
             $data =  Department::query()
                 ->where('departments.faculty_id', '=', $id)
-                ->orWhere('departments.name', 'like', "%{$search}%")
+                ->whereAny([
+                    'departments.name',
+                ], 'like', "%{$search}%")
                 ->join('faculties', 'departments.faculty_id', 'faculties.id')
-            ->select('departments.*', 'faculties.name as fname')
-            ->orderBy("departments.$sortField", $sortDirection)
+                ->select('departments.*', 'faculties.name as fname')
+                ->orderBy("departments.$sortField", $sortDirection)
                 ->paginate($per_page);
             return DepartmentResource::collection($data);
         }
@@ -104,7 +105,8 @@ class DepartmentController extends Controller
     {
 
         $result = 0;
-        $request->validate(['manager_name' => 'required|max:100',
+        $request->validate([
+            'manager_name' => 'required|max:100',
             'manager_lname' => 'required|max:100',
             'photo' => 'nullable|image|mimes:png,jpg,jpeg,gif',
             'name' => 'required',
@@ -138,10 +140,12 @@ class DepartmentController extends Controller
         }
         $result = $department->save();
         if ($result) {
-            return response(['message' => 'موفقانه ویرایش  شد '
+            return response([
+                'message' => 'موفقانه ویرایش  شد '
             ], 200);
         } else {
-            return response(['message' => 'دیتا ویرایش نشد دوباره تلاش نماید'
+            return response([
+                'message' => 'دیتا ویرایش نشد دوباره تلاش نماید'
             ], 403);
         }
     }

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PermissionResource;
 use App\Http\Resources\UserResource;
 use App\Models\Chance_Amiryat;
+use App\Models\Department;
+use App\Models\Faculty;
 use App\Models\permission;
 use App\Models\User;
 use App\Models\User_Permission;
@@ -78,17 +80,32 @@ class UserController extends Controller
         $user->photo_path = $photo_path;
         $user->user_type = $request->user_type;
         if ($request->user_type == 'fifth_department') {
+            $chance_department = Chance_Amiryat::find($request->dep_id);
             $user->dep_id = $request->dep_id;
+            $user->part_name = $chance_department->name;
         }
         if (
             $request->user_type == 'faculty_user'
         ) {
+            $faculty = Faculty::find($request->faculty_id);
             $user->faculty_id = $request->faculty_id;
+            $user->part_name = $faculty->name;
         }
-        if (
-            $request->user_type == 'department_user'
-        ) {
+
+        if ($request->user_type == 'department_user') {
+            $department = Department::find($request->department_id);
             $user->department_id = $request->department_id;
+            $user->part_name = $department->name;
+            $user->faculty_id = $request->faculty_id;
+            $user->dep_id = null;
+        }
+
+        if (
+            $request->user_type == 'common_department_user'
+        ) {
+            $department = Department::find($request->department_id);
+            $user->department_id = $request->department_id;
+            $user->part_name = $department->name;
         }
         $user->password = $request->password;
         $result = $user->save();
@@ -125,6 +142,7 @@ class UserController extends Controller
 
         DB::beginTransaction();
         try {
+
             $user = User::find($request->id);
             $photo = $user->photo;
             $photo_path = $user->photo_path;
@@ -147,17 +165,31 @@ class UserController extends Controller
             $user->photo_path = $photo_path;
             $user->user_type = $request->user_type;
             if ($request->user_type == 'fifth_department') {
+                $chance_department = Chance_Amiryat::find($request->dep_id);
                 $user->dep_id = $request->dep_id;
+                $user->part_name = $chance_department->name;
                 $user->faculty_id = null;
                 $user->department_id = null;
             }
             if ($request->user_type == 'faculty_user') {
+                $faculty = Faculty::find($request->faculty_id);
                 $user->faculty_id = $request->faculty_id;
+                $user->part_name = $faculty->name;
                 $user->dep_id = null;
                 $user->department_id = null;
             }
             if ($request->user_type == 'department_user') {
+                $department = Department::find($request->department_id);
                 $user->department_id = $request->department_id;
+                $user->part_name = $department->name;
+                $user->faculty_id = $request->faculty_id;
+                $user->dep_id = null;
+            }
+
+            if ($request->user_type == 'common_department_user') {
+                $department = Department::find($request->department_id);
+                $user->department_id = $request->department_id;
+                $user->part_name = $department->name;
                 $user->faculty_id = null;
                 $user->dep_id = null;
             }

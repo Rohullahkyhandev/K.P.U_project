@@ -13,7 +13,7 @@ class studentController extends Controller
 {
 
     // =================================================================================================
-    //  status number 1 indicates to the not graduation 2 number means graduation
+    //  status number 1 indicates to the not graduated 2 number means graduated
     // =================================================================
     public function index()
     {
@@ -26,12 +26,18 @@ class studentController extends Controller
         $year = request('year', date('Y') - 621);
 
         $data = Student::query()
-            ->where('students.program_id', '=', $program_id)
-            ->where('students.status', '=', '1')
-            ->where('students.name', 'like', "%{$search}%")
+            ->where('students.admission_year', $year)
+            ->where('students.admission_year', 'like', "%{$program_id}%")
+            ->whereAny([
+                'students.name',
+                'students.admission_year',
+                'students.lname',
+                'students.fname',
+                'students.name',
+                'students.email',
+                'students.phone',
+            ], 'like', "%{$search}%")
             ->whereDate('students.admission_year', 'like', "%{$year}%")
-            // ->where('students.lname', 'like', "%{$search}%")
-            // ->where('students.fname', 'like', "%{$search}%")
             ->join("users", "students.user_id", "users.id")
             ->join("post_graduated_programs", "students.program_id", "post_graduated_programs.id")
             ->select("students.*", "post_graduated_programs.program_name as program_name", "users.name as uname")
