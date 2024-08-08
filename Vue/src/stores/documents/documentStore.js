@@ -79,6 +79,9 @@ const useDocumentStore = defineStore("document", () => {
             attachment = data.attachment;
         }
 
+        // console.log(document.value.farwarded_parts);
+
+        // return 0;
         const form = new FormData();
         form.append("number", data.number);
         form.append("title", data.title);
@@ -88,9 +91,13 @@ const useDocumentStore = defineStore("document", () => {
         form.append("date", data.date);
         form.append("department_part", data.department_part);
         form.append("attachment", attachment);
-        for (let i = 0; i < data.farwarded_parts.length; i++) {
-            form.append(`farwarded_parts[${i}]`, data.farwarded_parts[i]);
-        }
+        // for (let i = 0; i < data.farwarded_parts.length; i++) {
+        //     form.append(`farwarded_parts[${i}]`, data.farwarded_parts[i]);
+        // }
+
+        document.value.farwarded_parts.forEach((part, index) => {
+            form.append(`farwarded_parts[${index}]`, part.id);
+        });
 
         form.append("description", data.description);
         form.append("remark", data.remark);
@@ -107,7 +114,7 @@ const useDocumentStore = defineStore("document", () => {
                     document.value.source = "";
                     document.value.number = "";
                     document.value.description = "";
-                    document.value.destination = "";
+                    document.value.farwarded_parts = "";
                     document.value.title = "";
                     document.value.type = "";
                     document.value.date = "";
@@ -230,6 +237,18 @@ const useDocumentStore = defineStore("document", () => {
         }
     }
 
+    // edit notification
+    function editDocument(id) {
+        axiosClient
+            .get(`/document/edit/${id}`)
+            .then((response) => {
+                document.value = response.data;
+            })
+            .catch((error) => {
+                msg_wrang.value = error.response.data.message;
+            });
+    }
+
     // update notification
     function updateNotification(id) {
         axiosClient
@@ -316,6 +335,7 @@ const useDocumentStore = defineStore("document", () => {
         saveAsEnterDocument,
         getNotification,
         countNotification,
+        editDocument,
         updateNotification,
         deleteDocument,
         deleteFormFarwardList,

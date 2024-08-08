@@ -34,10 +34,7 @@
         <form @submit.prevent="onSubmit">
             <div class="w-full py-8 bg-white shadow mt-8 px-4">
                 <!-- display message area -->
-                <div
-                    class="bg-green-700 text-white rounded py-4 text-center"
-                    v-if="teacherStore.msg_qsuccess"
-                >
+                <div class="msg--success" v-if="teacherStore.msg_qsuccess">
                     <div class="flex items-center justify-between px-10">
                         <div
                             class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
@@ -64,10 +61,7 @@
                     </div>
                 </div>
 
-                <div
-                    class="bg-red-500 text-white py-4 rounded text-center"
-                    v-if="teacherStore.msg_qwrang"
-                >
+                <div class="msg--warning" v-if="teacherStore.msg_qwrang">
                     <div class="flex items-center justify-between px-10">
                         <div
                             class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"

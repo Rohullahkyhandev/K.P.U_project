@@ -20,6 +20,7 @@ class ArchiveResource extends JsonResource
             'date' => $this->date,
             'description' => $this->description,
             'file_path' => $this->file_path,
+            'uname' => $this->uname,
         ];
     }
 }

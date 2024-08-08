@@ -33,13 +33,13 @@ const useCurriculumStore = defineStore("curriculum", () => {
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
-                if (res.statusCode === 200) {
+                if (res.status == 200) {
                     curriculum.value.subject_name = "";
                     curriculum.value.subject_code = "";
                     curriculum.value.subject_credit = "";
                     curriculum.value.subject_type = "";
                     curriculum.value.departments = "";
-                    curriculum.value.semster = "";
+                    curriculum.value.semester = "";
                 }
             })
             .catch((err) => {
@@ -112,9 +112,12 @@ const useCurriculumStore = defineStore("curriculum", () => {
         axiosClient
             .post("/curriculum/update", data)
             .then((res) => {
-                loading.value = false;
-                msg_success.value = res.data.message;
-                curriculum.value = "";
+                if (res.status === 200) {
+                    loading.value = false;
+                    msg_success.value = res.data.message;
+                    router.push({ name: "app.research.curriculum.list" });
+                    curriculum.value = "";
+                }
             })
             .catch((err) => {
                 loading.value = false;

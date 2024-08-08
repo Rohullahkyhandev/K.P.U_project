@@ -23,7 +23,7 @@
                     لیست برنامه ها
                 </router-link>
 
-                <router-link
+                <!-- <router-link
                     :to="{ name: 'app.post.select_program' }"
                     class="header--button"
                 >
@@ -43,7 +43,7 @@
                     </svg>
 
                     انتخاب برنامه
-                </router-link>
+                </router-link> -->
             </div>
             <div>
                 <h1 class="text--header">فورم راجستر برنامه جدید</h1>
@@ -217,7 +217,7 @@
                     <span v-else> ثبت </span>
                 </button>
                 <router-link
-                    :to="{ name: 'app.dashboard' }"
+                    :to="{ name: 'app.post.list' }"
                     class="footer--button--cancel"
                     >لغو ثبت</router-link
                 >

@@ -89,12 +89,14 @@
                 <div class="wrapper--dev--input">
                     <div class="label--dev--width">
                         <label for="" class="form--label">
-                             بخش فعالیت<span class="label--prefix">*</span></label
+                            بخش فعالیت<span class="label--prefix"
+                                >*</span
+                            ></label
                         >
                     </div>
                     <div class="input--dev--width">
                         <CustomInput
-                            type="text"
+                            type="textarea"
                             v-model="specialArea.related_part"
                             class="mb-2"
                             required="required"
@@ -105,19 +107,20 @@
                 <div class="wrapper--dev--input">
                     <div class="label--dev--width">
                         <label for="" class="form--label">
-                              رشته مربوطه<span class="label--prefix">*</span></label
+                            رشته مربوطه<span class="label--prefix"
+                                >*</span
+                            ></label
                         >
                     </div>
                     <div class="input--dev--width">
                         <CustomInput
-                            type="text"
+                            type="textarea"
                             v-model="specialArea.related_field"
                             class="mb-2"
                             required="required"
                         />
                     </div>
                 </div>
-
 
                 <footer class="bg-gray-100 mt-5 py-4 md:flex gap-5">
                     <button
@@ -152,9 +155,12 @@
                         </span>
                         <span v-else> ویرایش </span>
                     </button>
-                    <button @click="closeModal" class="footer--button--cancel">
+                    <router-link
+                        :to="{ name: 'app.research.specialarea.list' }"
+                        class="footer--button--cancel"
+                    >
                         لغو ویرایش
-                    </button>
+                    </router-link>
                 </footer>
             </div>
         </form>
@@ -180,7 +186,6 @@ const props = defineProps({
         required: true,
     },
 });
-
 
 function onSubmit() {
     specialAreaStore.updateSpecialArea(specialArea.value);

@@ -68,7 +68,7 @@
                     <div class="input--dev--width">
                         <CustomInput
                             type="text"
-                            v-model="lab.name"
+                            v-model="lab.lab_name"
                             class="mb-2"
                             required="required"
                         />
@@ -135,9 +135,8 @@
 <script setup>
 import { computed, onMounted, ref, useSlots } from "vue";
 import CustomInput from "../../../components/core/CustomInput.vue";
-import useDepartmentStore from "../../../stores/department/deparmentStore";
 import useLabStore from "../../../stores/researchDepartment/labStore";
-import MultiSelect from "primevue/multiselect";
+
 
 const labStore = useLabStore();
 const lab = computed(() => labStore.lab);

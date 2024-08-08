@@ -26,8 +26,8 @@ class LabEquipmentController extends Controller
             ->orWhere('lab_tools.entry_date', 'like', "%{$search}%")
             ->join('users', 'lab_tools.user_id', 'users.id')
             ->join('labs', 'lab_tools.lab_id', 'labs.id')
-            ->join('post_graduated_programs', 'lab_tools.lab_id', 'post_graduated_programs.id')
-            ->select('lab_tools.*', 'users.name as uname', 'labs.name as lname', 'post_graduated_programs.program_name as program_name')
+            // ->join('post_graduated_programs', 'lab_tools.lab_id', 'post_graduated_programs.id')
+            ->select('lab_tools.*', 'users.name as uname', 'labs.name as lname')
             ->orderBy("lab_tools.$sortField", $sortDirection)
             ->paginate($per_page);
 

@@ -23,6 +23,7 @@ const useCriteriaStore = defineStore("main_criteria", () => {
         number: "",
         description: "",
         attachment: "",
+        related_part: "",
     });
 
     function createCriteria(data) {
@@ -38,6 +39,7 @@ const useCriteriaStore = defineStore("main_criteria", () => {
         form.append("year", data.year);
         form.append("number", data.number);
         form.append("description", data.description);
+        form.append("related_part", data.related_part);
         form.append("attachment", attachment);
 
         data = form;
@@ -47,7 +49,10 @@ const useCriteriaStore = defineStore("main_criteria", () => {
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
-                criteria.value = "";
+                criteria.value.number = "";
+                criteria.value.description = "";
+                criteria.value.related_part = "";
+                criteria.value.attachment = "";
             })
             .catch((err) => {
                 loading.value = false;
@@ -119,6 +124,7 @@ const useCriteriaStore = defineStore("main_criteria", () => {
         form.append("year", data.year);
         form.append("number", data.number);
         form.append("description", data.description);
+        form.append("related_part", data.related_part);
         form.append("attachment", attachment);
 
         data = form;
@@ -129,7 +135,10 @@ const useCriteriaStore = defineStore("main_criteria", () => {
                 loading.value = false;
                 msg_success.value = res.data.message;
                 router.push({ name: "app.pdc.workshop.list" });
-                criteria.value = "";
+                criteria.value.number = "";
+                criteria.value.description = "";
+                criteria.value.related_part = "";
+                criteria.value.attachment = "";
             })
             .catch((err) => {
                 loading.value = false;

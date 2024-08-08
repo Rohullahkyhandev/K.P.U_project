@@ -184,7 +184,6 @@ class TeacherInCommitController extends Controller
 
     public function generateReport($type, $report_data)
     {
-
         $report_format = request('report_format');
         return  Excel::download((new CommitMember)->getData($type, $report_data), $report_format == 'pdf' ? 'report.pdf' : 'report.xls');
     }

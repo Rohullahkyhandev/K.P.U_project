@@ -22,6 +22,7 @@ const useSubCriteriaStore = defineStore("sub_criteria", () => {
         criteria_id: "id",
         number: "",
         description: "",
+        related_part: "",
         attachment: "",
     });
 
@@ -39,6 +40,7 @@ const useSubCriteriaStore = defineStore("sub_criteria", () => {
         form.append("criteria_id", id);
         form.append("number", data.number);
         form.append("description", data.description);
+        form.append("related_part", data.related_part);
         form.append("attachment", attachment);
 
         data = form;
@@ -49,7 +51,10 @@ const useSubCriteriaStore = defineStore("sub_criteria", () => {
                 loading.value = false;
                 subCriteria.value.attachment = "";
                 msg_success.value = res.data.message;
-                subCriteria.value = "";
+                subCriteria.value.number = "";
+                subCriteria.value.description = "";
+                subCriteria.value.related_part = "";
+                subCriteria.value.attachment = "";
             })
             .catch((err) => {
                 loading.value = false;
@@ -133,7 +138,7 @@ const useSubCriteriaStore = defineStore("sub_criteria", () => {
         form.append("id", data.id);
         form.append("criteria_id", data.criteria_id);
         form.append("number", data.number);
-        form.append("description", data.description);
+        form.append("related_part", data.related_part);
         form.append("attachment", attachment);
 
         data = form;
@@ -144,7 +149,10 @@ const useSubCriteriaStore = defineStore("sub_criteria", () => {
                 loading.value = false;
                 msg_success.value = res.data.message;
                 router.push({ name: "app.pdc.workshop.list" });
-                subCriteria.value = "";
+                subCriteria.value.number = "";
+                subCriteria.value.description = "";
+                subCriteria.value.related_part = "";
+                subCriteria.value.attachment = "";
             })
             .catch((err) => {
                 loading.value = false;

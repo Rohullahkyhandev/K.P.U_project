@@ -23,7 +23,7 @@ class NotificationController extends Controller
                 ->join('documents', 'farward_documents.document_id', 'documents.id')
                 ->join('users', 'farward_documents.user_id', 'users.id')
                 ->join('faculties', 'farward_documents.farwarded_part', '=', 'faculties.id')
-                ->select('farward_documents.*', 'documents.attachment_path as attachment_path', 'documents.date as date', 'documents.number as number', 'documents.title as title', 'users.name as uname', 'users.photo_path as photo_path', 'faculties.name  as fname',)
+            ->select('farward_documents.*', 'documents.attachment_path as attachment_path', 'documents.date as date', 'documents.number as number', 'documents.title as title', 'users.name as uname', 'users.photo_path as photo_path', 'faculties.name  as cname',)
                 ->get();
             return FarwardedDocumentResource::collection($data);
         }

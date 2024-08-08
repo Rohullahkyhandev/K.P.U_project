@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-10">
+    <div class="form--padding--top">
         <div class="flex items-center justify-between mb-8">
             <div class="flex items-center gap-5">
                 <router-link
@@ -79,506 +79,543 @@
             </div>
         </div>
         <!-- end of display message area -->
-        <div class="table--wrapper--dev">
-            <div class="flex justify-between border-b-2 pb-3 relative">
-                <div>
-                    <input
-                        v-model="search"
-                        @change="getStudent(null)"
-                        class="appearance-none relative block w-48 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="جستجوی بر اساس نام,تخلص"
-                    />
-                </div>
-
-                <select
-                    class="appearance-none relative w-64 flex item-center justify-between text-left px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    v-model="selectYear"
-                    @change="getStudent(null)"
-                >
-                    <option
-                        value=""
-                        selected
-                        class="flex items-center font-bold justify-between float-end"
-                    >
-                        {{ selectedYear }}
-                        ه,ش
-                    </option>
-                    <option v-for="year in years" :key="year" :value="year">
-                        {{ year }} ه,ش
-                    </option>
-                </select>
-
-                <select
-                    class="appearance-none relative w-72 flex item-center justify-between text-left px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    v-model="program_id"
-                    @change="getStudent(null)"
-                >
-                    <option
-                        value=""
-                        selected
-                        class="flex items-center font-bold justify-between float-end"
-                    >
-                        <span>فیلتر دیتا براساس برنامه ها</span>
-                    </option>
-                    <option
-                        v-for="(program, index) in programs"
-                        :key="index"
-                        :value="program.key"
-                    >
-                        {{ program.text }}
-                    </option>
-                </select>
-
-                <div class="flex items-center">
-                    <span class="whitespace-nowrap mr-3">هر صفحه</span>
-                    &nbsp;
-                    <select
-                        dir="ltr"
-                        @change="getStudent(null)"
-                        v-model="perPage"
-                        class="appearance-none relative block w-24 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    >
-                        <option value="5" selected>5</option>
-                        <option value="10" selected>10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                        <option value="100">100</option>
-                    </select>
-                    &nbsp;
-                    <span class="ml-3">پیداشد {{ students.total }} دیتا</span>
-                </div>
-            </div>
-            <table class="table-auto w-full border">
-                <thead>
-                    <tr>
-                        <TableHeaderCell
-                            field="id"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('id')"
+        <div class="container mx-auto  max-w-7xl">
+            <div class="overflow-x-auto">
+                <div class="min-w-full shadow rounded-lg overflow-hidden">
+                    <div class="table--wrapper--dev leading-normal">
+                        <div
+                            class="flex justify-between border-b-2 pb-3 relative"
                         >
-                            شماره.
-                        </TableHeaderCell>
+                            <div>
+                                <input
+                                    v-model="search"
+                                    @change="getStudent(null)"
+                                    class="appearance-none relative block w-48 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                    placeholder="جستجوی بر اساس نام,تخلص"
+                                />
+                            </div>
 
-                        <TableHeaderCell
-                            field="name"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('name')"
-                        >
-                            نام
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="email"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('id')"
-                        >
-                            تخلص
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="‌fname"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('‌fname')"
-                        >
-                            نام پدر
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="program_name"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('program_name')"
-                        >
-                            برنامه ماستری
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="phone"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('phone')"
-                        >
-                            شماره تماس
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="phone"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('phone')"
-                        >
-                            ایمل آدرس
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="kankor_id"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('kankor_id')"
-                        >
-                            آدی کانکور
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="نمره کانکور"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('نمره کانکور')"
-                        >
-                            نمره کانکور
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="bachelor_field"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('bachelor_field')"
-                        >
-                            رشته دوره لیسانس
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="nic"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('nic')"
-                        >
-                            نمبر تذکره
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="address"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('address')"
-                        >
-                            آدرس
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="admission_year"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('admission_year')"
-                        >
-                            تاریخ ثبت نام
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="blood_group"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('blood_group')"
-                        >
-                            گروپ خونی
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="action"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('acs')"
-                        >
-                            کابر
-                        </TableHeaderCell>
-
-                        <TableHeaderCell
-                            field="action"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortUsers('acs')"
-                        >
-                            عملیات
-                        </TableHeaderCell>
-                    </tr>
-                </thead>
-                <tbody v-if="students.loading || !students.data?.length">
-                    <tr>
-                        <td colspan="16">
-                            <Spinner v-if="students.loading" />
-                            <p v-else class="text-center py-8 text-gray-700">
-                                نتیجه ای پیدا نشد
-                            </p>
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody v-else>
-                    <tr v-for="(student, index) of students.data" :key="index">
-                        <td class="border-b p-2 border">{{ index + 1 }}</td>
-
-                        <td class="border-b p-2 border">
-                            {{ student.name }}
-                        </td>
-                        <td class="border-b p-2 border">
-                            {{ student.lname }}
-                        </td>
-
-                        <td class="border-b p-2 border">
-                            {{ student.fname }}
-                        </td>
-
-                        <td class="border-b p-2 border">
-                            {{ student.program_name }}
-                        </td>
-                        <td class="border-b p-2 border">
-                            {{ student.phone }}
-                        </td>
-                        <td class="border-b p-2 border">
-                            {{ student.email }}
-                        </td>
-
-                        <td class="border-b p-2 border">
-                            {{ student.kankor_id }}
-                        </td>
-
-                        <td class="border-b p-2 border">
-                            {{ student.kankor_mark }}
-                        </td>
-
-                        <td class="border-b p-2 border">
-                            {{ student.bachelor_field }}
-                        </td>
-
-                        <td class="border-b p-2 border">
-                            {{ student.nic }}
-                        </td>
-                        <td class="border-b p-2 border">
-                            {{ student.address }}
-                        </td>
-
-                        <td class="border-b p-2 border">
-                            {{ student.admission_year }}
-                        </td>
-
-                        <td class="border-b p-2 border">
-                            {{ student.blood_group }}
-                        </td>
-
-                        <td class="border-b p-2 border">
-                            {{ student.uname }}
-                        </td>
-
-                        <td class="border-b p-2 border">
-                            <Menu
-                                as="div"
-                                class="relative inline-block text-left"
+                            <select
+                                class="appearance-none relative w-64 flex item-center justify-between text-left px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                v-model="selectYear"
+                                @change="getStudent(null)"
                             >
-                                <div>
-                                    <MenuButton
-                                        class="inline-flex items-center justify-center w-full justify-center rounded-full w-10 h-10 bg-black bg-opacity-0 text-sm font-medium text-blue-800 hover:bg-opacity-5 focus:bg-opacity-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-                                    >
-                                        <svg
-                                            class="text-red"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="20"
-                                            height="20"
-                                            viewBox="0 0 20 20"
-                                        >
-                                            <path
-                                                fill="currentColor"
-                                                d="M10 6a2 2 0 1 1 0-4a2 2 0 0 1 0 4Zm0 6a2 2 0 1 1 0-4a2 2 0 0 1 0 4Zm0 6a2 2 0 1 1 0-4a2 2 0 0 1 0 4Z"
-                                            />
-                                        </svg>
-                                    </MenuButton>
-                                </div>
-
-                                <transition
-                                    enter-active-class="transition duration-100 ease-out"
-                                    enter-from-class="transform scale-95 opacity-0"
-                                    enter-to-class="transform scale-100 opacity-100"
-                                    leave-active-class="transition duration-75 ease-in"
-                                    leave-from-class="transform scale-100 opacity-100"
-                                    leave-to-class="transform scale-95 opacity-0"
+                                <option
+                                    value=""
+                                    selected
+                                    class="flex items-center font-semibold justify-between float-end"
                                 >
-                                    <MenuItems
-                                        class="absolute z-10 left-4 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                    فیلتر کردن دیتای محصلین براساس سال
+                                </option>
+                                <option
+                                    v-for="year in years"
+                                    :key="year"
+                                    :value="year"
+                                >
+                                    {{ year }}
+                                </option>
+                            </select>
+
+                            <Select
+                                v-model="program_id"
+                                @change="getStudent(null)"
+                                :options="programs"
+                                optionLabel="text"
+                                filter
+                                placeholder="فلیتر کردن محصیلن براساس برنامه"
+                                class="w-full md:w-80 py-1 rounded-lg"
+                            />
+
+                            <div class="flex items-center">
+                                <span class="whitespace-nowrap mr-3"
+                                    >هر صفحه</span
+                                >
+                                &nbsp;
+                                <select
+                                    dir="ltr"
+                                    @change="getStudent(null)"
+                                    v-model="perPage"
+                                    class="appearance-none relative block w-24 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                >
+                                    <option value="5" selected>5</option>
+                                    <option value="10" selected>10</option>
+                                    <option value="20">20</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                &nbsp;
+                                <span class="ml-3"
+                                    >پیداشد {{ students.total }} دیتا</span
+                                >
+                            </div>
+                        </div>
+                        <table class="table-auto w-full border">
+                            <thead>
+                                <tr>
+                                    <TableHeaderCell
+                                        field="id"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('id')"
                                     >
-                                        <div class="px-1 py-1"></div>
+                                        شماره.
+                                    </TableHeaderCell>
 
-                                        <div class="px-1 py-1">
-                                            <MenuItem v-slot="{ active }">
-                                                <button
-                                                    @click="
-                                                        openModal(student.id)
-                                                    "
-                                                    :class="[
-                                                        active
-                                                            ? 'bg-blue-800 text-white'
-                                                            : 'text-gray-900',
-                                                        'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
-                                                    ]"
+                                    <TableHeaderCell
+                                        field="name"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('name')"
+                                    >
+                                        نام
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="email"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('id')"
+                                    >
+                                        تخلص
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="‌fname"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('‌fname')"
+                                    >
+                                        نام پدر
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="program_name"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('program_name')"
+                                    >
+                                        برنامه ماستری
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="phone"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('phone')"
+                                    >
+                                        شماره تماس
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="phone"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('phone')"
+                                    >
+                                        ایمل آدرس
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="kankor_id"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('kankor_id')"
+                                    >
+                                        آدی کانکور
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="نمره کانکور"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('نمره کانکور')"
+                                    >
+                                        نمره کانکور
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="bachelor_field"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('bachelor_field')"
+                                    >
+                                        رشته دوره لیسانس
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="nic"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('nic')"
+                                    >
+                                        نمبر تذکره
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="address"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('address')"
+                                    >
+                                        آدرس
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="admission_year"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('admission_year')"
+                                    >
+                                        تاریخ ثبت نام
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="blood_group"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('blood_group')"
+                                    >
+                                        گروپ خونی
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="action"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('acs')"
+                                    >
+                                        کابر
+                                    </TableHeaderCell>
+
+                                    <TableHeaderCell
+                                        field="action"
+                                        :sortDirection="sortDirection"
+                                        :sortField="sortField"
+                                        @click="sortUsers('acs')"
+                                    >
+                                        عملیات
+                                    </TableHeaderCell>
+                                </tr>
+                            </thead>
+                            <tbody
+                                v-if="
+                                    students.loading || !students.data?.length
+                                "
+                            >
+                                <tr>
+                                    <td colspan="16">
+                                        <Spinner v-if="students.loading" />
+                                        <p
+                                            v-else
+                                            class="text-center py-8 text-gray-700"
+                                        >
+                                            نتیجه ای پیدا نشد
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tbody v-else>
+                                <tr
+                                    v-for="(student, index) of students.data"
+                                    :key="index"
+                                >
+                                    <td class="border-b p-2 border">
+                                        {{ index + 1 }}
+                                    </td>
+
+                                    <td class="border-b p-2 border">
+                                        {{ student.name }}
+                                    </td>
+                                    <td class="border-b p-2 border">
+                                        {{ student.lname }}
+                                    </td>
+
+                                    <td class="border-b p-2 border">
+                                        {{ student.fname }}
+                                    </td>
+
+                                    <td class="border-b p-2 border">
+                                        {{ student.program_name }}
+                                    </td>
+                                    <td class="border-b p-2 border">
+                                        {{ student.phone }}
+                                    </td>
+                                    <td class="border-b p-2 border">
+                                        {{ student.email }}
+                                    </td>
+
+                                    <td class="border-b p-2 border">
+                                        {{ student.kankor_id }}
+                                    </td>
+
+                                    <td class="border-b p-2 border">
+                                        {{ student.kankor_mark }}
+                                    </td>
+
+                                    <td class="border-b p-2 border">
+                                        {{ student.bachelor_field }}
+                                    </td>
+
+                                    <td class="border-b p-2 border">
+                                        {{ student.nic }}
+                                    </td>
+                                    <td class="border-b p-2 border">
+                                        {{ student.address }}
+                                    </td>
+
+                                    <td class="border-b p-2 border">
+                                        {{ student.admission_year }}
+                                    </td>
+
+                                    <td class="border-b p-2 border">
+                                        {{ student.blood_group }}
+                                    </td>
+
+                                    <td class="border-b p-2 border">
+                                        {{ student.uname }}
+                                    </td>
+
+                                    <td class="border-b p-2 border">
+                                        <Menu
+                                            as="div"
+                                            class="relative inline-block text-left"
+                                        >
+                                            <div>
+                                                <MenuButton
+                                                    class="inline-flex items-center justify-center w-full justify-center rounded-full w-10 h-10 bg-black bg-opacity-0 text-sm font-medium text-blue-800 hover:bg-opacity-5 focus:bg-opacity-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
                                                 >
                                                     <svg
+                                                        class="text-red"
                                                         xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke-width="1.5"
-                                                        stroke="currentColor"
-                                                        class="w-5 h-5 text-indigo-500"
+                                                        width="20"
+                                                        height="20"
+                                                        viewBox="0 0 20 20"
                                                     >
                                                         <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                                            fill="currentColor"
+                                                            d="M10 6a2 2 0 1 1 0-4a2 2 0 0 1 0 4Zm0 6a2 2 0 1 1 0-4a2 2 0 0 1 0 4Zm0 6a2 2 0 1 1 0-4a2 2 0 0 1 0 4Z"
                                                         />
                                                     </svg>
-                                                    ویرایش دیتا
-                                                </button>
-                                            </MenuItem>
-                                        </div>
+                                                </MenuButton>
+                                            </div>
 
-                                        <div class="px-1 py-1">
-                                            <MenuItem v-slot="{ active }">
-                                                <router-link
-                                                    :to="{
-                                                        name: 'app.post-graduated.student_research.create',
-                                                        params: {
-                                                            id: student.id,
-                                                        },
-                                                    }"
-                                                    :class="[
-                                                        active
-                                                            ? 'bg-blue-800 text-white'
-                                                            : 'text-gray-900',
-                                                        'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
-                                                    ]"
+                                            <transition
+                                                enter-active-class="transition duration-100 ease-out"
+                                                enter-from-class="transform scale-95 opacity-0"
+                                                enter-to-class="transform scale-100 opacity-100"
+                                                leave-active-class="transition duration-75 ease-in"
+                                                leave-from-class="transform scale-100 opacity-100"
+                                                leave-to-class="transform scale-95 opacity-0"
+                                            >
+                                                <MenuItems
+                                                    class="absolute z-10 left-4 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                                 >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke-width="1.5"
-                                                        stroke="currentColor"
-                                                        class="w-5 h-5 text-indigo-500"
-                                                    >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                                        />
-                                                    </svg>
-                                                    ثبت تحقیق
-                                                </router-link>
-                                            </MenuItem>
-                                        </div>
+                                                    <div
+                                                        class="px-1 py-1"
+                                                    ></div>
 
-                                        <div class="px-1 py-1">
-                                            <MenuItem v-slot="{ active }">
-                                                <router-link
-                                                    :to="{
-                                                        name: 'app.post-graduated.student.edit',
-                                                        params: {
-                                                            id: student.id,
-                                                        },
-                                                    }"
-                                                    :class="[
-                                                        active
-                                                            ? 'bg-blue-800 text-white'
-                                                            : 'text-gray-900',
-                                                        'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
-                                                    ]"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke-width="1.5"
-                                                        stroke="currentColor"
-                                                        class="w-5 h-5 text-indigo-500"
+                                                    <div
+                                                        class="px-1 py-1"
+                                                        v-if="
+                                                            student.status == 1
+                                                        "
                                                     >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                                        />
-                                                    </svg>
-                                                    ویراش
-                                                </router-link>
-                                            </MenuItem>
-                                        </div>
+                                                        <MenuItem
+                                                            v-slot="{ active }"
+                                                        >
+                                                            <button
+                                                                @click="
+                                                                    openModal(
+                                                                        student.id
+                                                                    )
+                                                                "
+                                                                :class="[
+                                                                    active
+                                                                        ? 'bg-blue-800 text-white'
+                                                                        : 'text-gray-900',
+                                                                    'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
+                                                                ]"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    fill="none"
+                                                                    viewBox="0 0 24 24"
+                                                                    stroke-width="1.5"
+                                                                    stroke="currentColor"
+                                                                    class="w-5 h-5 text-indigo-500"
+                                                                >
+                                                                    <path
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                                                    />
+                                                                </svg>
+                                                                ویرایش دیتا
+                                                            </button>
+                                                        </MenuItem>
+                                                    </div>
 
-                                        <div class="px-1 py-1">
-                                            <MenuItem v-slot="{ active }">
-                                                <button
-                                                    @click="
-                                                        deleteStudent(
-                                                            student.id
-                                                        )
-                                                    "
-                                                    :class="[
-                                                        active
-                                                            ? 'bg-blue-800 text-white'
-                                                            : 'text-gray-900',
-                                                        'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
-                                                    ]"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke-width="1.5"
-                                                        s
-                                                        stroke="currentColor"
-                                                        class="w-5 h-5 text-red-500"
-                                                    >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                                                        />
-                                                    </svg>
+                                                    <div class="px-1 py-1">
+                                                        <MenuItem
+                                                            v-slot="{ active }"
+                                                        >
+                                                            <router-link
+                                                                :to="{
+                                                                    name: 'app.post-graduated.student_research.create',
+                                                                    params: {
+                                                                        id: student.id,
+                                                                    },
+                                                                }"
+                                                                :class="[
+                                                                    active
+                                                                        ? 'bg-blue-800 text-white'
+                                                                        : 'text-gray-900',
+                                                                    'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
+                                                                ]"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    fill="none"
+                                                                    viewBox="0 0 24 24"
+                                                                    stroke-width="1.5"
+                                                                    stroke="currentColor"
+                                                                    class="size-5"
+                                                                >
+                                                                    <path
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
+                                                                    />
+                                                                </svg>
 
-                                                    حذف
-                                                </button>
-                                            </MenuItem>
-                                        </div>
-                                    </MenuItems>
-                                </transition>
-                            </Menu>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div
-                v-if="!students.loading"
-                class="flex justify-between items-center mt-5"
-                dir="ltr"
-            >
-                <div v-if="students.data">
-                    نمایش از {{ students.from }} تا {{ students.to }}
+                                                                ثبت تحقیق
+                                                            </router-link>
+                                                        </MenuItem>
+                                                    </div>
+
+                                                    <div class="px-1 py-1">
+                                                        <MenuItem
+                                                            v-slot="{ active }"
+                                                        >
+                                                            <router-link
+                                                                :to="{
+                                                                    name: 'app.post-graduated.student.edit',
+                                                                    params: {
+                                                                        id: student.id,
+                                                                    },
+                                                                }"
+                                                                :class="[
+                                                                    active
+                                                                        ? 'bg-blue-800 text-white'
+                                                                        : 'text-gray-900',
+                                                                    'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
+                                                                ]"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    fill="none"
+                                                                    viewBox="0 0 24 24"
+                                                                    stroke-width="1.5"
+                                                                    stroke="currentColor"
+                                                                    class="w-5 h-5 text-indigo-500"
+                                                                >
+                                                                    <path
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                                                                    />
+                                                                </svg>
+                                                                ویراش
+                                                            </router-link>
+                                                        </MenuItem>
+                                                    </div>
+
+                                                    <div class="px-1 py-1">
+                                                        <MenuItem
+                                                            v-slot="{ active }"
+                                                        >
+                                                            <button
+                                                                @click="
+                                                                    deleteStudent(
+                                                                        student.id
+                                                                    )
+                                                                "
+                                                                :class="[
+                                                                    active
+                                                                        ? 'bg-blue-800 text-white'
+                                                                        : 'text-gray-900',
+                                                                    'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
+                                                                ]"
+                                                            >
+                                                                <svg
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    fill="none"
+                                                                    viewBox="0 0 24 24"
+                                                                    stroke-width="1.5"
+                                                                    s
+                                                                    stroke="currentColor"
+                                                                    class="w-5 h-5 text-red-500"
+                                                                >
+                                                                    <path
+                                                                        stroke-linecap="round"
+                                                                        stroke-linejoin="round"
+                                                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                                                                    />
+                                                                </svg>
+
+                                                                حذف
+                                                            </button>
+                                                        </MenuItem>
+                                                    </div>
+                                                </MenuItems>
+                                            </transition>
+                                        </Menu>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div
+                            v-if="!students.loading"
+                            class="flex justify-between items-center mt-5"
+                            dir="ltr"
+                        >
+                            <div v-if="students.data">
+                                نمایش از {{ students.from }} تا
+                                {{ students.to }}
+                            </div>
+                            <nav
+                                v-if="students.total > students.limit"
+                                class="relative z-0 inline-flex justify-center rounded-md shadow-sm -space-x-px"
+                                aria-label="Pagination"
+                            >
+                                <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
+                                <a
+                                    v-for="(link, i) of students.links"
+                                    :key="i"
+                                    :disabled="!link.url"
+                                    href="#"
+                                    @click="getForPage($event, link)"
+                                    aria-current="page"
+                                    class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
+                                    :class="[
+                                        link.active
+                                            ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
+                                            : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
+                                        i === 0 ? 'rounded-l-md' : '',
+                                        i === students.links.length - 1
+                                            ? 'rounded-r-md'
+                                            : '',
+                                        !link.url
+                                            ? ' bg-gray-100 text-gray-700'
+                                            : '',
+                                    ]"
+                                    v-html="link.label"
+                                >
+                                </a>
+                            </nav>
+                        </div>
+                    </div>
                 </div>
-                <nav
-                    v-if="students.total > students.limit"
-                    class="relative z-0 inline-flex justify-center rounded-md shadow-sm -space-x-px"
-                    aria-label="Pagination"
-                >
-                    <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
-                    <a
-                        v-for="(link, i) of students.links"
-                        :key="i"
-                        :disabled="!link.url"
-                        href="#"
-                        @click="getForPage($event, link)"
-                        aria-current="page"
-                        class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
-                        :class="[
-                            link.active
-                                ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
-                                : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
-                            i === 0 ? 'rounded-l-md' : '',
-                            i === students.links.length - 1
-                                ? 'rounded-r-md'
-                                : '',
-                            !link.url ? ' bg-gray-100 text-gray-700' : '',
-                        ]"
-                        v-html="link.label"
-                    >
-                    </a>
-                </nav>
             </div>
         </div>
         <br /><br />
@@ -597,7 +634,7 @@
         </createGraduatedStudent>
 
         <!-- studen research -->
-        <studentResearchList />
+        <studentResearchList :close-modal="closeModal" />
         <!-- start of studentR  -->
         <!-- end of studentR  -->
     </div>
@@ -613,6 +650,7 @@ import {
     Switch,
 } from "@headlessui/vue";
 import { computed, onMounted, ref } from "vue";
+import Select from "primevue/select";
 import Spinner from "../../../components/core/Spnnier.vue";
 import { USER_PER_PAGE } from "../../../constant";
 import CustomInput from "../../../components/core/CustomInput.vue";
@@ -688,7 +726,7 @@ function getStudent(url = null) {
         per_page: perPage.value,
         sortField: sortField.value,
         sortDirection: sortDirection.value,
-        program_id: program_id.value,
+        program_id: program_id.value.key,
         year: selectYear.value,
     });
 }

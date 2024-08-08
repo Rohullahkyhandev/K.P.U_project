@@ -410,7 +410,9 @@
             :close-modal="closeModal"
             :title="title"
         >
-            <createLab />
+            <createLab
+              :close-modal="closeModal"
+            />
         </WrapperModal>
     </div>
 </template>

@@ -1,6 +1,6 @@
 <template>
     <TransitionRoot appear :show="isOpen" as="template">
-        <Dialog as="div" @close="closeModal" class="relative z-10 mr-10">
+        <Dialog as="div" @close="closeModal" class="relative z-10">
             <TransitionChild
                 as="template"
                 enter="duration-300 ease-out"
@@ -34,11 +34,29 @@
                                 as="h3"
                                 class="text--header flex items-end"
                             >
-                                <span
-                                    class="border-b text-xl border-block w-full text-start mb-2 mr-3 p-2"
+                                <div
+                                    class="border-b text-2xl font-bold  border-block w-full text-start mb-2 mr-3 p-2"
                                 >
                                     {{ title }}
-                                </span>
+                                </div>
+                                <div class=" absolute top-4 left-4">
+                                    <button @click="closeModal" class="hover:bg-red-400  flex items-center justify-center w-10 h-10 rounded-full">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="1.5"
+                                            stroke="currentColor"
+                                            class="size-7 text-red-500 hover:text-white"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M6 18 18 6M6 6l12 12"
+                                            />
+                                        </svg>
+                                    </button>
+                                </div>
                             </DialogTitle>
                             <div
                                 class="mt-6 flex items-center justify-center mb-4"

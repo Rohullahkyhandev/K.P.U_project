@@ -22,11 +22,11 @@ class TeacherRessearchResource extends JsonResource
             'lname' => $this->lname,
             'faculty' => $this->faculty,
             'department' => $this->department,
-            'research_title' => $this->search_title,
+            'title' => $this->research_title,
             'academic_rank' => $this->academic_rank,
             'education_degree' => $this->education_degree,
             'uname' => $this->uname,
-            'date' => $this->date,
+            // 'date' => $this->date,
         ];
     }
 }

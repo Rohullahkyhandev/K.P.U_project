@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-10">
+    <div class="form--padding--top">
         <div class="flex items-center justify-between mb-8">
             <div class="flex items-center gap-4">
                 <router-link
@@ -48,15 +48,13 @@
                 <h1 class="font-bold text-xl">لیست کلی دیپارتمنت ها</h1>
             </div>
         </div>
-        <div
-            class="bg-white p-6 rounded-lg shadow-lg border animate-fade-in-down overflow-auto"
-        >
+        <div class="table--wrapper--dev w-full">
             <!-- display message area -->
             <div
                 class="bg-green-700 text-white rounded py-4 text-center mb-3"
                 v-if="facultyStore.msg_success"
             >
-                <div class="flex items-center justify-between px-10">
+                <div class="flex items-center justify-between">
                     <div
                         class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
                     >
@@ -232,7 +230,9 @@
                         ) of faculty_departments.data"
                         :key="index"
                     >
-                        <td class="border p-2 text-center">{{ index + 1 }}</td>
+                        <td class="border p-2 text-center">
+                            {{ index + 1 }}
+                        </td>
 
                         <td class="border p-2">
                             {{ faculty_department.name }}

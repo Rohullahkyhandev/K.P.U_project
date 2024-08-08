@@ -1,33 +1,5 @@
 <template>
     <div class="form--padding--top">
-        <!-- <div class="flex items-center justify-between w-full">
-      <div>
-        <router-link
-          :to="{ name: 'app.post-graduated.board.list' }"
-          class="header--button"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-5 h-5 text-white"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-            />
-          </svg>
-          لیست بورد ها
-        </router-link>
-      </div>
-      <div>
-        <h1 class="text--header">فورم ثبت بورد جدید</h1>
-      </div>
-    </div> -->
-
         <form @submit.prevent="onSubmit">
             <div>
                 <!-- display message area -->
@@ -240,11 +212,9 @@
                         </span>
                         <span v-else> ثبت </span>
                     </button>
-                    <router-link
-                        :to="{ name: 'app.dashboard' }"
-                        class="footer--button--cancel"
-                        >لغو ثبت</router-link
-                    >
+                    <button @click="closeModal" class="footer--button--cancel">
+                        لغو ثبت
+                    </button>
                 </footer>
             </div>
         </form>
@@ -257,6 +227,13 @@ import CustomInput from "../../../components/core/CustomInput.vue";
 import useBoradMemberStore from "../../../stores/postgraduatedPrograms/boardMemberStore";
 
 const boardMemberStore = useBoradMemberStore();
+
+const props = defineProps({
+    closeModal: {
+        type: Function,
+        required: true,
+    },
+});
 
 const boardMember = computed(() => boardMemberStore.boardMember);
 

@@ -409,7 +409,7 @@
             :close-modal="closeModal"
             :title="'فورم ایجاد بورد جدید'"
         >
-            <createBoard />
+            <createBoard :close-modal="closeModal" />
         </WrapperModal>
         <!-- commit member -->
         <BoardMemberList />

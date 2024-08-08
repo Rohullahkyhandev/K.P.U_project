@@ -1,5 +1,5 @@
 <template>
-    <div class="container mx-auto p-3">
+    <div class="container mx-auto mb-3">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Sent Documents Card -->
             <div
@@ -24,7 +24,7 @@
                 <div>
                     <div class="text-lg font-bold">تعداد مکتوب های صادره</div>
                     <div class="text-2xl font-bold">
-                        {{ sentDocuments }}
+                        {{ total_send_docs }}
                     </div>
                 </div>
             </div>
@@ -52,7 +52,7 @@
                 <div>
                     <div class="text-lg font-bold">تعداد مکتوب های وارده</div>
                     <div class="text-2xl font-bold">
-                        {{ receivedDocuments }}
+                        {{ total_rec_docs }}
                     </div>
                 </div>
             </div>
@@ -80,7 +80,7 @@
                 <div>
                     <div class="text-lg font-bold">تعداد استادان در بورسیه</div>
                     <div class="text-2xl font-bold">
-                        {{ receivedDocuments }}
+                        {{ total_teacher_in_scholarships }}
                     </div>
                 </div>
             </div>
@@ -108,7 +108,7 @@
                 <div>
                     <div class="text-lg font-bold">تعداد کمته ها</div>
                     <div class="text-2xl font-bold">
-                        {{ receivedDocuments }}
+                        {{ total_commits }}
                     </div>
                 </div>
             </div>
@@ -134,9 +134,9 @@
                     </svg>
                 </div>
                 <div>
-                    <div class="text-lg font-bold">فایل ها در آرشیف تعداد</div>
+                    <div class="text-lg font-bold">تعداد فایل ها در آرشیف</div>
                     <div class="text-2xl font-bold">
-                        {{ receivedDocuments }}
+                        {{ total_file_in_archvie }}
                     </div>
                 </div>
             </div>
@@ -147,25 +147,23 @@
             >
                 <div class="flex-shrink-0">
                     <svg
-                        class="w-20 h-20 bg-gray-200 text-purple-500 rounded-full p-3"
+                        class="size-6 w-20 h-20 bg-gray-200 text-purple-500 rounded-full p-3"
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
+                        stroke-width="1.5"
                         stroke="currentColor"
                     >
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M7 8h10M7 12h4m1 8H6a2 2 0 01-2-2V6a2 2 0 012-2h7l5 5v9a2 2 0 01-2 2z"
+                            d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
                         />
                     </svg>
                 </div>
                 <div>
                     <div class="text-lg font-bold">تعداد کارمندان</div>
-                    <div class="text-2xl font-bold">
-                        {{ receivedDocuments }}
-                    </div>
+                    <div class="text-2xl font-bold">{{ total_employees }}</div>
                 </div>
             </div>
         </div>
@@ -173,8 +171,33 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
+import axiosClient from "../../axios";
+// import usePdcDashboadStore from "../../stores/pdc/dashboard/pdcDashboardStore";
+// const pdcDashboardStore = usePdcDashboadStore();
 
-const sentDocuments = ref(120); // Example data
-const receivedDocuments = ref(150);
+let total_teacher_in_scholarships = ref();
+let total_file_in_archvie = ref();
+let total_send_docs = ref();
+let total_rec_docs = ref();
+let total_commits = ref();
+let total_employees = ref();
+
+const getTotalData = async () => {
+    try {
+        const response = await axiosClient.get("/pdc/report/total");
+        total_teacher_in_scholarships.value = response.data.total_teacher;
+        total_file_in_archvie.value = response.data.total_file;
+        total_send_docs.value = response.data.total_send_docs;
+        total_rec_docs.value = response.data.total_rec_docs;
+        total_commits.value = response.data.total_committee;
+        total_employees.value = response.data.total_employees;
+    } catch (err) {
+        console.log("errr" + err);
+    }
+};
+
+onMounted(() => {
+    getTotalData();
+});
 </script>

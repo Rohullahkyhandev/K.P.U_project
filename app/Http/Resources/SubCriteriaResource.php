@@ -21,6 +21,7 @@ class SubCriteriaResource extends JsonResource
             'year' => $this->year,
             'attachment_path' => $this->attachment_path,
             'description' => $this->description,
+            'related_part' => $this->related_part,
             'uname' => $this->uname,
         ];
     }

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('project_name');
             $table->string('scope_of_project');
-            $table->json('related_images');
-            $table->json('related_image_paths');
+            $table->string('related_image');
+            $table->string('related_image_path');
             $table->text('description');
             $table->string('date', 100);
             $table->bigInteger('lab_id')->unsigned()->index();

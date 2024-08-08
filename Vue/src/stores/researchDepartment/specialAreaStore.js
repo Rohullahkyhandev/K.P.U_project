@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axiosClient from "../../axios";
 import { ref } from "vue";
+import router from "../../routes";
 
 const useSpecialAreaStore = defineStore("specialArea", () => {
     let msg_success = ref("");
@@ -99,6 +100,7 @@ const useSpecialAreaStore = defineStore("specialArea", () => {
                 loading.value = false;
                 msg_success.value = res.data.message;
                 specialArea.value = "";
+                router.push({ name: "app.research.specialArea.list" });
             })
             .catch((err) => {
                 loading.value = false;

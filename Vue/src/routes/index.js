@@ -60,6 +60,8 @@ import EditArchive from "../views/pdc/pdcArchives/edit.vue";
 
 // quality assurance
 import createCriteria from "../views/quality_assurance/create.vue";
+import qualityArchiveList from "../views/quality_assurance/qualityList.vue";
+import qualityArchiveEdit from "../views/quality_assurance/edit.vue";
 
 // post graduated program
 import postGraduatedProgramTabs from "../views/postgraduatedProgram/table.vue";
@@ -112,7 +114,7 @@ import editDepartment from "../views/department/edit.vue";
 
 // teacher
 import CreateTeacher from "../views/teachers/create.vue";
-import ListTeacher from "../views/teachers/index.vue";
+import ListTeacher from "../views/teachers/list.vue";
 import detailsTeacher from "../views/teachers/details.vue";
 import editTeacher from "../views/teachers/edit.vue";
 
@@ -179,6 +181,12 @@ import editExpDetails from "../views/researchDepartment/expdetails/edit.vue";
 //special area
 import listSpecialArea from "../views/researchDepartment/specialarea/index.vue";
 import editSpecialArea from "../views/researchDepartment/specialarea/edit.vue";
+
+// post student report route
+import studentReport from "../views/reports/student_report.vue";
+import boardReport from "../views/reports/boardMember.vue";
+import commitMember from "../views/reports/commitMember.vue";
+import teacherResearchReport from "../views/reports/teacher_research.vue";
 
 const routes = [
     {
@@ -366,11 +374,22 @@ const routes = [
             },
 
             // quality assurance routes
-
             {
                 path: "criteria/create",
                 name: "app.criteria.create",
                 component: createCriteria,
+            },
+
+            // quality assurance routes
+            {
+                path: "quality/list",
+                name: "app.quality.list",
+                component: qualityArchiveList,
+            },
+            {
+                path: "quality/edit/:id",
+                name: "app.quality.edit",
+                component: qualityArchiveEdit,
             },
 
             // post graduated program
@@ -774,6 +793,31 @@ const routes = [
                 path: "employee/edit/:id",
                 name: "app.employee.edit",
                 component: editEmployee,
+            },
+
+            // teacher report
+            {
+                path: "/student/report",
+                name: "app.student.report",
+                component: studentReport,
+            },
+
+            {
+                path: "/board_member/report",
+                name: "app.board.report",
+                component: boardReport,
+            },
+
+            {
+                path: "/post/commit_member/report",
+                name: "app.post.commit_member.report",
+                component: commitMember,
+            },
+            // teacher research reports
+            {
+                path: "/teacher_research/report",
+                name: "app.teacher_research.report",
+                component: teacherResearchReport,
             },
         ],
     },

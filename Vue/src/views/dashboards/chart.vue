@@ -1,149 +1,148 @@
 <template>
-    <div class="card grid grid-cols-2 gap-3">
-        <div class="m-3 bg-white rounded-lg p-4">
-            <h1 class="font-semibold mb-3 flex items-center gap-2">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="size-6"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
-                    />
-                </svg>
-                نمایش گرافیکی دیتای استادان
-            </h1>
+    <div class="grid grid-cols-2 gap-3 mb-3">
+        <div class="bg-white shadow-lg rounded-lg">
+            <div class="w-full font-bold text-xl border-b py-3 px-4">
+                نمایش گرافیکی تعداد استادان که مصروف تحصیل هستند
+            </div>
             <Chart
                 type="bar"
-                :data="chartData"
-                :options="chartOptions"
                 class="h-[30rem]"
+                :data="chartTeacher"
+                :options="chartOptions"
             />
         </div>
-        <div class="m-3 bg-white rounded-lg p-4">
-            <h1 class="font-semibold mb-3 flex items-center gap-2">
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="size-6"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6.75 15.75 3 12m0 0 3.75-3.75M3 12h18"
-                    />
-                </svg>
-                محاثبه گرافیکی تعداد مکتوب های صادره و وراده ماه وار
-            </h1>
-            <Chart
-                type="bar"
-                :data="chartData"
-                :options="chartOptions"
-                class="h-[30rem]"
-            />
+
+        <div class="bg-white shadow-lg rounded-lg">
+            <div class="w-full font-bold text-xl border-b py-3 px-4">
+                نمایش گرافیکی تعداد مکتوب های صادره و وارده
+            </div>
+            <div class="w-full">
+                <div class="mr-12 mb-4">
+                    <Chart type="pie" class="h-[30rem]" :data="chartDocument" />
+                </div>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import Chart from "primevue/chart";
 import { ref, onMounted } from "vue";
+import Chart from "primevue/chart";
+import axiosClient from "../../axios";
+
+const chartTeacher = ref(null);
+const chartDocument = ref(null);
+
+const chartOptions = {
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            display: true,
+        },
+        tooltip: {
+            enabled: true,
+        },
+    },
+    scales: {
+        x: {
+            display: true,
+            title: {
+                display: true,
+                text: "سال",
+            },
+        },
+        y: {
+            display: true,
+            title: {
+                display: true,
+                text: "تعداد",
+            },
+        },
+    },
+};
+
+const fetchChartTeacherData = async () => {
+    try {
+        const response = await axiosClient.get(
+            "/pdc/report/teacher_in_scholarship"
+        );
+        const data = response.data;
+
+        const years = Array.from(
+            new Set([
+                ...data.masters.map((d) => d.year),
+                ...data.doctors.map((d) => d.year),
+            ])
+        );
+
+        const mastersCounts = years.map((year) => {
+            const record = data.masters.find((d) => d.year === year);
+            return record ? record.count : 0;
+        });
+
+        const doctorsCounts = years.map((year) => {
+            const record = data.doctors.find((d) => d.year === year);
+            return record ? record.count : 0;
+        });
+
+        chartTeacher.value = {
+            labels: years,
+            datasets: [
+                {
+                    label: "تعداد استادان در مقطع ماستری",
+                    backgroundColor: "#42A5F5",
+                    data: mastersCounts,
+                },
+                {
+                    label: "تعداد استادان در مقطع دوکتورا",
+                    backgroundColor: "#66BB6A",
+                    data: doctorsCounts,
+                },
+            ],
+        };
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+};
+
+const fetchChartDocuments = async () => {
+    try {
+        const response = await axiosClient.get("/pdc/report/total");
+        const data = response.data;
+
+        const sendDocs = Array.from(
+            new Set([data.total_send_docs])
+        );
+        const recDocs = Array.from(
+            new Set([data.total_rec_docs])
+        );
+
+        chartDocument.value = {
+            labels: ["مکتوب های صادره", "مکتوب های وارده"],
+            datasets: [
+                {
+                    label: "تعداد مکتوب های صادره",
+                    backgroundColor: "#42A5F5",
+                    data: sendDocs,
+                },
+                {
+                    label: "تعداد مکتوب های وارده",
+                    backgroundColor: "#F97316",
+                    data: recDocs,
+                },
+            ],
+        };
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+};
 
 onMounted(() => {
-    chartData.value = setChartData();
-    chartOptions.value = setChartOptions();
+    fetchChartTeacherData();
+    fetchChartDocuments();
 });
-
-const chartData = ref();
-const chartOptions = ref();
-
-const setChartData = () => {
-    const documentStyle = getComputedStyle(document.documentElement);
-
-    return {
-        labels: [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-        ],
-        datasets: [
-            {
-                label: "تعداد مکتوب های صادره ",
-                backgroundColor: documentStyle.getPropertyValue("--p-cyan-500"),
-                borderColor: documentStyle.getPropertyValue("--p-cyan-500"),
-                data: [65, 59, 80, 81, 56, 55, 40],
-            },
-            {
-                label: "تعداد مکتوب های وارده",
-                backgroundColor: documentStyle.getPropertyValue("--p-gray-500"),
-                borderColor: documentStyle.getPropertyValue("--p-gray-500"),
-                data: [28, 48, 40, 19, 86, 27, 90],
-            },
-
-            {
-                label: "تعداد مکتوب های وارده",
-                backgroundColor: documentStyle.getPropertyValue("--p-gray-500"),
-                borderColor: documentStyle.getPropertyValue("--p-gray-500"),
-                data: [28, 48, 40, 19, 86, 27, 90],
-            },
-        ],
-    };
-};
-const setChartOptions = () => {
-    const documentStyle = getComputedStyle(document.documentElement);
-    const textColor = documentStyle.getPropertyValue("--p-text-color");
-    const textColorSecondary = documentStyle.getPropertyValue(
-        "--p-text-muted-color"
-    );
-    const surfaceBorder = documentStyle.getPropertyValue(
-        "--p-content-border-color"
-    );
-
-    return {
-        maintainAspectRatio: false,
-        aspectRatio: 0.8,
-        plugins: {
-            legend: {
-                labels: {
-                    color: textColor,
-                },
-            },
-        },
-        scales: {
-            x: {
-                ticks: {
-                    color: textColorSecondary,
-                    font: {
-                        weight: 500,
-                    },
-                },
-                grid: {
-                    display: false,
-                    drawBorder: false,
-                },
-            },
-            y: {
-                ticks: {
-                    color: textColorSecondary,
-                },
-                grid: {
-                    color: surfaceBorder,
-                    drawBorder: false,
-                },
-            },
-        },
-    };
-};
 </script>
+
+<style>
+/* Add any styles you need for your chart */
+</style>

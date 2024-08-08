@@ -16,13 +16,10 @@ class TeacherPromotionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'uname' => $this->uname,
-            'name' => $this->name,
-            'lname' => $this->lname,
             'date' => $this->date,
-            'last_rank' => $this->last_rank,
-            'now_rank' => $this->now_rank,
-            'attachment_path' => $this->attachment_path,
+            'last_rank' => $this->last_academic_rank,
+            'now_rank' => $this->now_academic_rank,
+            'attachment_path' => is_array($this->attachment_path) ? $this->attachment_path : json_decode($this->attachment_path, true),
         ];
     }
 }

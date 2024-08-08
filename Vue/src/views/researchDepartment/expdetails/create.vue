@@ -102,8 +102,10 @@
                     </div>
                     <div class="input--dev--width">
                         <CustomInput
-                            type="text"
-                            v-model="expDetail.related_images"
+                            type="file"
+                            @change="
+                                (file) => (expDetail.related_image = file)
+                            "
                             class="mb-2"
                             required="required"
                         />
@@ -147,7 +149,7 @@
                 <div class="wrapper--dev--input">
                     <div class="label--dev--width">
                         <label for="" class="form--label">
-                              لابراتوار
+                            لابراتوار
                             <span class="label--prefix">*</span></label
                         >
                     </div>
@@ -219,7 +221,7 @@ onMounted(() => {
 });
 
 const labs = computed(() =>
-    labStore.all_labs.map((lab) => ({ key: lab.id, text: lab.name }))
+    labStore.allLabs.map((lab) => ({ key: lab.id, text: lab.lab_name }))
 );
 
 const expDetail = computed(() => expDetailStore.expDetail);

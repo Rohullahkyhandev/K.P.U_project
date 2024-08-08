@@ -47,7 +47,7 @@ class SpecailistAreaController extends Controller
         $specailist_area = new SpecailistArea();
         $specailist_area->related_part = $request->related_part;
         $specailist_area->related_field = $request->related_field;
-        $specailist_area->user_id = $request->user_id;
+        $specailist_area->user_id = $user_id;
         $result =  $specailist_area->save();
 
         if ($result) {
@@ -83,7 +83,6 @@ class SpecailistAreaController extends Controller
         $specailist_area = SpecailistArea::find($request->id);
         $specailist_area->related_part = $request->related_part;
         $specailist_area->related_field = $request->related_field;
-        $specailist_area->user_id = $request->user_id;
         $result =  $specailist_area->save();
 
         if ($result) {

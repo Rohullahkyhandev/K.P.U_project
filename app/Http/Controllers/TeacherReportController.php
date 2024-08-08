@@ -18,6 +18,8 @@ class TeacherReportController extends Controller
 
     public function generateReport()
     {
+
+        return Excel::download(new TeachersExport(), 'report.xls');
         // $faculty_department_data[$faculty->name]['total_teacher_entire_faculty'] = Teacher::where('faculty_id', $faculty->id)->get()->count();
         // $faculty_department_data[$faculty->name]['total_male_teacher_entire_faculty'] = Teacher::where('faculty_id', $faculty->id)->where('gender', 'مرد')->get()->count();
         // $faculty_department_data[$faculty->name]['total_female_teacher_entire_faculty'] = Teacher::where('faculty_id', $faculty->id)->where('gender', 'زن')->get()->count();
@@ -61,57 +63,69 @@ class TeacherReportController extends Controller
                     'total_master_female_teacher_in_department' => Teacher::where('department_id', $department->id)->where('gender', 'زن')->where('education_degree', 'ماستر')->get()->count(),
                     'total_bachelor_male_teacher_in_department' => Teacher::where('department_id', $department->id)->where('gender', 'مرد')->where('education_degree', 'لسیانس')->get()->count(),
                     'total_bachelor_female_teacher_in_department' => Teacher::where('department_id', $department->id)->where('gender', 'زن')->where('education_degree', 'لسیانس')->get()->count(),
+                    'total_pohand_male_teacher_in_department' => Teacher::where('department_id', $department->id)->where('gender', 'مرد')->where('academic_rank', 'پوهاند')->get()->count(),
+                    'total_pohand_female_teacher_in_department' => Teacher::where('department_id', $department->id)->where('gender', 'زن')->where('academic_rank', 'پوهاند')->get()->count(),
+                    'total_pohandyar_male_teacher_in_department' => Teacher::where('department_id', $department->id)->where('gender', 'مرد')->where('academic_rank', 'پوهنیار')->get()->count(),
+                    'total_pohandyar_female_teacher_in_department' => Teacher::where('department_id', $department->id)->where('gender', 'زن')->where('academic_rank', 'پوهنیار')->get()->count(),
+                    'total_pohanmal_male_teacher_in_department' => Teacher::where('department_id', $department->id)->where('gender', 'مرد')->where('academic_rank', 'پوهنمل')->get()->count(),
+                    'total_pohanmal_female_teacher_in_department' => Teacher::where('department_id', $department->id)->where('gender', 'زن')->where('academic_rank', 'پوهنمل')->get()->count(),
+                    'total_namzadpohanyar_male_teacher_in_department' => Teacher::where('department_id', $department->id)->where('gender', 'مرد')->where('academic_rank', 'نامزاد پوهنیار')->get()->count(),
+                    'total_namzadpohanyar_female_teacher_in_department' => Teacher::where('department_id', $department->id)->where('gender', 'زن')->where('academic_rank', 'نامزاد پوهنیار')->get()->count(),
+                    // teachers in scholarships
+                    'total_male_teacher_scholarship' => Teacher::where('department_id', $department->id)->where('gender', 'مرد')->where('status', '2')->get()->count(),
+                    'total_female_teacher_scholarship' => Teacher::where('department_id', $department->id)->where('gender', 'زن')->where('status', '2')->get()->count(),
+
                 );
             }
         }
         return $faculty_department_data;
 
         // number of the departments that depend on the particular faculty
-        $departments = Department::query()
-            ->join('faculties', 'departments.faculty_id', 'faculties.id')
-            ->select("departments.*", "faculties.name as faculty_name", "faculties.id as faculty_id")
-            ->get();
-        // return $departments;
-        $data = [];
-        foreach ($departments as  $department) {
-            $faculty_department_length = Department::where('faculty_id', $department->faculty_id)->get()->count();
-            $total_male_teacher_entire_department = Teacher::where('department_id', '=', $department->id)->where('gender', 'مرد')->get()->count();
-            $total_female_teacher_entire_department = Teacher::where('department_id', '=', $department->id)->where('gender', 'زن')->get()->count();
-            $total_male_teachers = Teacher::where('gender', 'مرد')->get()->count();
-            $total_female_teachers = Teacher::where('gender', 'زن')->get()->count();
-            $total_teachers = Teacher::get()->count();
-            $data[] = (object) array(
-                'faculty_name' => $department->faculty_name,
-                'total_teachers' => $total_teachers,
-                'total_male_teachers' => $total_male_teachers,
-                'faculty_departments_length' => $faculty_department_length,
-                'total_female_teacher' => $total_female_teachers,
+        // $departments = Department::query()
+        //     ->join('faculties', 'departments.faculty_id', 'faculties.id')
+        //     ->select("departments.*", "faculties.name as faculty_name", "faculties.id as faculty_id")
+        //     ->get();
+        // // return $departments;
+        // $data = [];
+        // foreach ($departments as  $department) {
+        //     $faculty_department_length = Department::where('faculty_id', $department->faculty_id)->get()->count();
+        //     $total_male_teacher_entire_department = Teacher::where('department_id', '=', $department->id)->where('gender', 'مرد')->get()->count();
+        //     $total_female_teacher_entire_department = Teacher::where('department_id', '=', $department->id)->where('gender', 'زن')->get()->count();
+        //     $total_male_teachers = Teacher::where('gender', 'مرد')->get()->count();
+        //     $total_female_teachers = Teacher::where('gender', 'زن')->get()->count();
+        //     $total_teachers = Teacher::get()->count();
+        //     $data[] = (object) array(
+        //         'faculty_name' => $department->faculty_name,
+        //         'total_teachers' => $total_teachers,
+        //         'total_male_teachers' => $total_male_teachers,
+        //         'faculty_departments_length' => $faculty_department_length,
+        //         'total_female_teacher' => $total_female_teachers,
 
-                'teachers' => [
-                    'total_male_teacher_entire_department' => $total_male_teacher_entire_department,
-                    'total_female_teacher_entire_department' => $total_female_teacher_entire_department,
-                    'department_name' => $department->name,
-                    'total_bachelor_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('education_degree', 'لسیانس')->get()->count(),
-                    'total_bachelor_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('education_degree', 'لسیانس')->get()->count(),
-                    'total_master_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('education_degree', 'ماستر')->get()->count(),
-                    'total_master_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('education_degree', 'ماستر')->get()->count(),
-                    'total_doctor_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('education_degree', 'داکتر')->get()->count(),
-                    'total_doctor_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('education_degree', 'داکتر')->get()->count(),
-                    'total_pohand_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('academic_rank', 'پوهاند')->get()->count(),
-                    'total_pohand_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('academic_rank', 'پوهاند')->get()->count(),
-                    'total_pohyali_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('academic_rank', 'پوهیالی')->get()->count(),
-                    'total_pohyali_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('academic_rank', 'پوهیالی')->get()->count(),
-                    'total_pohanmal_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('academic_rank', 'پوهنمل')->get()->count(),
-                    'total_pohanmal_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('academic_rank', 'پوهنمل')->get()->count(),
-                    'total_namzadPohanyar_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('academic_rank', 'نامزد پوهنیار')->get()->count(),
-                    'total_namzadPohanyar_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('academic_rank', 'نامزد پوهنیار')->get()->count(),
-                    'total_pohanyar_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('academic_rank', ' پوهنیار')->get()->count(),
-                    'total_pohanyar_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('academic_rank', ' پوهنیار')->get()->count(),
-                ],
-            );
-        }
+        //         'teachers' => [
+        //             'total_male_teacher_entire_department' => $total_male_teacher_entire_department,
+        //             'total_female_teacher_entire_department' => $total_female_teacher_entire_department,
+        //             'department_name' => $department->name,
+        //             'total_bachelor_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('education_degree', 'لسیانس')->get()->count(),
+        //             'total_bachelor_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('education_degree', 'لسیانس')->get()->count(),
+        //             'total_master_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('education_degree', 'ماستر')->get()->count(),
+        //             'total_master_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('education_degree', 'ماستر')->get()->count(),
+        //             'total_doctor_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('education_degree', 'داکتر')->get()->count(),
+        //             'total_doctor_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('education_degree', 'داکتر')->get()->count(),
+        //             'total_pohand_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('academic_rank', 'پوهاند')->get()->count(),
+        //             'total_pohand_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('academic_rank', 'پوهاند')->get()->count(),
+        //             'total_pohyali_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('academic_rank', 'پوهیالی')->get()->count(),
+        //             'total_pohyali_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('academic_rank', 'پوهیالی')->get()->count(),
+        //             'total_pohanmal_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('academic_rank', 'پوهنمل')->get()->count(),
+        //             'total_pohanmal_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('academic_rank', 'پوهنمل')->get()->count(),
+        //             'total_namzadPohanyar_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('academic_rank', 'نامزد پوهنیار')->get()->count(),
+        //             'total_namzadPohanyar_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('academic_rank', 'نامزد پوهنیار')->get()->count(),
+        //             'total_pohanyar_male_teacher_in_department' => Teacher::where('gender', 'مرد')->where('department_id', $department->id)->where('academic_rank', ' پوهنیار')->get()->count(),
+        //             'total_pohanyar_female_teacher_in_department' => Teacher::where('gender', 'زن')->where('department_id', $department->id)->where('academic_rank', ' پوهنیار')->get()->count(),
+        //         ],
+        //     );
+        // }
 
-        return $data;
+        // return $data;
     }
 
 

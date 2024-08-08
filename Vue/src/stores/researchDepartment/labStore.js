@@ -18,7 +18,7 @@ const useLabStore = defineStore("lab", () => {
     });
     let lab = ref({
         id: "",
-        name: "",
+        lab_name: "",
         description: "",
     });
 
@@ -29,13 +29,25 @@ const useLabStore = defineStore("lab", () => {
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
-                if (res.statusCode === 200) {
+                if (res.status == 200) {
                     lab.value.name = "";
                     lab.value.description = "";
                 }
             })
             .catch((err) => {
                 loading.value = false;
+                msg_wrang.value = err.response.data.message;
+            });
+    }
+
+    let allLabs = ref([]);
+    function getAllLabs() {
+        axiosClient
+            .get("/get_all_labs")
+            .then((res) => {
+                allLabs.value = res.data;
+            })
+            .catch((err) => {
                 msg_wrang.value = err.response.data.message;
             });
     }
@@ -91,14 +103,6 @@ const useLabStore = defineStore("lab", () => {
         });
     }
 
-    // get all the labs
-    let all_labs = ref([]);
-    function getAllLabs() {
-        axiosClient.get("/research_lab/all").then((res) => {
-            all_labs.value = res.data;
-        });
-    }
-
     // get all the departments
     let listDepartments = ref([]);
     function getAllDepartments() {
@@ -143,7 +147,7 @@ const useLabStore = defineStore("lab", () => {
         deleteLab,
         getAllDepartments,
         getAllLabs,
-        all_labs,
+        allLabs,
         listDepartments,
         lab,
         labs,

@@ -1,8 +1,10 @@
 <?php
 
+use App\Exports\TeacherInScholarship;
 use App\Http\Controllers\api\AuthController;
 use App\Http\Controllers\criteria\CriteriaController;
 use App\Http\Controllers\criteria\SubCriteriaController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\FacultyController;
@@ -34,6 +36,7 @@ use App\Http\Controllers\researchDepartment\ResearchProjectController;
 use App\Http\Controllers\researchDepartment\SpecailistAreaController;
 use App\Http\Controllers\researchDepartment\TeacherResearchController;
 use App\Http\Controllers\postgraduated\graduatedStudentController;
+use App\Http\Controllers\QaulityArchiveController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TeacherPromotionController;
 use App\Http\Controllers\TeacherReportController;
@@ -138,6 +141,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/pdc/commit/edit/{id}', [CommitController::class, 'edit']);
         Route::post('/pdc/commit/update', [CommitController::class, 'update']);
 
+        // teacher update information
+        Route::post('/pdc/teacher_in_scholarship/update_info', [TeacherInSchalarshipController::class, 'updateStatus']);
+
         // update and edit teacher in commit
         Route::get('/pdc/teacher_in_commit/edit/{id}', [TeacherInCommitController::class, 'edit']);
         Route::post('/pdc/teacher_in_commit/update', [TeacherInCommitController::class, 'update']);
@@ -180,12 +186,13 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     Route::get('/faculty/department/get', [TeacherController::class, 'getFacultyDepartment']);
     Route::get('/department/teacher/{id}', [TeacherController::class, 'getDepartmentTeacher']);
     //   view routes in teacher department
-    Route::middleware(['auth:sanctum', 'view_teacher'])->group(function () {
+    Route::middleware(['auth:sanctum', 'view_research_department'])->group(function () {
         //faculty routes
         Route::get('/faculty', [FacultyController::class, 'index']);
         // teacher create  routes
         Route::get('/teacher', [TeacherController::class, 'index']);
         Route::get('/teacher/promotion/{id}', [TeacherPromotionController::class, 'index']);
+        Route::get('/teacher/promotion/list/{id}', [TeacherPromotionController::class, 'listPromotion']);
         Route::get('/teacher/qualification', [TeacherController::class, 'getQualify']);
         Route::get('/teacher/article', [TeacherController::class, 'getArticle']);
         Route::get('/teacher/document', [TeacherController::class, 'getDocument']);
@@ -235,7 +242,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     });
 
     // delete route in teacher department
-    Route::middleware(['auth:sanctum', 'delete_teacher'])->group(function () {
+    Route::middleware(['auth:sanctum',])->group(function () {
         Route::get('/faculty/delete/{id}', [FacultyController::class, 'destroy']);
         // teacher delete routes
         Route::get('/teacher/delete/{id}', [TeacherController::class, 'destroy']);
@@ -245,7 +252,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
             TeacherController::class, 'destroyArticle'
         ]);
         Route::get('/teacher/literature/delete/{id}', [TeacherController::class, 'destroyLiterature']);
-        Route::get('/teacher/promotion/delete/{id}', [TeacherPromotionController::class, 'destory']);
+        Route::get('/teacher/promotion/delete/{id}', [TeacherPromotionController::class, 'destroy']);
         Route::get('/department/delete/{id}', [DepartmentController::class, 'destory']);
     });
 
@@ -254,6 +261,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         // main criteria
         Route::get('/criteria', [CriteriaController::class, 'index']);
         Route::get('/get_criteria/{id}', [CriteriaController::class, 'getCriteria']);
+        Route::get('/quality', [QaulityArchiveController::class, 'index']);
         Route::get('/get_sub_criteria', [SubCriteriaController::class, 'getAllSubCriteria']);
         // sub criteria
         Route::get('/sub_criteria', [SubCriteriaController::class, 'index']);
@@ -264,6 +272,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     ])->group(function () {
         Route::post('/criteria/create', [CriteriaController::class, 'store']);
         Route::post('/sub_criteria/create', [SubCriteriaController::class, 'store']);
+        Route::post('/quality/create', [QaulityArchiveController::class, 'store']);
     });
     // quality assurance edit and update routes
     Route::middleware(['auth:sanctum', 'edit_quality'])->group(function () {
@@ -273,6 +282,9 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         // sub criteria update and edit routes
         Route::get('/sub_criteria/edit/{id}', [SubCriteriaController::class, 'edit']);
         Route::post('/sub_criteria/update', [SubCriteriaController::class, 'update']);
+        // plan and new something
+        Route::get('/quality/archive/edit/{id}', [QaulityArchiveController::class, 'edit']);
+        Route::post('/quality/archive/update', [QaulityArchiveController::class, 'update']);
     });
 
     // quality  assurance delete  routes
@@ -280,6 +292,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         // Route::get('/get_criteria', [CriteriaController::class, 'getAllCriteria']);
         Route::get('/criteria/delete/{id}', [CriteriaController::class, 'destroy']);
         Route::get('/sub_criteria/delete/{id}', [SubCriteriaController::class, 'destroy']);
+        Route::get('/quality/archive/delete/{id}', [QaulityArchiveController::class, 'destroy']);
     });
 
     // post graduated view routes
@@ -401,10 +414,11 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/teacher_research', [TeacherResearchController::class, 'index']);
         Route::get('/curriculum', [CurriculumController::class, 'index']);
         Route::get('/curriculum/department', [CurriculumController::class, 'getAllDepartments']);
-        Route::get('/research_lab', [LabController::class, 'index']);
+        Route::get('/research_lab', [ResearchDepartmentLabController::class, 'index']);
         Route::get('/research_project', [ResearchProjectController::class, 'index']);
         Route::get('/experiment_detail', [ExperimentDetailController::class, 'index']);
         Route::get('/specialist_area', [SpecailistAreaController::class, 'index']);
+        Route::get('/get_all_labs', [ResearchDepartmentLabController::class, 'getAllLabs']);
     });
 
     // research department create routes
@@ -412,7 +426,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::post('/international_publisher/create', [InternatinalPublishmentController::class, 'store']);
         Route::post('/teacher_research/create', [TeacherResearchController::class, 'store']);
         Route::post('/curriculum/create', [CurriculumController::class, 'store']);
-        Route::post('/research_lab/create', [LabController::class, 'store']);
+        Route::post('/research_lab/create', [ResearchDepartmentLabController::class, 'store']);
         Route::post('/research_project/create', [ResearchProjectController::class, 'store']);
         Route::post('/specialist_area/create', [SpecailistAreaController::class, 'store']);
         Route::post('/experiment_detail/create', [ExperimentDetailController::class, 'store']);
@@ -431,8 +445,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/curriculum/edit/{id}', [CurriculumController::class, 'edit']);
         Route::post('/curriculum/update', [CurriculumController::class, 'update']);
         // research labs
-        Route::get('/research_lab/edit/{id}', [LabController::class, 'edit']);
-        Route::post('/research_lab/update', [LabController::class, 'update']);
+        Route::get('/research_lab/edit/{id}', [ResearchDepartmentLabController::class, 'edit']);
+        Route::post('/research_lab/update', [ResearchDepartmentLabController::class, 'update']);
         // research project
         Route::get('/research_project/edit/{id}', [ResearchProjectController::class, 'edit']);
         Route::post('/research_project/update', [ResearchProjectController::class, 'update']);
@@ -449,7 +463,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/international_publisher/delete/{id}', [InternatinalPublishmentController::class, 'destroy']);
         Route::get('/teacher_research/delete/{id}', [TeacherResearchController::class, 'destroy']);
         Route::get('/curriculum/delete/{id}', [CurriculumController::class, 'destroy']);
-        Route::get('/research_lab/delete/{id}', [LabController::class, 'destroy']);
+        Route::get('/research_lab/delete/{id}', [ResearchDepartmentLabController::class, 'destroy']);
         Route::get('/research_project/delete/{id}', [ResearchProjectController::class, 'destroy']);
         Route::get('/specialist_area/delete/{id}', [SpecailistAreaController::class, 'destroy']);
         Route::get('/experiment_detail/delete/{id}', [ExperimentDetailController::class, 'destroy']);
@@ -458,6 +472,17 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
     // test teacher report
     Route::get('teacher/report', [TeacherReportController::class, 'generateReport']);
+
+    // dashboard data
+    Route::get('/pdc/report/teacher_in_scholarship', [DashboardController::class, 'PDCDashboard']);
+    Route::get('/pdc/report/total', [DashboardController::class, 'countPDCWholeData']);
+    Route::get('/pdc/report/plans_commit', [DashboardController::class, 'tableView']);
+    Route::get('/teacher_department/report/teachaers', [DashboardController::class, 'getTotalData']);
+    Route::get('/post_department/report/total', [DashboardController::class, 'getPostTotalData']);
+    Route::get('/research_department/report/total', [DashboardController::class, 'getResearchTotalData']);
+    Route::get('/faculty/report', [DashboardController::class, 'getFacultyTotalData']);
+    Route::get('/department/report', [DashboardController::class, 'getDepartmentTotalData']);
+    Route::get('/quality/report', [DashboardController::class, 'getQualityTotalData']);
 
     // Route::middleware(['auth:sanctum', 'edit_teacher'])->group(function () {
     //     Route::post('/teacher/update', [TeacherController::class, 'update']);

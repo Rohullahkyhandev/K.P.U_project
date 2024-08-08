@@ -114,7 +114,9 @@
                 <div class="wrapper--dev--input">
                     <div class="label--dev--width">
                         <label for="" class="form--label">
-                            برنامه مربوط<span class="label--prefix">*</span></label
+                            برنامه مربوط<span class="label--prefix"
+                                >*</span
+                            ></label
                         >
                     </div>
                     <div class="input--dev--width">
@@ -176,11 +178,9 @@
                         </span>
                         <span v-else> ثبت </span>
                     </button>
-                    <router-link
-                        :to="{ name: 'app.dashboard' }"
-                        class="footer--button--cancel"
-                        >لغو ثبت</router-link
-                    >
+                    <button @click="closeModal" class="footer--button--cancel">
+                        لغو ثبت
+                    </button>
                 </footer>
             </div>
         </form>
@@ -193,6 +193,13 @@ import CustomInput from "../../../components/core/CustomInput.vue";
 import DatePicker from "vue3-persian-datetime-picker";
 import useLabStore from "../../../stores/postgraduatedPrograms/labStore";
 import useProgramStore from "../../../stores/postgraduatedPrograms/programStore";
+
+const props = defineProps({
+    closeModal: {
+        type: Function,
+        required: true,
+    },
+});
 
 const labStore = useLabStore();
 const programStore = useProgramStore();

@@ -4,7 +4,7 @@
             <div>
                 <router-link
                     :to="{ name: 'app.pdc.archive.list' }"
-                    class="bg-blue-600 flex items-center justify-center gap-3 focus:ring focus:ring-blue-500 outline-none py-2 px-6 rounded shadow text-white"
+                    class="header--button"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -32,10 +32,7 @@
         <form @submit.prevent="onSubmit">
             <div class="w-full py-8 bg-white shadow mt-8 px-4">
                 <!-- display message area -->
-                <div
-                    class="bg-green-700 text-white rounded py-4 text-center"
-                    v-if="archiveStore.msg_success"
-                >
+                <div class="msg--success" v-if="archiveStore.msg_success">
                     <div class="flex items-center justify-between px-10">
                         <div
                             class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
@@ -62,10 +59,7 @@
                     </div>
                 </div>
 
-                <div
-                    class="bg-red-500 text-white py-4 rounded text-center"
-                    v-if="archiveStore.msg_wrang"
-                >
+                <div class="msg--warning" v-if="archiveStore.msg_wrang">
                     <div class="flex items-center justify-between px-10">
                         <div
                             class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
@@ -95,22 +89,20 @@
                 <div>
                     <div class="border-b py-2">
                         <h1 class="font-bold text-xl">
-                            فورم ویرایش اطلاعات ارشیف
+                            فورم ویرایش اطلاعات در ارشیف
                         </h1>
                     </div>
                 </div>
                 <div class="mt-5">
-                    <div class="md:flex items-center justify-center">
-                        <div class="w-2/12">
-                            <label
-                                for=""
-                                class="block text-gray-500 md:text-right mb-1 md:mb-0 pr-4"
-                                >موضوع<span class="text-red-500 px-2"
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label for="" class="form--label"
+                                >موضوع<span class="label--prefix"
                                     >*</span
                                 ></label
                             >
                         </div>
-                        <div class="w-6/12">
+                        <div class="input--dev--width">
                             <CustomInput
                                 type="text"
                                 v-model="archive.subject"
@@ -120,17 +112,15 @@
                         </div>
                     </div>
 
-                    <div class="md:flex items-center justify-center">
-                        <div class="w-2/12">
-                            <label
-                                for=""
-                                class="block text-gray-500 md:text-right mb-1 md:mb-0 pr-4"
-                                >تاریخ<span class="text-red-500 px-2"
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label for="" class="form--label"
+                                >تاریخ<span class="label--prefix"
                                     >*</span
                                 ></label
                             >
                         </div>
-                        <div class="md:w-6/12">
+                        <div class="input--dev--width">
                             <DatePicker
                                 type="date"
                                 v-model="archive.date"
@@ -141,17 +131,13 @@
                         </div>
                     </div>
 
-                    <div class="md:flex items-center justify-center">
-                        <div class="md:w-2/12">
-                            <label
-                                for=""
-                                class="block text-gray-500 md:text-right mb-1 md:mb-0 pr-4"
-                                >فایل<span class="text-red-500 px-2"
-                                    >*</span
-                                ></label
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label for="" class="form--label"
+                                >فایل<span class="label--prefix"></span></label
                             >
                         </div>
-                        <div class="md:w-6/12">
+                        <div class="input--dev--width">
                             <CustomInput
                                 type="file"
                                 class="mb-2"
@@ -162,17 +148,13 @@
                         </div>
                     </div>
 
-                    <div class="md:flex items-center justify-center">
-                        <div class="md:w-2/12">
-                            <label
-                                for=""
-                                class="block text-gray-500 md:text-right mb-1 md:mb-0 pr-4"
-                                >خلاصه مطلب<span
-                                    class="text-red-500 px-2"
-                                ></span
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
+                            <label for="" class="form--label"
+                                >خلاصه مطلب<span class="label--prefix"></span
                             ></label>
                         </div>
-                        <div class="md:w-6/12">
+                        <div class="input--dev--width">
                             <CustomInput
                                 type="textarea"
                                 v-model="archive.description"
@@ -187,8 +169,8 @@
                     type="submit"
                     :class="[
                         archiveStore.loading === true
-                            ? 'bg-green-600 mr-10 text-white py-2 px-6 cursor-not-allowed rounded focus:ring focus:ring-green-500'
-                            : 'bg-green-600 mr-10 text-white py-2 px-6 cursor-pointer rounded focus:ring focus:ring-green-500',
+                            ? 'footer--button--submit cursor-not-allowed '
+                            : 'footer--button--submit cursor-pointer',
                     ]"
                 >
                     <span v-if="archiveStore.loading === true">
@@ -213,12 +195,12 @@
                             ></path>
                         </svg>
                     </span>
-                    <span v-else> ثبت </span>
+                    <span v-else> ویرایش </span>
                 </button>
                 <router-link
-                    :to="{ name: 'app.dashboard' }"
-                    class="bg-gray-400 text-white py-2 px-5 cursor-pointer rounded focus:ring focus:ring-gray-300"
-                    >لغو ثبت</router-link
+                    :to="{ name: 'app.pdc.archive.list' }"
+                    class="footer--button--cancel"
+                    >لغو ویرایش</router-link
                 >
             </footer>
         </form>
@@ -233,15 +215,15 @@ import CustomInput from "../../../components/core/CustomInput.vue";
 import { useArchiveStore } from "../../../stores/pdc/archive/archiveStore";
 
 const archiveStore = useArchiveStore();
-const route = useRoute();
 const archive = computed(() => archiveStore.archive);
+const route = useRoute();
 
 onMounted(() => {
     archiveStore.editArchive(route.params.id);
 });
 
 function onSubmit() {
-    archiveStore.UpdateArchive(archive.value);
-    // archive.value = '';
+    let id = route.params.id;
+    archiveStore.UpdateArchive(archive.value, id);
 }
 </script>

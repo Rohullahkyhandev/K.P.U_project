@@ -1,5 +1,5 @@
 <template>
-    <div class="form--padding--top">
+    <div class="mt-10">
         <div class="flex items-center justify-between mb-4">
             <div class="mb-2">
                 <button @click="openModal" class="header--button">
@@ -176,23 +176,23 @@
                             لابرتوار مربوطه
                         </TableHeaderCell>
 
-                        <TableHeaderCell
+                        <!-- <TableHeaderCell
                             field="faculty"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
                             @click="sortLab('faculty')"
                         >
                             برنامه مربوطه
-                        </TableHeaderCell>
+                        </TableHeaderCell> -->
 
-                        <TableHeaderCell
+                        <!-- <TableHeaderCell
                             field="description"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
                             @click="sortLab('description')"
                         >
                             وضعیت
-                        </TableHeaderCell>
+                        </TableHeaderCell> -->
 
                         <TableHeaderCell
                             field="id"
@@ -251,17 +251,17 @@
                         <td class="border p-">
                             {{ equipment.lname }}
                         </td>
-                        <td class="border p-3">
+                        <!-- <td class="border p-3">
                             {{ equipment.program_name }}
-                        </td>
+                        </td> -->
 
-                        <td class="border p-3">
+                        <!-- <td class="border p-3">
                             <span
                                 v-if="equipment.status == 1"
                                 class="bg-green-500 block w-full px-3 py-2 rounded-lg text-white"
                                 >در حال استفاده</span
                             >
-                        </td>
+                        </td> -->
 
                         <td class="border p-3">
                             {{ equipment.uname }}
@@ -427,7 +427,9 @@
             :close-modal="closeModal"
             :title="'فورم ثبت تجهیزات  لابرتورا'"
         >
-            <createLabTools />
+            <createLabTools
+            :close-modal="closeModal"
+            />
         </WrapperModal>
     </div>
 </template>

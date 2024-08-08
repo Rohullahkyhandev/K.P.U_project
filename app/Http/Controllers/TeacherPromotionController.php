@@ -34,6 +34,13 @@ class TeacherPromotionController extends Controller
     }
 
 
+    public function  listPromotion($id)
+    {
+        $data =  Promotion::where('teacher_id', $id)->get();
+        return TeacherPromotionResource::collection($data);
+    }
+
+
     public function store(Request $request)
     {
 
@@ -165,9 +172,12 @@ class TeacherPromotionController extends Controller
 
     public function destroy($id = '')
     {
+
         $promotion = Promotion::find($id);
-        if (is_file(storage_path('/app/public/teacher_promotion/' . $promotion->attachment))) {
-            unlink(storage_path('/app/public/teacher_promotion/' . $promotion->attachment));
+        foreach ($promotion->attachment as $attachment) {
+            if (is_file(storage_path('/app/public/teacher_promotion/' . $attachment))) {
+                unlink(storage_path('/app/public/teacher_promotion/' . $attachment));
+            }
         }
         $result = Promotion::destroy($id);
         return $result;

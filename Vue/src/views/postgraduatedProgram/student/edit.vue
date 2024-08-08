@@ -396,7 +396,7 @@
                     <span v-else> ویرایش </span>
                 </button>
                 <router-link
-                    :to="{ name: 'app.dashboard' }"
+                    :to="{ name: 'app.post-graduated.student.list' }"
                     class="footer--button--cancel cursor-pointer"
                     >لغو ویرایش</router-link
                 >
@@ -417,6 +417,13 @@ import router from "../../../routes";
 const studentStore = useStudentStore();
 const programStore = useProgramStore();
 const route = useRoute();
+
+const props = defineProps({
+    closeModal: {
+        type: Function,
+        required: true,
+    },
+});
 
 onMounted(() => {
     programStore.getAllPrograms();

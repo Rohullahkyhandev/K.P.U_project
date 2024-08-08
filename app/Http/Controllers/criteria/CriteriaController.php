@@ -36,9 +36,11 @@ class CriteriaController extends Controller
             'year' => 'required',
             'number' => 'required',
             'description' => 'required',
+            'relate_part' => 'required',
             'attachment' => 'nullable|mimes:png,jpg,mp3,mp4,pdf,docx'
         ], [
             'year.required' => "فیلد سال  الزامی می باشد",
+            'related_part.required' => "فیلد بخش مربوط  الزامی می باشد",
             'number.required' => "فیلد شماره میعار  الزامی می باشد",
             'attachment.mimes' => "فارمت فایل باید شامل این فارمت ها باشد png,jpg,mp3,mp4,pdf,docx"
         ]);
@@ -52,6 +54,7 @@ class CriteriaController extends Controller
         $criteria = new Criteria();
         $criteria->year = $request->year;
         $criteria->number = $request->number;
+        $criteria->related_part = $request->related_part;
         $criteria->description = $request->description;
         $criteria->attachment = $attachment;
         $criteria->attachment_path = $attachment_path;
@@ -63,7 +66,8 @@ class CriteriaController extends Controller
                 'message' => 'اطلاعات  موفقانه ذخیره گردید'
             ], 200);
         } else {
-            return response(['error' => 'اطلاعات  ذخیره نشد دوباره تلاش نماید'
+            return response([
+                'error' => 'اطلاعات  ذخیره نشد دوباره تلاش نماید'
             ], 304);
         }
     }
@@ -86,8 +90,10 @@ class CriteriaController extends Controller
         $request->validate([
             'year' => 'required',
             'description' => 'nullable',
+            'related_part' => 'required',
             'attachment' => 'nullable|mimes:png,jpg,mp3,mp4,pdf,docx'
         ], [
+            'related_part.required' => "فیلد بخش مربوط  الزامی می باشد",
             'year.required' => "فیلد  سال الزامی می باشد",
             'attachment' => "فارمت فایل باید شامل این فارمت ها باشد png,jpg,mp3,mp4,pdf,docx"
         ]);
@@ -106,6 +112,7 @@ class CriteriaController extends Controller
         $user_id = Auth::id();
         $criteria->year = $request->year;
         $criteria->description = $request->description;
+        $criteria->related_part = $request->related_part;
         $criteria->attachment = $attachment;
         $criteria->attachment_path = $attachment_path;
         $criteria->user_id = $user_id;

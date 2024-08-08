@@ -37,7 +37,7 @@
             <!-- Add more columns as needed -->
         </tr>
     </thead>
-    @if ($type == 'base_on_commit')
+    @if ($type == 'base_on_year')
         <tbody>
             @foreach ($teacher_in_commits as $teacher)
                 <tr>

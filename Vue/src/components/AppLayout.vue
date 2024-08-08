@@ -4,7 +4,7 @@
         <Sidebar />
         <div class="flex items-center bg-gray-200 flex-grow flex-col">
             <Navbar />
-            <div class="mb-auto" style="width: 95%">
+            <div class="mb-auto" style="width: 97%">
                 <router-view></router-view>
             </div>
             <Footer />

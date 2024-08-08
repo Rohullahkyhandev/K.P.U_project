@@ -5,6 +5,7 @@ namespace App\Exports;
 use App\Models\PD_Committee;
 use App\Models\PDCTeacherInCommitee;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromView;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
@@ -22,7 +23,6 @@ class CommitMember implements FromView
 
     public function view(): View
     {
-
         if ($this->type == "base_on_commit") {
             $commit  = PD_Committee::find($this->report_data);
             return view('reports.teacher_in_commit', [
@@ -38,17 +38,16 @@ class CommitMember implements FromView
                 'type' => $this->type,
             ]);
         } else {
-            $commit  = PD_Committee::find($this->report_data);
             return view('reports.teacher_in_commit', [
-                'teacher_in_commits' => PD_Committee::query()
+                'teacher_in_commits' => PDCTeacherInCommitee::query()
                     ->leftJoin('faculties', 'p_d_c_teacher_in_commitees.faculty_id', 'faculties.id')
                     ->join('departments', 'p_d_c_teacher_in_commitees.department_id', 'departments.id')
                     ->join('teachers', 'p_d_c_teacher_in_commitees.teacher_id', 'teachers.id')
                     ->join('p_d__committees', 'p_d_c_teacher_in_commitees.commit_id', 'p_d__committees.id')
                     ->select('p_d_c_teacher_in_commitees.*', 'p_d__committees.name as commit_name', 'faculties.name as faculty_name', 'departments.name as department_name', 'teachers.name as tname', 'teachers.lname as lname', 'teachers.phone as phone', 'teachers.email as email')
-                    ->where('p_d__committees.data', 'like', "%{$this->report_data}%")
+                    ->where(DB::raw("YEAR(p_d_c_teacher_in_commitees.created_at)"), $this->report_data)
                     ->get(),
-                'commit' => $commit,
+                'commit' => $this->report_data,
                 'type' => $this->type,
             ]);
         }

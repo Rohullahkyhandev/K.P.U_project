@@ -50,7 +50,7 @@ class WorkshopController extends Controller
         $document_path = null;
         if ($request->document != '') {
             $document = $request->document->store('/', 'pdc/workshop');
-            $document_path = asset(Storage::url('pdc/workshop' . $document));
+            $document_path = asset(Storage::url('pdc/workshop/' . $document));
         }
         $user_id = Auth::id();
         $workshop = new Workshop();
@@ -108,11 +108,11 @@ class WorkshopController extends Controller
         $document = $workshop->document;
         $document_path = $workshop->document_path;
         if ($request->document != '') {
-            if (is_file(storage_path('/app/public/workshop/' . $document))) {
-                unlink(storage_path('/app/public/workshop/' . $document));
+            if (is_file(storage_path('/app/public/pdc/workshop/' . $document))) {
+                unlink(storage_path('/app/public/pdc/workshop/' . $document));
             }
-            $document = $request->document->store('/', 'workshop');
-            $document_path = asset(Storage::url('workshop/' . $document));
+            $document = $request->document->store('/', 'pdc/workshop');
+            $document_path = asset(Storage::url('pdc/workshop/' . $document));
         }
         $user_id = Auth::id();
         $workshop->topic = $request->topic;
@@ -126,7 +126,7 @@ class WorkshopController extends Controller
 
         if ($result) {
             return response([
-                'message' => ' موفقانه ویرایش گردید  '
+                'message' => 'ورکشاپ  موفقانه ویرایش گردید  '
             ], 200);
         } else {
             return response([

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\postgraduated;
 
+use App\Exports\PostGraduatedCommitMember;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PostCommitteeMemberResource;
 use App\Models\CommitMember;
@@ -9,6 +10,7 @@ use App\Models\PostCommit;
 use App\Models\PostCommitteeMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Excel;
 
 class CommitteeMemberController extends Controller
 {
@@ -130,5 +132,14 @@ class CommitteeMemberController extends Controller
                 'message' => 'اطلاعات حذف نشد دوباره تلاش نماید'
             ], 403);
         }
+    }
+
+
+    // generate report for commites members
+    public function generate_report_commit_member($type, $report_data)
+    {
+
+        return Excel::download((new PostGraduatedCommitMember)->getData($type, $report_data), 'report.xls');
+        
     }
 }

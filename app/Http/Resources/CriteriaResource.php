@@ -19,6 +19,7 @@ class CriteriaResource extends JsonResource
             'year' => $this->year,
             'number' => $this->number,
             'description' => $this->description,
+            'related_part' => $this->related_part,
             'attachment_path' => $this->attachment_path,
             'uname' => $this->uname,
         ];

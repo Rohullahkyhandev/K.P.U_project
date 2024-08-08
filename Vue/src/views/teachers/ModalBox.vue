@@ -13,7 +13,7 @@
                 <div class="fixed inset-0 bg-black/25" />
             </TransitionChild>
 
-        <div class="fixed inset-0 overflow-y-auto">
+            <div class="fixed inset-0 overflow-y-auto">
                 <div
                     class="flex min-h-full items-center justify-center p-4 text-center"
                 >
@@ -304,10 +304,10 @@
                                             </span>
                                             <span v-else> ثبت </span>
                                         </button>
-                                        <router-link
-                                            :to="{ name: 'app.dashboard' }"
+                                        <span
+                                            @click="closeProModal"
                                             class="footer--button--cancel"
-                                            >لغو ثبت</router-link
+                                            >لغو ثبت</span
                                         >
                                     </footer>
                                 </form>
@@ -374,6 +374,7 @@ function handleOnChange(event) {
 
 function onSubmit() {
     teacherStore.createPromotion(promotion.value, props.teacher_id);
+    teacherStore.getPromotions();
 }
 
 const academic_ranks = ref([

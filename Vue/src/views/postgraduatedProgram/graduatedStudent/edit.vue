@@ -225,13 +225,14 @@
                             ></path>
                         </svg>
                     </span>
-                    <span v-else> ثبت </span>
+                    <span v-else> ویرایش </span>
                 </button>
-                <router-link
-                    :to="{ name: 'app.post-graduated.student.list' }"
+                <span
+                    @click="closeModal"
                     class="footer--button--cancel cursor-pointer"
-                    >لغو ثبت</router-link
                 >
+                    لغو ویرایش
+                </span>
             </footer>
         </form>
     </div>
@@ -266,6 +267,10 @@ let selectYear = ref("");
 const props = defineProps({
     student_id: {
         type: String,
+        required: true,
+    },
+    closeModal: {
+        type: Function,
         required: true,
     },
 });

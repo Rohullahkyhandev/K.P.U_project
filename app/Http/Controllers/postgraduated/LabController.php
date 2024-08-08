@@ -19,7 +19,7 @@ class LabController extends Controller
         $per_page = request('per_page', '');
         $sortField = request('sort_field', 'id');
         $sortDirection = request('sort_direction', 'DESC');
-        $program_id = request('program_id');
+        // $program_id = request('program_id');
 
         $data = Lab::query()
             ->where('labs.name', 'like', "%{$search}%")
@@ -27,7 +27,7 @@ class LabController extends Controller
             ->join('users', 'labs.user_id', 'users.id')
             ->join('post_graduated_programs', 'labs.program_id', 'post_graduated_programs.id')
             ->select('labs.*', 'users.name as uname', 'post_graduated_programs.program_name as program_name')
-            ->where('labs.program_id', '=', $program_id)
+            // ->where('labs.program_id', '=', $program_id)
             ->orderBy("labs.$sortField", $sortDirection)
             ->paginate($per_page);
         return LabResource::collection($data);

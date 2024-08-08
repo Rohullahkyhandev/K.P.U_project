@@ -43,6 +43,20 @@ const useTeacherInScholarship = defineStore("teacher_in_scholarship", () => {
             });
     }
 
+    function updateTeacherinfo(data) {
+        loading.value = true;
+        axiosClient
+            .post("/pdc/teacher_in_scholarship/update_info", data)
+            .then((response) => {
+                loading.value = false;
+                msg_success.value = response.data.message;
+            })
+            .catch((err) => {
+                loading.value = false;
+                msg_wrang.value = err.response.data.message;
+            });
+    }
+
     function createTeacherInScholarship(data) {
         loading.value = true;
         let document = "";
@@ -69,7 +83,14 @@ const useTeacherInScholarship = defineStore("teacher_in_scholarship", () => {
                 console.log(res);
                 loading.value = false;
                 msg_success.value = res.data.message;
-                teacherInScholarship.value = "";
+                teacherInScholarship.value.teacher_id = "";
+                teacherInScholarship.value.back_date = "";
+                teacherInScholarship.value.sent_date = "";
+                teacherInScholarship.value.department_id = "";
+                teacherInScholarship.value.country_name = "";
+                teacherInScholarship.value.document = "";
+                teacherInScholarship.value.edu_degree = "";
+                teacherInScholarship.value.edu_maqta = "";
             })
             .catch((err) => {
                 loading.value = false;
@@ -192,6 +213,7 @@ const useTeacherInScholarship = defineStore("teacher_in_scholarship", () => {
         updateTeacherInScholarship,
         deleteTeacherInScholarship,
         getTeacherInScholarship,
+        updateTeacherinfo,
         teacher_department,
         teacherInScholarship,
         teacherInScholarships,

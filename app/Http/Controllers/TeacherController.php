@@ -82,7 +82,9 @@ class TeacherController extends Controller
                 ->leftJoin('departments', 'teachers.department_id', 'departments.id')
                 ->leftJoin('post_graduated_programs', 'teachers.program_id', 'post_graduated_programs.id')
                 ->leftJoin('users', 'teachers.user_id', 'users.id')
-                ->leftJoin('promotions', 'promotions.teacher_id', 'teachers.id')
+                ->leftJoin(DB::raw('(SELECT teacher_id, MAX(id) as promotion_id FROM promotions GROUP BY teacher_id) as latest_promotions'), function ($join) {
+                    $join->on('teachers.id', '=', 'promotions.teacher_id');
+                })
                 ->leftJoin('teacher_qualifications', 'teachers.id', 'teacher_qualifications.teacher_id')
                 ->leftJoin('faculties', 'teachers.faculty_id', 'faculties.id')
                 ->select('teachers.*', 'promotions.date as date', 'post_graduated_programs.program_name as pname',  'post_graduated_programs.degree_type as degree_type', 'promotions.attachment_path as attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department', 'teacher_qualifications.education_ as education', 'users.name as uname')
@@ -104,10 +106,17 @@ class TeacherController extends Controller
             ->leftJoin('departments', 'teachers.department_id', 'departments.id')
             ->leftJoin('post_graduated_programs', 'teachers.program_id', 'post_graduated_programs.id')
             ->leftJoin('users', 'teachers.user_id', 'users.id')
-            ->leftJoin('promotions', 'promotions.teacher_id', 'teachers.id')
-            // ->leftJoin('teacher_qualifications', 'teachers.id', '=', 'teacher_qualifications.teacher_id')
+            ->leftJoin('promotions', function ($join) {
+                $join->on('teachers.id', '=', 'promotions.teacher_id')
+                    ->whereIn('promotions.id', function ($query) {
+                        $query->select(DB::raw('MAX(id)'))
+                            ->from('promotions')
+                            ->groupBy('teacher_id');
+                    });
+            })
+            ->leftJoin('teacher_qualifications', 'teachers.id', '=', 'teacher_qualifications.teacher_id')
             ->leftJoin('faculties', 'teachers.faculty_id', 'faculties.id')
-            ->select('teachers.*', 'promotions.date as date', 'post_graduated_programs.program_name as pname',  'post_graduated_programs.degree_type as degree_type', 'promotions.attachment_path as attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department', 'teachers.education_degree as education', 'users.name as uname')
+            ->select('teachers.*', 'promotions.date as date', 'post_graduated_programs.program_name as pname', 'teacher_qualifications.education_ as education', 'post_graduated_programs.degree_type as degree_type', 'promotions.attachment_path as attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department',  'users.name as uname')
             ->orderBy("teachers.$sortField", $sortDirection)
             ->distinct()
             ->paginate($per_page);
@@ -118,15 +127,13 @@ class TeacherController extends Controller
     // get the teache information acc specific department
     public function getDepartmentTeacher($id)
     {
-        $data = Teacher::where('department_id', '=', $id)->get();
+        $data = Teacher::where('department_id', '= ', $id)->get();
         return $data;
     }
 
 
     public function store(Request $request)
     {
-
-
         $validate_date_of_birth = (date('Y') - substr($request->birth_date, 0, 3));
         if ($validate_date_of_birth < 25) {
             return response([
@@ -155,7 +162,20 @@ class TeacherController extends Controller
             // 'department_id' => 'required',
             // 'faculty_id' => 'required',
             'education_field' => 'required|string|max:100',
-        ], []);
+        ], [
+            'name.required' => 'وارد کردن نام الزامی میباشد',
+            'lname.required' => 'وارد کردن تخلص الزامی میباشد',
+            'fatherName.required' => 'وارد کردن نام پدر الزامی میباشد',
+            'grandFatherName.required' => 'وارد کردن نام پدرکلان الزامی میباشد',
+            'email.required' => 'وارد کردن ایمیل الزامی میباشد',
+            'main_address.required' => 'وارد کردن آدرس اصلی الزامی میباشد',
+            'current_address.required' => 'وارد کردن آدرس فعلی الزامی میباشد',
+            'birth_date.required' => 'وارد کردن تاریخ تولد الزامی میباشد',
+            'academic_rank.required' => 'وارد کردن رتبه علمی الزامی میباشد',
+            'hire_date.required' => 'وارد کردن تاریخ استخدام الزامی میباشد',
+            'nic.required' => 'وارد کردن نمبر تذکزه الزامی میباشد',
+            'teaching_status.required' => 'وارد کردن وضعیت استاد الزامی میباشد',
+        ]);
 
         DB::beginTransaction();
         try {
@@ -387,14 +407,15 @@ class TeacherController extends Controller
         return Teacher_qualification::where('teacher_id', '=', $id)->first();
     }
 
-    public function updateQualification(Request $request, $id = '')
+    public function updateQualification(Request $request, $id = ' ')
     {
+
         $request->validate([
             'country' => 'required|string',
             'education_' => 'required|string',
             'graduated_year' => 'required|string',
             'university' => 'required|string',
-            'description' => 'nullable|string'
+            'description' => 'nullable|string '
         ]);
 
         DB::beginTransaction();
@@ -411,8 +432,8 @@ class TeacherController extends Controller
             $teacher_qualification->user_id = $user_id;
             $result = $teacher_qualification->save();
             // Update the teacher education degree
-            $teacher = Teacher::find($id);
-            $teacher->education_degree = $request->education_;
+            $teacher = Teacher::find($teacher_qualification->teacher_id);
+            $teacher->education_degree = $teacher_qualification->education_;
             $result = $teacher->save();
             DB::commit();
         } catch (Exception $e) {

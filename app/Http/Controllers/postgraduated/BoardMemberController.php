@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\postgraduated;
 
+use App\Exports\BoardMember as ExportsBoardMember;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\BoardMemberResource;
 use App\Models\Board;
 use App\Models\BoardMember;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Excel;
 
 class BoardMemberController extends Controller
 {
@@ -21,11 +23,13 @@ class BoardMemberController extends Controller
         $sortDirection = request('sortDirection', 'DESC');
 
         $data  = BoardMember::query()
-            ->where('board_members.name', 'like', "%{$search}%")
-            ->orWhere('board_members.lname', 'like', "%{$search}%")
-            ->orWhere('board_members.fname', 'like', "%{$search}")
-            ->orWhere('board_members.phone', 'like', "%{$search}")
-            ->orWhere('board_members.email', 'like', "%{$search}")
+            ->whereAny([
+                'board_members.name',
+                'board_members.lname',
+                'board_members.fname',
+                'board_members.phone',
+                'board_members.email',
+            ], 'LIKE', "%{$search}%")
             ->join('users', 'board_members.user_id', 'users.id')
             ->join('boards', 'board_members.board_id', 'boards.id')
             ->select('board_members.*', 'boards.name as board_name', 'users.name as uname')
@@ -141,5 +145,12 @@ class BoardMemberController extends Controller
             $result = BoardMember::destroy($id);
             return $result;
         }
+    }
+
+
+    // board members REPORT
+    public function generate_report_board_members($type, $report_data)
+    {
+        return  Excel::download((new ExportsBoardMember)->getData($type, $report_data), 'report.xls');
     }
 }

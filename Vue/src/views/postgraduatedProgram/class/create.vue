@@ -199,5 +199,8 @@ const programs = computed(() =>
 
 function onSubmit() {
     classRoomStore.createClassRoom(classRoom.value);
+    setTimeout(() => {
+        classRoomStore.getClassRoom();
+    }, 1000);
 }
 </script>

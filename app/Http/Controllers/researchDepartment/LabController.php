@@ -11,8 +11,6 @@ use Symfony\Component\CssSelector\Node\FunctionNode;
 class LabController extends Controller
 {
 
-
-
     public function index()
     {
         $search = request('search', '');
@@ -21,20 +19,25 @@ class LabController extends Controller
         $sortDirection = request('sortDirection', 'DESC');
 
         $data = ReasearchLab::query()
-            ->where('research_labs.name', 'like', "%{$search}%")
+            ->where('reasearch_labs.lab_name', 'like', "%{$search}%")
             ->join('users', 'reasearch_labs.user_id', 'users.id')
-            ->select('research_labs.*', 'users.name as uname')
-            ->orderBy("research_labs.$sortField", $sortDirection)
+            ->select('reasearch_labs.*', 'users.name as uname')
+            ->orderBy("reasearch_labs.$sortField", $sortDirection)
             ->paginate($per_page);
         return ResearchLabResource::collection($data);
+    }
+
+
+    public function getAllLabs()
+    {
+        return ReasearchLab::all();
     }
 
 
     public function store(Request $request)
     {
 
-        $request->validate([
-            'name' => 'required',
+        $request->validate(['lab_name' => 'required',
             'description' => 'required',
 
         ], [
@@ -43,7 +46,7 @@ class LabController extends Controller
         ]);
 
         $lab = new ReasearchLab();
-        $lab->name = $request->name;
+        $lab->lab_name = $request->lab_name;
         $lab->description = $request->description;
         $lab->user_id = auth()->user()->id;
         $result = $lab->save();
@@ -59,11 +62,16 @@ class LabController extends Controller
         }
     }
 
+
+    public function edit($id)
+    {
+        return ReasearchLab::find($id);
+    }
+
     public function update(Request $request)
     {
 
-        $request->validate([
-            'name' => 'required',
+        $request->validate(['lab_name' => 'required',
             'description' => 'required',
 
         ], [
@@ -72,7 +80,7 @@ class LabController extends Controller
         ]);
 
         $lab = ReasearchLab::find($request->id);
-        $lab->name = $request->name;
+        $lab->lab_name = $request->lab_name;
         $lab->description = $request->description;
         $lab->user_id = auth()->user()->id;
         $result = $lab->save();

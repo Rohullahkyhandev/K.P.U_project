@@ -124,10 +124,12 @@
                         </div>
                         <div class="input--dev--width">
                             <CustomInput
-                                type="text"
+                                type="select"
+                                :select-options="academic_ranks"
                                 v-model="teacherResearch.academic_rank"
                                 class="mb-2"
                                 required="required"
+                                label=" رتبه علمی"
                             />
                         </div>
                     </div>
@@ -136,16 +138,18 @@
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
                             <label for="" class="form--label">
-                                سطح تحصیلی
+                                سویه تحصیلی
                                 <span class="label--prefix">*</span></label
                             >
                         </div>
                         <div class="input--dev--width">
                             <CustomInput
-                                type="text"
+                                type="select"
+                                :select-options="education_degrees"
                                 v-model="teacherResearch.education_degree"
                                 class="mb-2"
                                 required="required"
+                                label=" سویه تحصیلی"
                             />
                         </div>
                     </div>
@@ -174,7 +178,7 @@
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
                             <label for="" class="form--label">
-                                دیپارتمنت ها
+                                  پوهنځی
                                 <span class="label--prefix">*</span></label
                             >
                         </div>
@@ -183,10 +187,12 @@
                                 type="select"
                                 v-model="teacherResearch.faculty_id"
                                 @change="
-                                    getDepartmentFaculty(teacherResearch.faculty_id)
+                                    getDepartmentFaculty(
+                                        teacherResearch.faculty_id
+                                    )
                                 "
                                 :select-options="faculties"
-                                label=" کالولته"
+                                label=" پوهنځی"
                                 class="mb-2"
                             />
                         </div>
@@ -256,6 +262,7 @@
 </template>
 
 <script setup>
+import DatePicker from "vue3-persian-datetime-picker";
 import { computed, onMounted, ref, useSlots } from "vue";
 import CustomInput from "../../../components/core/CustomInput.vue";
 import useDepartmentStore from "../../../stores/department/deparmentStore";
@@ -270,6 +277,43 @@ onMounted(() => {
     teacherResearchStore.getAllDepartments();
     facultyStore.getAllFaculty();
 });
+
+const education_degrees = ref([
+    {
+        text: "لیسانس",
+        key: "لیسانس",
+    },
+    {
+        text: "ماستر",
+        key: "ماستر",
+    },
+    {
+        text: "داکتر",
+        key: "داکتر",
+    },
+]);
+const academic_ranks = ref([
+    {
+        text: "نامزد پوهنیار",
+        key: "نامزد پوهنیار",
+    },
+    {
+        text: "پوهیالی",
+        key: "پوهیالی",
+    },
+    {
+        text: "پوهنیار",
+        key: "پوهنیار",
+    },
+    {
+        text: "پوهنمل",
+        key: "پوهنمل",
+    },
+    {
+        text: "پوهاند",
+        key: "پوهاند",
+    },
+]);
 
 const props = defineProps({
     closeModal: {
@@ -296,11 +340,10 @@ function getDepartmentFaculty(id) {
     departmentStore.getFacultyDepartment(id);
 }
 
-
 function onSubmit() {
     teacherResearchStore.createTeacherResearch(teacherResearch.value);
 
     // for refreshing the teacher research
-    teacherResearchStore.getTeacherResearchs();
+    teacherResearchStore.getTeacherResearch();
 }
 </script>

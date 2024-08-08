@@ -35,7 +35,7 @@
         >
             <!-- display message area -->
             <div
-                class="bg-green-700 mb-2 text-white rounded py-4 text-center"
+                class="msg-success"
                 v-if="userStore.msg_success"
             >
                 <div class="flex items-center justify-between px-10">
@@ -65,7 +65,7 @@
             </div>
 
             <div
-                class="bg-red-500 text-white py-4 mb-2 rounded text-center"
+                class="msg--warning"
                 v-if="userStore.msg_wrang"
             >
                 <div class="flex items-center justify-between px-10">

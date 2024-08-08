@@ -17,10 +17,10 @@
 
 /* common alert message style */
 .msg--success {
-    @apply bg-green-500 mb-4  z-10 text-white rounded-md py-8 text-center;
+    @apply bg-green-500 mb-4  z-10 text-white rounded-md py-5 text-center;
 }
 .msg--warning {
-    @apply bg-red-400 mb-4  z-10 text-white py-8 relative rounded-md text-center;
+    @apply bg-red-400 mb-4  z-10 text-white py-5 relative rounded-md text-center;
 }
 
 /* header button for navigation */
@@ -44,7 +44,7 @@
 /* part forms customization */
 
 .form--padding--top {
-    @apply mt-8 mb-6 w-full;
+    @apply mt-8 mb-6 w-full px-8;
 }
 
 .footer--button--submit {
@@ -80,7 +80,7 @@
     display: flex !important;
 }
 .header--button.router-link-exact-active {
-    @apply bg-blue-700 rounded-lg;
+    @apply bg-blue-700 rounded-lg border-b-2  border-green-700;
     /* display: none !important; */
 }
 
@@ -89,18 +89,23 @@
     font-size: 14px;
 }
 .sidebar-item.router-link-exact-active {
-    @apply bg-blue-700;
+    @apply bg-blue-600 border-b-2  border-green-700;
 }
 
 /* persian date time picker */
 
 .vpd-main {
-    @apply block rounded-lg shadow w-full px-3 py-1.5 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm;
+    @apply block rounded-md shadow w-full px-3 py-1.5 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm;
 }
 .form-control {
     border: none !important;
 }
 
+/* primevue  */
+
+.p-select {
+    @apply focus:ring focus:ring-indigo-700 !important;
+}
 /* common style for option and input  */
 
 input,
@@ -116,4 +121,14 @@ textarea {
 
 label {
     font-size: 16px;
+}
+
+/* actions button */
+.group {
+    @apply text-lg !important;
+}
+
+/* general td style */
+th {
+    @apply whitespace-nowrap !important;
 }

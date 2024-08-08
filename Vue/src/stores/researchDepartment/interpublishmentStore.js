@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axiosClient from "../../axios";
 import { ref } from "vue";
+import router from "../../routes";
 
 const useInterpubStore = defineStore("publishment", () => {
     let msg_success = ref("");
@@ -51,6 +52,7 @@ const useInterpubStore = defineStore("publishment", () => {
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
+                getPublishment();
                 if (res.status == 200) {
                     publishment.value.title = "";
                     publishment.value.author = "";
@@ -120,12 +122,29 @@ const useInterpubStore = defineStore("publishment", () => {
 
     function updatePublishment(data) {
         loading.value = true;
+        let attachment = "";
+        if (data.attachment instanceof File) {
+            attachment = data.attachment;
+        }
+
+        let form = new FormData();
+        form.append("id", data.id);
+        form.append("author", data.author);
+        form.append("author_assesstance", data.author_assesstance);
+        form.append("title", data.title);
+        form.append("journal", data.journal_name);
+        form.append("journal_website_link", data.journal_link_website);
+        form.append("faculty_id", data.faculty_id);
+        form.append("attachment", attachment);
+        form.append("department_id", data.department_id);
+        data = form;
         axiosClient
             .post("/international_publisher/update", data)
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
                 publishment.value = "";
+                router.push({ name: "app.research.interpub.list" });
             })
             .catch((err) => {
                 loading.value = false;

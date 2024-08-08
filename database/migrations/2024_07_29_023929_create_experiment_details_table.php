@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('experiment_name');
             $table->string('related_part');
             $table->string('related_image');
+            $table->string('related_image_path');
             $table->string('standard_id');
             $table->string('scope_part');
             $table->bigInteger('lab_id')->unsigned()->index();

@@ -420,7 +420,9 @@
             :close-modal="closeModal"
             :title="'فورم ثبت اعضای بورد '"
         >
-            <createBoradMember />
+            <createBoradMember
+             :close-modal="closeModal"
+            />
         </WrapperModal>
     </div>
 </template>

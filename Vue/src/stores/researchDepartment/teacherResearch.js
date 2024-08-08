@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axiosClient from "../../axios";
 import { ref } from "vue";
+import router from "../../routes";
 
 const useTeacherResearchStore = defineStore("teacherResearch", () => {
     let msg_success = ref("");
@@ -21,11 +22,11 @@ const useTeacherResearchStore = defineStore("teacherResearch", () => {
         name: "",
         lname: "",
         fname: "",
+        research_title: "",
         academic_rank: "",
         education_degree: "",
-        research_title: "",
-        faculty_id:"",
-        department_id:""
+        faculty_id: "",
+        department_id: "",
     });
 
     function createTeacherResearch(data) {
@@ -39,9 +40,10 @@ const useTeacherResearchStore = defineStore("teacherResearch", () => {
                     teacherResearch.value.name = "";
                     teacherResearch.value.lname = "";
                     teacherResearch.value.fname = "";
+                    teacherResearch.value.date = "";
+                    teacherResearch.value.research_title = "";
                     teacherResearch.value.academic_rank = "";
                     teacherResearch.value.education_degree = "";
-                    teacherResearch.value.research_title = "";
                     teacherResearch.value.faculty_id = "";
                     teacherResearch.value.department_id = "";
                 }
@@ -58,6 +60,7 @@ const useTeacherResearchStore = defineStore("teacherResearch", () => {
         search = "",
         sortField,
         sortDirection,
+        dep_id,
     } = {}) {
         teacherResearchs.value.loading = true;
         url = url || "/teacher_research";
@@ -74,6 +77,7 @@ const useTeacherResearchStore = defineStore("teacherResearch", () => {
                     per_page,
                     sortDirection,
                     sortField,
+                    dep_id,
                 },
             })
             .then((response) => {
@@ -119,6 +123,7 @@ const useTeacherResearchStore = defineStore("teacherResearch", () => {
                 loading.value = false;
                 msg_success.value = res.data.message;
                 teacherResearch.value = "";
+                router.push({ name: "app.research.t.list" });
             })
             .catch((err) => {
                 loading.value = false;

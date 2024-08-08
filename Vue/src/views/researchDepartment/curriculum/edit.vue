@@ -163,7 +163,16 @@
                             >
                         </div>
                         <div class="input--dev--width">
-                            <select
+                            <MultiSelect
+                                v-model="curriculum.departments"
+                                :options="curriculum.departments"
+                                optionLabel="name"
+                                filter
+                                placeholder="انتخاب دیپارتمنت"
+                                :maxSelectedLabels="5"
+                                class="w-full border border-gray-300 shadow mb-2"
+                            />
+                            <!-- <select
                                 v-model="curriculum.departments"
                                 multiple
                                 class="block w-full px-3 py-2.5 border rounded shadow border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -175,7 +184,7 @@
                                 >
                                     {{ department.name }}
                                 </option>
-                            </select>
+                            </select> -->
                         </div>
                     </div>
                 </div>
@@ -200,45 +209,44 @@
                         </div>
                     </div>
                 </div>
-
-                <footer class="bg-gray-100 mt-5 py-4 md:flex gap-5">
-                    <button
-                        type="submit"
-                        :class="[
-                            curriculumStore.loading === true
-                                ? 'footer--button--submit cursor-not-allowed'
-                                : 'footer--button--submit cursor-pointer rounded ',
-                        ]"
-                    >
-                        <span v-if="curriculumStore.loading === true">
-                            <svg
-                                class="animate-spin -ml-1 h-5 w-5 text-white"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                            >
-                                <circle
-                                    class="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    stroke-width="4"
-                                ></circle>
-                                <path
-                                    class="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                ></path>
-                            </svg>
-                        </span>
-                        <span v-else> ویرایش </span>
-                    </button>
-                    <button @click="closeModal" class="footer--button--cancel">
-                        لغو ویرایش
-                    </button>
-                </footer>
             </div>
+            <footer class="bg-gray-100 py-4 md:flex gap-5">
+                <button
+                    type="submit"
+                    :class="[
+                        curriculumStore.loading === true
+                            ? 'footer--button--submit cursor-not-allowed'
+                            : 'footer--button--submit cursor-pointer rounded ',
+                    ]"
+                >
+                    <span v-if="curriculumStore.loading === true">
+                        <svg
+                            class="animate-spin -ml-1 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                class="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                stroke-width="4"
+                            ></circle>
+                            <path
+                                class="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                        </svg>
+                    </span>
+                    <span v-else> ویرایش </span>
+                </button>
+                <router-link  :to="{ name: 'app.research.curriculum.list' }" class="footer--button--cancel">
+                    لغو ویرایش
+                </router-link>
+            </footer>
         </form>
     </div>
 </template>
@@ -249,6 +257,7 @@ import { useRoute } from "vue-router";
 import CustomInput from "../../../components/core/CustomInput.vue";
 import useDepartmentStore from "../../../stores/department/deparmentStore";
 import useCurriculumStore from "../../../stores/researchDepartment/curriculumStore";
+import MultiSelect from "primevue/multiselect";
 
 const curriculumStore = useCurriculumStore();
 const route = useRoute();
@@ -257,6 +266,11 @@ onMounted(() => {
     curriculumStore.editCurriculum(route.params.id);
 });
 
+const selectedDepartments = computed(() =>
+    curriculum.value.departments.map((department) => ({
+        name: department.name,
+    }))
+);
 const curriculum = computed(() => curriculumStore.curriculum);
 const departments = computed(() => curriculumStore.listDepartments);
 

@@ -2,9 +2,14 @@
 
 use App\Exports\TeacherInScholarship;
 use App\Exports\TeachersExport;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PDC\TeacherInCommitController;
 use App\Http\Controllers\PDC\TeacherInSchalarshipController;
+use App\Http\Controllers\postgraduated\BoardMemberController;
+use App\Http\Controllers\postgraduated\CommitteeMemberController;
+use App\Http\Controllers\postgraduated\studentController;
 use App\Http\Controllers\postgraduated\StudentResearchController;
+use App\Http\Controllers\researchDepartment\TeacherResearchController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\TeacherReportController;
 use App\Models\Department;
@@ -30,14 +35,14 @@ use Symfony\Component\Routing\Route as RoutingRoute;
 
 
 
-Route::get("/report", [TeacherController::class, 'downloadTeacher']);
+Route::get("/report", [TeacherReportController::class, 'generateReport']);
 
-// pdc all report route
+// pdc all report route*
 Route::get('/pdc/report/teacher_in_commit/{type?}/{report_data?}', [TeacherInCommitController::class, 'generateReport']);
 Route::get('/pdc/report/teacher_in_scholarship/{format_type?}/{year?}', [TeacherInSchalarshipController::class, 'generateReport']);
 
-// test teacher report
-Route::get('teacher/report', [TeacherReportController::class, 'generateReport']);
-Route::get('post/teacher/{id}', [StudentResearchController::class, 'getTeacherData']);
-// pdc testing
-Route::get('/pdc/testing/{year}', [TeacherInSchalarshipController::class, 'getTeacherInScholarship']);
+// post graduated report*
+Route::get('/student/report/{type?}/{report_data?}/{status?}', [studentController::class, 'generateStudentReport']);
+Route::get('/postgraduated/report/board_member/{type?}/{report_data?}', [BoardMemberController::class, 'generate_report_board_members']);
+Route::get('/postgraduated/report/commit_member/{type?}/{report_data?}', [CommitteeMemberController::class, 'generate_report_commit_member']);
+Route::get('/research/report/{type?}/{faculty_id?}/{department_id?}', [TeacherResearchController::class, 'generateReport']);

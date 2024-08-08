@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers\postgraduated;
 
+use App\Exports\StudentExport;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PhpOffice\PhpSpreadsheet\Calculation\Statistical\Distributions\StudentT;
+use Excel;
+use Illuminate\Support\Facades\DB;
 
 class studentController extends Controller
 {
@@ -23,11 +26,10 @@ class studentController extends Controller
         $sortField = request('sort_Field', 'id');
         $sortDirection = request('sort_direction', 'DESC');
         $program_id = request('program_id', '');
-        $year = request('year', date('Y') - 621);
-
+        $year = request('year');
         $data = Student::query()
-            ->where('students.admission_year', $year)
-            ->where('students.admission_year', 'like', "%{$program_id}%")
+            ->where(DB::raw('YEAR(students.admission_year)'), 'like', "%{$year}%")
+            ->where('students.program_id', 'like', "%{$program_id}%")
             ->whereAny([
                 'students.name',
                 'students.admission_year',
@@ -184,5 +186,16 @@ class studentController extends Controller
                 'message' => 'اطلاعات موفقانه حذف گردید'
             ], 200);
         }
+    }
+
+    // generate the report of students both graduated and undergraduated
+    public function generateStudentReport($type, $report_data, $status)
+    {
+
+        return  Excel::download((new StudentExport)->getData(
+            $type,
+            $report_data,
+            $status
+        ), 'report.xls');
     }
 }

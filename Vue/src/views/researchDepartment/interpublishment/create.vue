@@ -294,7 +294,5 @@ function getDepartmentFaculty(id) {
 
 function onSubmit() {
     interpubStore.createPublishment(publishment.value);
-    // for refreshing the publishment
-    interpubStore.getPublishment();
 }
 </script>

@@ -138,12 +138,10 @@ class CommitController extends Controller
         $result = $commit->save();
 
         if ($result) {
-            return response([
-                'message' => 'دیتا در آرشیف موفقانه ویرایش گردید'
+            return response(['message' => 'دیتا در  موفقانه ویرایش گردید'
             ], 200);
         } else {
-            return response([
-                'message' => 'دیتا در آرشیف  ویرایش نشد دوباره تلاش نماید'
+            return response(['message' => 'دیتا در   ویرایش نشد دوباره تلاش نماید'
             ], 304);
         }
     }

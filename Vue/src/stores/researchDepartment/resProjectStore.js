@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axiosClient from "../../axios";
 import { ref } from "vue";
+import router from "../../routes";
 
 const useResProjectStore = defineStore("resProject", () => {
     let msg_success = ref("");
@@ -20,22 +21,35 @@ const useResProjectStore = defineStore("resProject", () => {
         id: "",
         project_name: "",
         scope_of_project: "",
-        related_images: "",
+        related_image: "",
         date: "",
         lab_id: "",
+        description: "",
     });
 
     function createResProject(data) {
         loading.value = true;
+        let related_image = "";
+        if (data.related_image instanceof File) {
+            related_image = data.related_image;
+        }
+        let form = new FormData();
+        form.append("project_name", data.project_name);
+        form.append("scope_of_project", data.scope_of_project);
+        form.append("date", data.date);
+        form.append("related_image", related_image);
+        form.append("lab_id", data.lab_id);
+        form.append("description", data.description);
+        data = form;
         axiosClient
             .post("/research_project/create", data)
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
-                if (res.statusCode === 200) {
+                if (res.status == 200) {
                     resProject.value.project_name = "";
                     resProject.value.scope_of_project = "";
-                    resProject.value.related_images = "";
+                    resProject.value.related_image = "";
                     resProject.value.date = "";
                     resProject.value.lab_id = "";
                 }
@@ -99,12 +113,26 @@ const useResProjectStore = defineStore("resProject", () => {
 
     function updateResProject(data) {
         loading.value = true;
+        let related_image = "";
+        if (data.related_image instanceof File) {
+            related_image = data.related_image;
+        }
+        let form = new FormData();
+        form.append("id", data.id);
+        form.append("project_name", data.project_name);
+        form.append("scope_of_project", data.scope_of_project);
+        form.append("date", data.date);
+        form.append("related_image", related_image);
+        form.append("lab_id", data.lab_id);
+        form.append("description", data.description);
+        data = form;
         axiosClient
             .post("/research_project/update", data)
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
                 resProject.value = "";
+                router.push({ name: "app.research.resproject.list" });
             })
             .catch((err) => {
                 loading.value = false;

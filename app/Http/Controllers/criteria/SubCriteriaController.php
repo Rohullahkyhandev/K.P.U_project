@@ -37,13 +37,16 @@ class SubCriteriaController extends Controller
     {
 
         // return $request->criteria_id;
-        $request->validate(['number' => 'required',
+        $request->validate([
+            'number' => 'required',
             'criteria_id' => 'required',
             'description' => 'required',
+            'related_part' => 'required',
             'attachment' => 'nullable|mimes:png,jpg,mp3,mp4,pdf,docx'
         ], [
             'number.required' => "فیلد شماره معیار  الزامی می باشد",
             'criteria_id.required' => "فیلد  معیار اصلی الزامی می باشد",
+            'related_part.required' => "فیلد بخش مربوط الزامی می باشد",
             'attachment.mimes' => "فارمت فایل باید شامل این فارمت ها باشد png,jpg,mp3,mp4,pdf,docx"
         ]);
 
@@ -58,6 +61,7 @@ class SubCriteriaController extends Controller
         $sub_criteria->number = $request->number;
         $sub_criteria->criteria_id = $request->criteria_id;
         $sub_criteria->description = $request->description;
+        $sub_criteria->related_part = $request->related_part;
         $sub_criteria->attachment = $attachment;
         $sub_criteria->attachment_path = $attachment_path;
         $sub_criteria->user_id = $user_id;
@@ -88,10 +92,12 @@ class SubCriteriaController extends Controller
 
         $request->validate([
             'number' => 'required',
+            'related_part' => 'required',
             'description' => 'nullable',
             'attachment' => 'nullable|mimes:png,jpg,mp3,mp4,pdf,docx'
         ], [
             'number.required' => "فیلد  شماره معیار الزامی می باشد",
+            'related_part.required' => "فیلد بخش مربوط الزامی می باشد",
             'attachment' => "فارمت فایل باید شامل این فارمت ها باشد png,jpg,mp3,mp4,pdf,docx"
         ]);
 
@@ -110,6 +116,7 @@ class SubCriteriaController extends Controller
         $sub_criteria->number = $request->number;
         $sub_criteria->sub_criteria_id = $request->sub_criteria_id;
         $sub_criteria->description = $request->description;
+        $sub_criteria->related_part = $request->related_part;
         $sub_criteria->attachment = $attachment;
         $sub_criteria->attachment_path = $attachment_path;
         $sub_criteria->user_id = $user_id;

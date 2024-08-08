@@ -102,8 +102,10 @@
                     </div>
                     <div class="input--dev--width">
                         <CustomInput
-                            type="text"
-                            v-model="resProject.related_images"
+                            type="file"
+                            @change="
+                                (file) => (resProject.related_image = file)
+                            "
                             class="mb-2"
                             required="required"
                         />
@@ -128,7 +130,7 @@
                 <div class="wrapper--dev--input">
                     <div class="label--dev--width">
                         <label for="" class="form--label">
-                              لابراتوار
+                            لابراتوار
                             <span class="label--prefix">*</span></label
                         >
                     </div>
@@ -147,15 +149,14 @@
                 <div class="wrapper--dev--input">
                     <div class="label--dev--width">
                         <label for="" class="form--label">
-                            توضیحات <span class="label--prefix"></span></label
-                        >
+                            توضیحات <span class="label--prefix"></span
+                        ></label>
                     </div>
                     <div class="input--dev--width">
                         <CustomInput
                             type="textarea"
                             v-model="resProject.description"
                             class="mb-2"
-
                         />
                     </div>
                 </div>
@@ -206,7 +207,7 @@
 import { computed, onMounted, ref, useSlots } from "vue";
 import CustomInput from "../../../components/core/CustomInput.vue";
 import useResProjectStore from "../../../stores/researchDepartment/resProjectStore";
-import DatePicker from "vue3-persian-datetime-picker"
+import DatePicker from "vue3-persian-datetime-picker";
 import useLabStore from "../../../stores/researchDepartment/labStore";
 
 const resProjectStore = useResProjectStore();
@@ -217,7 +218,7 @@ onMounted(() => {
 });
 
 const labs = computed(() =>
-    labStore.all_labs.map((lab) => ({ key: lab.id, text: lab.name }))
+    labStore.allLabs.map((lab) => ({ key: lab.id, text: lab.lab_name }))
 );
 
 const resProject = computed(() => resProjectStore.resProject);

@@ -3,12 +3,12 @@
         <div class="card flex flex-col justify-center">
             <ProgressSpinner
                 style="width: 60px; height: 60px; color:blue"
-                strokeWidth="6"
+                strokeWidth="3"
                 fill="transparent"
                 animationDuration=".5s"
                 aria-label="Custom ProgressSpinner"
             />
-            <div v-if="text" class="mt-2">{{ text }}</div>
+            <div v-if="text" class="mt-2 font-semibold">{{ text }}</div>
         </div>
     </div>
 </template>

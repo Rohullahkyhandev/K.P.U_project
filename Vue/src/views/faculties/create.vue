@@ -169,8 +169,8 @@
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
                             <label class="form--label"
-                                >توضیحات
-                                <span class="label--prefix">*</span></label
+                                >توضیحات  در باره فاکولته
+                                <span class="label--prefix"></span></label
                             >
                         </div>
                         <div class="input--dev--width">

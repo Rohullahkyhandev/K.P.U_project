@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axiosClient from "../../../axios";
 import { ref } from "vue";
+import router from "../../../routes";
 
 const useCommitStore = defineStore("postCommit", () => {
     let msg_success = ref("");
@@ -48,7 +49,10 @@ const useCommitStore = defineStore("postCommit", () => {
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
-                commit.value = "";
+                commit.value.name = "";
+                commit.value.date = "";
+                commit.value.description = "";
+                commit.value.attachment = "";
             })
             .catch((err) => {
                 loading.value = false;
@@ -132,6 +136,7 @@ const useCommitStore = defineStore("postCommit", () => {
                 loading.value = false;
                 msg_success.value = res.data.message;
                 commit.value = "";
+                router.push({ name: "app.pdc.commit.list" });
             })
             .catch((err) => {
                 loading.value = false;
@@ -144,11 +149,11 @@ const useCommitStore = defineStore("postCommit", () => {
             .get(`/pdc/commit/delete/${id}`)
             .then((res) => {
                 if (res.status === 200) {
-                    msg_success.value = "پلان موفقانه حذف شد";
+                    msg_success.value = "کمیته موفقانه حذف شد";
                 }
             })
             .catch((err) => {
-                msg_wrang.value = "پلان حذف نشد دوباره تلاش نماید";
+                msg_wrang.value = "کمیته حذف نشد دوباره تلاش نماید";
             });
     }
 

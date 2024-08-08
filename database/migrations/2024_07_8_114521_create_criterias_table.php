@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sub_criterias', function (Blueprint $table) {
+        Schema::create('criterias', function (Blueprint $table) {
             $table->id();
-            $table->text('number');
+            $table->string('year');
+            $table->string('number', '20');
+            $table->string('realted_part');
             $table->text('description');
             $table->string('attachment');
             $table->string('attachment_path');
-            $table->bigInteger("criteria_id")->unsigned()->index();
-            $table->foreign('criteria_id')->references('id')->on('criterias');
             $table->bigInteger("user_id")->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sub_criterias');
+        Schema::dropIfExists('criterias');
     }
 };

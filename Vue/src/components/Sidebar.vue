@@ -56,7 +56,10 @@
                     </router-link>
                 </li>
 
-                <li class="text-white transition-colors py-2 px-4">
+                <li
+                    v-if="view_document || administrator"
+                    class="text-white transition-colors py-2 px-4"
+                >
                     <router-link
                         :to="{ name: 'app.document.list' }"
                         class="sidebar-item flex items-center justify-start gap-3"
@@ -159,7 +162,7 @@
 
                         <li class="transition-colors px-2 py-1 rounded">
                             <router-link
-                                :to="{ name: 'app.pdc.workshop.create' }"
+                                :to="{ name: 'app.pdc.workshop.list' }"
                                 class="sidebar-item flex items-center justify-start gap-3"
                             >
                                 <svg
@@ -369,6 +372,30 @@
                                 <span>معیارات اصلی</span>
                             </router-link>
                         </li>
+
+                        <li class="transition-colors px-2 py-1rounded">
+                            <router-link
+                                :to="{ name: 'app.quality.list' }"
+                                class="sidebar-item flex items-center justify-start gap-3"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="size-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                                    />
+                                </svg>
+
+                                <span>اداری</span>
+                            </router-link>
+                        </li>
                     </ul>
                 </li>
 
@@ -480,7 +507,7 @@
                         <li class="transition-colors px-2 py-1 rounded">
                             <router-link
                                 :to="{
-                                    name: 'app.post-graduated.commit.create',
+                                    name: 'app.post-graduated.commit.list',
                                 }"
                                 class="sidebar-item flex items-center justify-start gap-3"
                             >
@@ -716,7 +743,9 @@
                     v-if="
                         view_pdc ||
                         view_teacher_department ||
-                        view_research_department
+                        view_research_department ||
+                        view_post_graduated ||
+                        administrator
                     "
                     class="mr-3 transition-colors cursor-pointer w-full px-1 py-1 text-white"
                 >
@@ -748,6 +777,7 @@
                     </button>
                     <ul class="mr-1 transition-all" v-if="reportToggle">
                         <li
+                            v-if="view_pdc || administrator"
                             class="transition-colors py-1 px-3 whitespace-nowrap rounded"
                         >
                             <router-link
@@ -776,6 +806,7 @@
                         </li>
 
                         <li
+                            v-if="view_pdc || administrator"
                             class="transition-colors py-1 px-3 whitespace-nowrap rounded"
                         >
                             <router-link
@@ -802,10 +833,129 @@
                                 <span> راپور بورسیه ها</span>
                             </router-link>
                         </li>
+
+                        <li
+                            v-if="view_post_graduated || administrator"
+                            class="transition-colors py-1 px-3 whitespace-nowrap rounded"
+                        >
+                            <router-link
+                                :to="{
+                                    name: 'app.student.report',
+                                }"
+                                class="sidebar-item flex items-center justify-start gap-3"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="size-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                    />
+                                </svg>
+
+                                <span> راپور محصیلن </span>
+                            </router-link>
+                        </li>
+
+                        <li
+                            v-if="view_post_graduated || administrator"
+                            class="transition-colors py-1 px-3 whitespace-nowrap rounded"
+                        >
+                            <router-link
+                                :to="{
+                                    name: 'app.board.report',
+                                }"
+                                class="sidebar-item flex items-center justify-start gap-3"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="size-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                    />
+                                </svg>
+
+                                <span> راپور اعضای بورد </span>
+                            </router-link>
+                        </li>
+
+                        <li
+                            v-if="view_post_graduated || administrator"
+                            class="transition-colors py-1 px-3 whitespace-nowrap rounded"
+                        >
+                            <router-link
+                                :to="{
+                                    name: 'app.post.commit_member.report',
+                                }"
+                                class="sidebar-item flex items-center justify-start gap-3"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="size-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                    />
+                                </svg>
+
+                                <span> راپور اعضای کمیته </span>
+                            </router-link>
+                        </li>
+
+                        <li
+                            v-if="view_research_department || administrator"
+                            class="transition-colors py-1 px-3 whitespace-nowrap rounded"
+                        >
+                            <router-link
+                                :to="{
+                                    name: 'app.teacher_research.report',
+                                }"
+                                class="sidebar-item flex items-center justify-start gap-3"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="size-5"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                    />
+                                </svg>
+
+                                <span> راپور تحقیقات استادان </span>
+                            </router-link>
+                        </li>
                     </ul>
                 </li>
 
-                <li class="transition-colors py-2 px-4 rounded text-white">
+                <li
+                    v-if="administrator || view_employee"
+                    class="transition-colors py-2 px-4 rounded text-white"
+                >
                     <router-link
                         :to="{
                             name: 'app.employee.list',
@@ -899,6 +1049,14 @@ const view_quality_assurance = computed(
 );
 const view_research_department = computed(
     () => userStore.permission_current.view_research_department
+);
+
+const view_document = computed(
+    () => userStore.permission_current.view_document
+);
+
+const view_employee = computed(
+    () => userStore.permission_current.view_employee
 );
 
 function getCurrentPermission() {

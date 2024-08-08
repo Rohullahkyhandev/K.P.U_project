@@ -240,7 +240,7 @@
                         <span v-else> ویراش </span>
                     </button>
                     <router-link
-                        :to="{ name: 'app.dashboard' }"
+                        :to="{ name: 'app.post-graduated.board.list' }"
                         class="footer--button--cancel"
                         >لغو ویراش</router-link
                     >

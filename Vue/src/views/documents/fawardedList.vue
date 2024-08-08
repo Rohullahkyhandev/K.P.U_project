@@ -1,6 +1,6 @@
 <template>
-    <div class="form--padding--top">
-        <div class="flex items-center justify-between mb-8">
+    <div class="container form--padding--top">
+        <div class="flex max-au items-center justify-between mb-8 px-8">
             <div class="flex items-center gap-4">
                 <router-link
                     :to="{ name: 'app.document.list' }"
@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <div class="table--wrapper--dev">
+        <div class="table--wrapper--dev mx-8">
             <!-- display message area -->
             <div
                 class="bg-green-700 text-white rounded py-4 text-center mb-3"
@@ -97,7 +97,7 @@
                         v-model="search"
                         @change="getFarwardedDocument(null)"
                         class="appearance-none relative block w-48 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="جستجوی بر اساس نام"
+                        placeholder="جستجو..."
                     />
                 </div>
                 <div class="flex items-center">
@@ -217,7 +217,7 @@
                         <td class="border p-2">
                             <span
                                 v-if="farwaded_document.status == 1"
-                                class="bg-red-500 text-white rounded py-2 px-3"
+                                class="bg-red-500 text-white whitespace-nowrap rounded-md py-1 px-3"
                             >
                                 ملاحظه نگردیده</span
                             >
@@ -256,7 +256,7 @@
                                     leave-to-class="transform scale-95 opacity-0"
                                 >
                                     <MenuItems
-                                        class="absolute z-10 left-4 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                        class="absolute z-10 left-4 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                     >
                                         <div class="px-1 py-1">
                                             <MenuItem v-slot="{ active }">

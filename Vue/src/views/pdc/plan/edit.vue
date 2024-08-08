@@ -127,17 +127,14 @@
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
                             <label for="" class="form--label"
-                                >فایل پلان<span class="label--prefix"
-                                    >*</span
-                                ></label
-                            >
+                                >فایل پلان<span class="label--prefix"></span
+                            ></label>
                         </div>
                         <div class="input--dev--width">
                             <CustomInput
                                 type="file"
                                 @change="(file) => (plan.document = file)"
                                 class="mb-2"
-                                required="required"
                             />
                         </div>
                     </div>
@@ -189,12 +186,12 @@
                             ></path>
                         </svg>
                     </span>
-                    <span v-else> ثبت </span>
+                    <span v-else> ویرایش </span>
                 </button>
                 <router-link
                     :to="{ name: 'app.dashboard' }"
                     class="footer--button--cancel"
-                    >لغو ثبت</router-link
+                    >لغو ویرایش</router-link
                 >
             </footer>
         </form>

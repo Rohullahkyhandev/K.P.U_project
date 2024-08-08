@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('criterias', function (Blueprint $table) {
+        Schema::create('quality_arichves', function (Blueprint $table) {
             $table->id();
-            $table->string('year');
-            $table->string('number', '20');
-            $table->text('description');
+            $table->string('date');
+            $table->string('type');
             $table->string('attachment');
             $table->string('attachment_path');
-            $table->bigInteger("user_id")->unsigned()->index();
+            $table->text('description');
+            $table->bigInteger('user_id')->unsigned()->index();
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('criterias');
+        Schema::dropIfExists('quality_arichves');
     }
 };

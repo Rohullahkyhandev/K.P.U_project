@@ -243,7 +243,7 @@
                 </thead>
                 <tbody v-if="employees.loading || !employees.data?.length">
                     <tr>
-                        <td colspan="10">
+                        <td colspan="13">
                             <Spinner v-if="employees.loading" />
                             <p v-else class="text-center py-8 text-gray-700">
                                 نتیجه ای پیدا نشد

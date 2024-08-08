@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axiosClient from "../../axios";
 import { ref } from "vue";
+import router from "../../routes";
 
 const useExpDetailStore = defineStore("expDetail", () => {
     let msg_success = ref("");
@@ -20,23 +21,36 @@ const useExpDetailStore = defineStore("expDetail", () => {
         id: "",
         experiment_name: "",
         related_part: "",
-        related_images: "",
-        standard_id: "", 
+        related_image: "",
+        standard_id: "",
         scope_part: "",
         lab_id: "",
     });
 
     function createExpDetail(data) {
         loading.value = true;
+        let related_image = "";
+        if (data.related_image instanceof File) {
+            related_image = data.related_image;
+        }
+
+        let form = new FormData();
+        form.append("experiment_name", data.experiment_name);
+        form.append("related_part", data.related_part);
+        form.append("related_image", related_image);
+        form.append("standard_id", data.standard_id);
+        form.append("scope_part", data.scope_part);
+        form.append("lab_id", data.lab_id);
+        data = form;
         axiosClient
             .post("/experiment_detail/create", data)
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
-                if (res.statusCode === 200) {
+                if (res.status == 200) {
                     expDetail.value.experiment_name = "";
                     expDetail.value.related_part = "";
-                    expDetail.value.related_images = "";
+                    expDetail.value.related_image = "";
                     expDetail.value.standard_id = "";
                     expDetail.value.scope_part = "";
                     expDetail.value.lab_id = "";
@@ -101,11 +115,28 @@ const useExpDetailStore = defineStore("expDetail", () => {
 
     function updateExpDetail(data) {
         loading.value = true;
+        let related_image = "";
+        if (data.related_image instanceof File) {
+            related_image = data.related_image;
+        }
+
+        let form = new FormData();
+        form.append("id", data.id);
+        form.append("experiment_name", data.experiment_name);
+        form.append("related_part", data.related_part);
+        form.append("related_image", related_image);
+        form.append("standard_id", data.standard_id);
+        form.append("scope_part", data.scope_part);
+        form.append("lab_id", data.lab_id);
+        data = form;
         axiosClient
             .post("/experiment_detail/update", data)
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
+                setTimeout(() => {
+                    router.push({ name: "app.research.expdetails.list" });
+                }, 1000);
                 expDetail.value = "";
             })
             .catch((err) => {
@@ -118,7 +149,7 @@ const useExpDetailStore = defineStore("expDetail", () => {
         axiosClient
             .get(`/experiment_detail/delete/${id}`)
             .then((res) => {
-                if (res.status === 200) {
+                if (res.status === 204) {
                     msg_success.value = "دیتا موفقانه حذف شد";
                 }
             })

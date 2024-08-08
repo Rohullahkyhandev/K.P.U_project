@@ -241,14 +241,14 @@
                         <td class="border p-3">
                             <ul>
                                 <li
-                                    class="text-left"
+                                    class="text-right w-full  border-b py-2"
                                     v-for="(
                                         department, index
                                     ) of curriculum.departments"
                                     :key="index"
                                 >
-                                    <span>{{ index + 1 }}&nbsp;</span>
-                                    <span>
+                                    <span class="bg-blue-600 rounded-full text-white px-3 py-1">{{ index + 1 }}</span>&nbsp;
+                                    <span class="text-blue-800">
                                         {{ department.name }}
                                     </span>
                                 </li>

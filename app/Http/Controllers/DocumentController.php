@@ -29,22 +29,6 @@ class DocumentController extends Controller
         $sortField = request('sortField', 'id');
         $sortDirection = request('sortDirection', 'DESC');
         $currentUser = Auth::user();
-        $document_view = false;
-        $document_edit = false;
-        $document_delete = false;
-        $document_create = false;
-        // all the staff about
-        // foreach (Auth::user()->permissions as $permission) {
-        //     if ($permission == 'document_create') {
-        //         $document_create = true;
-        //     } else if ($permission == 'document_view') {
-        //         $document_view = true;
-        //     } else if ($permission == 'document_edit') {
-        //         $document_view = true;
-        //     } else {
-        //         $document_delete = true;
-        //     }
-        // }
 
         if ($currentUser->user_type == 'faculty_user') {
             $data = Document::query()
@@ -81,6 +65,26 @@ class DocumentController extends Controller
                 ->paginate($per_page);
             return DocumentResource::collection($data);
         }
+
+
+        if ($currentUser->user_type == 'faculty_user') {
+            $data = Document::query()
+                ->whereAny([
+                    'documents.number',
+                    'documents.title',
+                    'documents.date',
+                    'documents.type',
+                    'documents.source',
+                    'documents.destination',
+                ], 'LIKE', "%{$search}%")
+                ->join('users', 'documents.user_id', 'users.id')
+                ->select('documents.*', 'users.name as uname')
+                ->where('documents.faculty_id', $currentUser->faculty_id)
+                ->orderBy("documents.$sortField", $sortDirection)
+                ->paginate($per_page);
+            return DocumentResource::collection($data);
+        }
+
 
         if ($currentUser->user_type == 'department_user') {
             $data = Document::query()
@@ -171,6 +175,7 @@ class DocumentController extends Controller
                 ->where('farward_documents.status', '=', 1)
                 ->join('documents', 'farward_documents.document_id', 'documents.id')
                 ->join('users', 'farward_documents.user_id', 'users.id')
+                ->join('departments', '')
                 ->select('farward_documents.*', 'documents.id as document_id', 'documents.attachment_path as attachment_path', 'documents.date as date',  'documents.number as number', 'documents.title as title', 'users.name as uname')
                 ->paginate($per_page);
             return FarwardedDocumentResource::collection($data);
@@ -238,7 +243,7 @@ class DocumentController extends Controller
                 $departments = Department::where('faculty_id', '<>', null)->get();
 
                 foreach ($faculties as $faculty) {
-                    if ($user->faculty_id != $faculty->faculty_id) {
+                    if ($user->faculty_id != $faculty->id) {
                         $document_farwarded = new FarwardDocument();
                         $document_farwarded->document_id = $document_id;
                         $document_farwarded->user_id = $user->id;
@@ -267,15 +272,15 @@ class DocumentController extends Controller
                     }
                 }
 
-                foreach ($departments as $department) {
-                    if ($user->department_id != $department->id) {
-                        $document_farwarded = new FarwardDocument();
-                        $document_farwarded->document_id = $document_id;
-                        $document_farwarded->user_id = $user->id;
-                        $document_farwarded->farwarded_part = $department->id;
-                        $result = $document_farwarded->save();
-                    }
-                }
+                // foreach ($departments as $department) {
+                //     if ($user->department_id != $department->id) {
+                //         $document_farwarded = new FarwardDocument();
+                //         $document_farwarded->document_id = $document_id;
+                //         $document_farwarded->user_id = $user->id;
+                //         $document_farwarded->farwarded_part = $department->id;
+                //         $result = $document_farwarded->save();
+                //     }
+                // }
             }
 
             if ($request->type == 'صادره' && $request->department_part != 'all') {
@@ -314,8 +319,10 @@ class DocumentController extends Controller
 
         $request->validate([
             'date' => 'required|date',
-            'remark' => 'required'
+            'remark' => 'required',
+            'number' => 'required'
         ], [
+            'number.required' => 'شماره مکتوب الزامی می باشد ',
             'date.required' => 'تاریخ الزامی می باشد ',
             'remark.required' => 'ملاحظات الزامی می باشد'
         ]);
@@ -326,7 +333,7 @@ class DocumentController extends Controller
             $farwarded_doc = FarwardDocument::find($request->farward_id);
             $document = Document::find($request->d_id);
             $newDocument = new Document();
-            $newDocument->number = $document->number;
+            $newDocument->number = $request->number;
             $newDocument->title = $document->title;
             $newDocument->source = $document->source;
             $newDocument->destination = $document->destination;

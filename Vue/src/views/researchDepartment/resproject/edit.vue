@@ -125,15 +125,16 @@
                     <div class="label--dev--width">
                         <label for="" class="form--label">
                             تصاویر مرتبط
-                            <span class="label--prefix">*</span></label
+                            <span class="label--prefix"></span></label
                         >
                     </div>
                     <div class="input--dev--width">
                         <CustomInput
-                            type="text"
-                            v-model="resProject.related_images"
+                            type="file"
+                            @change="
+                                (file) => (resProject.related_image = file)
+                            "
                             class="mb-2"
-                            required="required"
                         />
                     </div>
                 </div>
@@ -157,7 +158,7 @@
                 <div class="wrapper--dev--input">
                     <div class="label--dev--width">
                         <label for="" class="form--label">
-                              لابراتوار
+                            لابراتوار
                             <span class="label--prefix">*</span></label
                         >
                     </div>
@@ -176,8 +177,8 @@
                 <div class="wrapper--dev--input">
                     <div class="label--dev--width">
                         <label for="" class="form--label">
-                            توضیحات <span class="label--prefix"></span></label
-                        >
+                            توضیحات <span class="label--prefix"></span
+                        ></label>
                     </div>
                     <div class="input--dev--width">
                         <CustomInput
@@ -187,45 +188,47 @@
                         />
                     </div>
                 </div>
-
-                <footer class="bg-gray-100 mt-5 py-4 md:flex gap-5">
-                    <button
-                        type="submit"
-                        :class="[
-                            resProjectStore.loading === true
-                                ? 'footer--button--submit cursor-not-allowed'
-                                : 'footer--button--submit cursor-pointer rounded ',
-                        ]"
-                    >
-                        <span v-if="resProjectStore.loading === true">
-                            <svg
-                                class="animate-spin -ml-1 h-5 w-5 text-white"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                            >
-                                <circle
-                                    class="opacity-25"
-                                    cx="12"
-                                    cy="12"
-                                    r="10"
-                                    stroke="currentColor"
-                                    stroke-width="4"
-                                ></circle>
-                                <path
-                                    class="opacity-75"
-                                    fill="currentColor"
-                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                ></path>
-                            </svg>
-                        </span>
-                        <span v-else> ویرایش </span>
-                    </button>
-                    <button @click="closeModal" class="footer--button--cancel">
-                        لغو ویرایش
-                    </button>
-                </footer>
             </div>
+            <footer class="bg-gray-100 py-4 md:flex gap-5">
+                <button
+                    type="submit"
+                    :class="[
+                        resProjectStore.loading === true
+                            ? 'footer--button--submit cursor-not-allowed'
+                            : 'footer--button--submit cursor-pointer rounded ',
+                    ]"
+                >
+                    <span v-if="resProjectStore.loading === true">
+                        <svg
+                            class="animate-spin -ml-1 h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                class="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                stroke-width="4"
+                            ></circle>
+                            <path
+                                class="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                        </svg>
+                    </span>
+                    <span v-else> ویرایش </span>
+                </button>
+                <router-link
+                    :to="{ name: 'app.research.expdetails.list' }"
+                    class="footer--button--cancel"
+                >
+                    لغو ویرایش
+                </router-link>
+            </footer>
         </form>
     </div>
 </template>
@@ -249,20 +252,10 @@ onMounted(() => {
 
 const resProject = computed(() => resProjectStore.resProject);
 const labs = computed(() =>
-    labStore.labs.map((lab) => ({ key: lab.id, text: lab.name }))
+    labStore.allLabs.map((lab) => ({ key: lab.id, text: lab.lab_name }))
 );
 
-const props = defineProps({
-    closeModal: {
-        type: Function,
-        required: true,
-    },
-});
-
 function onSubmit() {
-    resProjectStore.createResProject(resProject.value);
-
-    // for refreshing the res project
-    resProjectStore.getResProject();
+    resProjectStore.updateResProject(resProject.value);
 }
 </script>

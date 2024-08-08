@@ -227,11 +227,12 @@
                     </span>
                     <span v-else> ثبت </span>
                 </button>
-                <router-link
-                    :to="{ name: 'app.post-graduated.student.list' }"
+                <button
+                    @click="closeModal"
                     class="footer--button--cancel cursor-pointer"
-                    >لغو ثبت</router-link
                 >
+                    لغو ثبت
+                </button>
             </footer>
         </form>
     </div>
@@ -254,10 +255,6 @@ const studentStore = useStudentStore();
 const route = useRoute();
 const graduatedStudent = computed(() => graduatedStudentStore.graduatedStudent);
 
-function onSubmit() {
-    graduatedStudentStore.createGraduatedStudent(graduatedStudent.value);
-}
-
 const dateStore = useDateStore();
 const years = computed(() => dateStore.years);
 const selectedYear = computed(() => dateStore.selectedYear);
@@ -270,6 +267,10 @@ const props = defineProps({
         type: String,
         required: true,
     },
+    closeModal: {
+        type: Function,
+        required: true,
+    },
 });
 
 onMounted(() => {
@@ -279,6 +280,12 @@ onMounted(() => {
 const student = computed(() => studentStore.student);
 graduatedStudent.value.student_id = props.student_id;
 
+function onSubmit() {
+    graduatedStudentStore.createGraduatedStudent(graduatedStudent.value);
+    setTimeout(() => {
+        graduatedStudentStore.getGraduatedStudent();
+    }, 1000);
+}
 // get just the year
 
 // Helper function to calculate the current Persian year

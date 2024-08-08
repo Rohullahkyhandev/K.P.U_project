@@ -30,12 +30,7 @@
 
         <form @submit.prevent="onSubmit">
             <div class="w-full py-8 bg-white shadow mt-8 px-4">
-                <!-- display message area -->
-                <Message
-                    :msg_success="teacherStore.msg_success"
-                    :msg_wrang="teacherStore.msg_wrang"
-                />
-                <!-- <div class="msg--success" v-if="teacherStore.msg_success">
+                <div class="msg--success" v-if="teacherStore.msg_success">
                     <div class="flex items-center justify-between px-10">
                         <div
                             class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
@@ -123,7 +118,7 @@
                             <span>{{ teacherStore.msg_wrang }}</span>
                         </div>
                     </div>
-                </div> -->
+                </div>
                 <!-- end of display message area -->
                 <!-- steper  -->
                 <div class="w-full flex items-center justify-center">
@@ -279,7 +274,6 @@
                                 <input
                                     type="radio"
                                     name="gander"
-                                    checked
                                     class="rounded-full focus:ring focus:bg-indigo-500"
                                     v-model="teacher.gender"
                                     value="مرد"
@@ -647,7 +641,6 @@ import { computed, onMounted, ref, useSlots } from "vue";
 import { useRoute } from "vue-router";
 import Steper from "../../components/steps.vue";
 import CustomInput from "../../components/core/CustomInput.vue";
-import Message from "../../components/Message.vue";
 import { useTeacherStore } from "../../stores/teachers/teacherStore";
 import DatePicker from "vue3-persian-datetime-picker";
 import { useFacultyStore } from "../../stores/faculties/facultyStore";
@@ -716,24 +709,11 @@ const teaching_status = ref([
     },
 ]);
 
-// part common department or faculties that has department
-
-const parts = [
-    {
-        key: "faculty",
-        text: "فاکولته ",
-    },
-
-    {
-        key: "common_department",
-        text: " دیپارتمنت های عمومی",
-    },
-];
-
+// academic ranks
 const academic_ranks = ref([
     {
-        text: "نامزد پوهنیار",
-        key: "نامزد پوهنیار",
+        text: "نامزاد پوهنیار",
+        key: "نامزاد پوهنیار",
     },
     {
         text: "پوهیالی",
@@ -752,6 +732,20 @@ const academic_ranks = ref([
         key: "پوهاند",
     },
 ]);
+
+// part common department or faculties that has department
+
+const parts = [
+    {
+        key: "faculty",
+        text: "فاکولته ",
+    },
+
+    {
+        key: "common_department",
+        text: " دیپارتمنت های عمومی",
+    },
+];
 
 function getFaculty(id) {
     teacherStore.getDepartments(id);

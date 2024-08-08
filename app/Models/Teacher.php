@@ -40,4 +40,14 @@ class Teacher extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function promotions()
+    {
+        return $this->hasMany(Promotion::class);
+    }
+
+    public function latestPromotion()
+    {
+        return $this->hasOne(Promotion::class)->latestOfMany();
+    }
 }

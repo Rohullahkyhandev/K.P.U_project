@@ -17,11 +17,11 @@
                             d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
                         />
                     </svg>
-                     ثبت  جزیات آزمایشات 
+                    ثبت جزیات آزمایشات
                 </button>
             </div>
 
-            <div class="text--header"> لیست جزیات آزمایشات </div>
+            <div class="text--header">لیست جزیات آزمایشات</div>
         </div>
         <div class="table--wrapper--dev">
             <!-- display message area -->
@@ -111,9 +111,7 @@
                         <option value="100">100</option>
                     </select>
                     &nbsp;
-                    <span class="ml-3"
-                        >پیداشد {{ expDetails.total }} دیتا</span
-                    >
+                    <span class="ml-3">پیداشد {{ expDetails.total }} دیتا</span>
                 </div>
             </div>
 
@@ -135,7 +133,7 @@
                             :sortField="sortField"
                             @click="sortExpDetail('experiment_name')"
                         >
-                              نام آزمایش
+                            نام آزمایش
                         </TableHeaderCell>
 
                         <TableHeaderCell
@@ -144,7 +142,7 @@
                             :sortField="sortField"
                             @click="sortExpDetail('related_part')"
                         >
-                             بخش مربوطه
+                            بخش مربوطه
                         </TableHeaderCell>
 
                         <TableHeaderCell
@@ -153,8 +151,8 @@
                             :sortField="sortField"
                             @click="sortExpDetail('related_images')"
                         >
-                              	تصاویر مرتبط
-                        </TableHeaderCell>                        
+                            تصاویر مرتبط
+                        </TableHeaderCell>
 
                         <TableHeaderCell
                             field="standard_id"
@@ -162,7 +160,7 @@
                             :sortField="sortField"
                             @click="sortExpDetail('standard_id')"
                         >
-                              استاندارد آی دی
+                            استاندارد آی دی
                         </TableHeaderCell>
 
                         <TableHeaderCell
@@ -171,7 +169,7 @@
                             :sortField="sortField"
                             @click="sortExpDetail('lab_id')"
                         >
-                              	آی دی لابراتوار
+                            لابراتوار
                         </TableHeaderCell>
 
                         <TableHeaderCell
@@ -180,9 +178,8 @@
                             :sortField="sortField"
                             @click="sortExpDetail('scope_part')"
                         >
-                              وسعت آزمایش
+                            وسعت آزمایش
                         </TableHeaderCell>
-
 
                         <TableHeaderCell
                             field="id"
@@ -223,21 +220,45 @@
                         <td class="border p-">
                             {{ expDetail.experiment_name }}
                         </td>
-                        <td class="border p-3">
+                        <td class="border p-">
                             {{ expDetail.related_part }}
                         </td>
                         <td class="border p-3">
-                            {{ expDetail.related_images }}
+                            <a
+                                :href="expDetail.related_image_path"
+                                class="bg-blue-500 inline-block py-2 rounded-lg cursor-pointer text-white px-3"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke-width="1.5"
+                                    stroke="currentColor"
+                                    class="size-6 text-white"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m.75 12 3 3m0 0 3-3m-3 3v-6m-1.5-9H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                                    />
+                                </svg>
+                            </a>
                         </td>
+
                         <td class="border p-">
                             {{ expDetail.standard_id }}
                         </td>
                         <td class="border p-3">
-                            {{ expDetail.lab_id }}
+                            {{ expDetail.lab_name }}
                         </td>
                         <td class="border p-3">
                             {{ expDetail.scope_part }}
-                        </td>                        
+                        </td>
+
+                        <td class="border p-3">
+                            {{ expDetail.uname }}
+                        </td>
+
                         <td class="border p-2">
                             <Menu
                                 as="div"
@@ -463,8 +484,6 @@ function deleteExpDetail(id) {
         return;
     }
     expDetailStore.deleteExpDetail(id);
-    if (expDetailStore.msg_success != null) {
-    }
     getExpDetail();
 }
 

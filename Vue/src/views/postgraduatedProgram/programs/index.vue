@@ -59,7 +59,7 @@
             </div>
 
             <div
-                class="bg-red-500 text-white py-4 rounded mb-2 text-center"
+                class="msg--warning"
                 v-if="programStore.msg_wrang"
             >
                 <div class="flex items-center justify-between px-10">

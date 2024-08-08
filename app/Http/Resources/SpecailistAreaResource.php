@@ -17,7 +17,7 @@ class SpecailistAreaResource extends JsonResource
         return [
             'id' => $this->id,
             'related_part' => $this->related_part,
-            'relate_field' => $this->relate_field,
+            'related_field' => $this->related_field,
             'uname' => $this->uname,
         ];
     }

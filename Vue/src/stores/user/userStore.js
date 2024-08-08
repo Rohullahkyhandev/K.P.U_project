@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import axiosClient from "../../axios";
 import { ref } from "vue";
+import router from "../../routes";
 
 export const useUserStore = defineStore("user", () => {
     let msg_success = ref("");
@@ -63,21 +64,23 @@ export const useUserStore = defineStore("user", () => {
         create_post_graduated: false,
         edit_post_graduated: false,
         delete_post_graduated: false,
-        // student permissions
-        view_student: false,
-        create_student: false,
-        edit_student: false,
-        delete_student: false,
-        // scholarship permissions
-        view_scholarship: false,
-        create_scholarship: false,
-        edit_scholarship: false,
-        delete_scholarship: false,
+
+        // documents
+        view_document: false,
+        create_document: false,
+        edit_document: false,
+        delete_document: false,
 
         // quality assurance department
         view_quality_assurance: false,
+        create_quality_assurance: false,
+        edit_quality_assurance: false,
+        delete_quality_assurance: false,
         // research department
         view_research_department: false,
+        create_research_department: false,
+        edit_research_department: false,
+        delete_research_department: false,
     });
 
     function getCurrentPermission() {
@@ -85,38 +88,74 @@ export const useUserStore = defineStore("user", () => {
             data.forEach((item) => {
                 if (item.id === 1) {
                     permission_current.value.administrator = true;
-                } else if (item.id === 5) {
+                } else if (item.id === 4) {
                     permission_current.value.view_pdc = true;
-                } else if (item.id === 6) {
+                } else if (item.id === 5) {
                     permission_current.value.create_pdc = true;
-                } else if (item.id === 7) {
+                } else if (item.id === 6) {
                     permission_current.value.edit_pdc = true;
-                } else if (item.id === 8) {
+                } else if (item.id === 7) {
                     permission_current.value.delete_pdc = true;
-                } else if (item.id === 10) {
-                    permission_current.value.view_teacher_department = true;
-                } else if (item.id === 11) {
-                    permission_current.value.create_teacher_department = true;
-                } else if (item.id === 12) {
-                    permission_current.value.edit_teacher_department = true;
-                } else if (item.id === 13) {
-                    permission_current.value.delete_teacher_department = true;
-                } else if (item.id === 25) {
-                    permission_current.value.view_employee = true;
-                } else if (item.id === 26) {
-                    permission_current.value.create_employee = true;
-                } else if (item.id === 27) {
-                    permission_current.value.edit_employee = true;
-                } else if (item.id === 28) {
-                    permission_current.value.delete_employee = true;
-                } else if (item.id === 30) {
-                    permission_current.value.view_post_graduated = true;
-                } else if (item.id === 31) {
-                    permission_current.value.create_post_graduated = true;
-                } else if (item.id === 32) {
+                }
+                // end pdc permissions
+                else if (item.id === 11) {
                     permission_current.value.view_quality_assurance = true;
-                } else if (item.id === 33) {
+                } else if (item.id === 12) {
+                    permission_current.value.create_quality_assurance = true;
+                } else if (item.id === 13) {
+                    permission_current.value.edit_quality_assurance = true;
+                } else if (item.id === 14) {
+                    permission_current.value.delete_quality_assurance = true;
+                }
+                // end of the quality assurance permissions
+                else if (item.id === 14) {
+                    permission_current.value.delete_quality_assurance = true;
+                } else if (item.id === 20) {
+                    permission_current.value.view_teacher_department = true;
+                } else if (item.id === 21) {
+                    permission_current.value.create_teacher_department = true;
+                } else if (item.id === 22) {
+                    permission_current.value.edit_teacher_department = true;
+                } else if (item.id === 23) {
+                    permission_current.value.delete_teacher_department = true;
+                } else if (item.id === 27) {
+                    permission_current.value.view_post_graduated = true;
+                } else if (item.id === 28) {
+                    permission_current.value.create_post_graduated = true;
+                } else if (item.id === 29) {
+                    permission_current.value.edit_post_graduated = true;
+                } else if (item.id === 30) {
+                    permission_current.value.delete_post_graduated = true;
+                }
+                // end of post graduated permissions
+                else if (item.id === 34) {
                     permission_current.value.view_research_department = true;
+                } else if (item.id === 35) {
+                    permission_current.value.create_research_department = true;
+                } else if (item.id === 36) {
+                    permission_current.value.edit_research_department = true;
+                } else if (item.id === 37) {
+                    permission_current.value.delete_research_department = true;
+                }
+                // end of research department permissions
+                else if (item.id === 41) {
+                    permission_current.value.view_employee = true;
+                } else if (item.id === 42) {
+                    permission_current.value.create_employee = true;
+                } else if (item.id === 43) {
+                    permission_current.value.edit_employee = true;
+                } else if (item.id === 44) {
+                    permission_current.value.delete_employee = true;
+                }
+                // end of employees permissions
+                else if (item.id === 48) {
+                    permission_current.value.view_document = true;
+                } else if (item.id === 49) {
+                    permission_current.value.create_document = true;
+                } else if (item.id === 50) {
+                    permission_current.value.edit_document = true;
+                } else if (item.id === 51) {
+                    permission_current.value.delete_document = true;
                 }
             });
         });
@@ -294,6 +333,7 @@ export const useUserStore = defineStore("user", () => {
             .then((res) => {
                 loading.value = false;
                 msg_success.value = res.data.message;
+                router.push({ name: "app.user.list" });
             })
             .catch((err) => {
                 loading.value = false;

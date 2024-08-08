@@ -114,11 +114,11 @@ class CurriculumController extends Controller
         if ($result) {
             return response()->json([
                 'message' => 'اطلاعات با موفقیت ��خیره شد'
-            ]);
+            ], 200);
         } else {
             return response()->json([
                 'message' => 'اطلاعات ��خیره نشد دوباره تلاش کنید'
-            ]);
+            ], 304);
         }
     }
 

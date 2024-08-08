@@ -17,7 +17,7 @@ class ResearchLabResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'lab_name' => $this->lab_name,
+            'name' => $this->lab_name,
             'description' => $this->description,
             'uname' => $this->uname,
         ];

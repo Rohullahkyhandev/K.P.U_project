@@ -235,10 +235,10 @@
                     </span>
                     <span v-else> ثبت </span>
                 </button>
-                <router-link
+                <span
                     :to="{ name: 'app.post-graduated.student.list' }"
                     class="footer--button--cancel cursor-pointer"
-                    >لغو ثبت</router-link
+                    >لغو ثبت</span
                 >
             </footer>
         </form>
@@ -265,6 +265,8 @@ onMounted(() => {
     programStore.getAllPrograms();
 });
 
+
+
 const programs = computed(() =>
     programStore.listProgram.map((program) => ({
         key: program.id,
@@ -286,5 +288,8 @@ function getTeachers(program_id) {
 function onSubmit() {
     let id = route.params.id;
     studentResearchStore.createStudentResearch(studentResearch.value, id);
+    setTimeout(() => {
+        studentResearchStore.getStudentResearch();
+    }, 1000);
 }
 </script>

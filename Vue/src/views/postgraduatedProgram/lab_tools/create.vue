@@ -172,11 +172,9 @@
                         </span>
                         <span v-else> ثبت </span>
                     </button>
-                    <router-link
-                        :to="{ name: 'app.dashboard' }"
-                        class="footer--button--cancel"
-                        >لغو ثبت</router-link
-                    >
+                    <button @click="closeModal" class="footer--button--cancel">
+                        لغو ثبت
+                    </button>
                 </footer>
             </div>
         </form>
@@ -190,6 +188,13 @@ import CustomInput from "../../../components/core/CustomInput.vue";
 import useLabEquipmentStore from "../../../stores/postgraduatedPrograms/labEquipment";
 
 const labEquipmentStore = useLabEquipmentStore();
+
+const props = defineProps({
+    closeModal: {
+        type: Function,
+        required: true,
+    },
+});
 
 onMounted(() => {
     labEquipmentStore.getAllLab();

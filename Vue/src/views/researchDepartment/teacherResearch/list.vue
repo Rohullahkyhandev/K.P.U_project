@@ -21,7 +21,7 @@
                 </button>
             </div>
 
-            <div class="text--header">لسیت  تحقیقات استادان</div>
+            <div class="text--header">لسیت تحقیقات استادان</div>
         </div>
 
         <div class="table--wrapper--dev">
@@ -96,6 +96,17 @@
                         placeholder="جستجوی بر اساس تمام فیلد ها"
                     />
                 </div>
+
+                <Select
+                    v-model="dep_id"
+                    @change="getTeacherResearch(null)"
+                    :options="departments"
+                    optionLabel="name"
+                    filter
+                    placeholder="فلیتر کردن تحقیقات استادان  براساس دیپارمنت"
+                    class="w-full md:w-80 py-1 rounded-lg"
+                />
+
                 <div class="flex items-center">
                     <span class="whitespace-nowrap mr-3">هر صفحه</span>
                     &nbsp;
@@ -154,7 +165,7 @@
                             :sortField="sortField"
                             @click="sortTeacherResearch('fname')"
                         >
-                            اسم پدر استاد 
+                            اسم پدر استاد
                         </TableHeaderCell>
 
                         <TableHeaderCell
@@ -185,12 +196,21 @@
                         </TableHeaderCell>
 
                         <TableHeaderCell
+                            field="id"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortTeacherResearch('id')"
+                        >
+                            پوهنځی
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
                             field="department"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
                             @click="sortTeacherResearch('department')"
                         >
-                            دیپارتمنت 
+                            دیپارتمنت
                         </TableHeaderCell>
 
                         <TableHeaderCell
@@ -212,7 +232,12 @@
                         </TableHeaderCell>
                     </tr>
                 </thead>
-                <tbody v-if="teacherResearchs.loading || !teacherResearchs.data.length">
+                <tbody
+                    v-if="
+                        teacherResearchs.loading ||
+                        !teacherResearchs.data.length
+                    "
+                >
                     <tr>
                         <td colspan="10">
                             <Spinner v-if="teacherResearchs.loading" />
@@ -224,7 +249,9 @@
                 </tbody>
                 <tbody class="border" v-else>
                     <tr
-                        v-for="(teacherResearch, index) of teacherResearchs.data"
+                        v-for="(
+                            teacherResearch, index
+                        ) of teacherResearchs.data"
                         :key="index"
                     >
                         <td class="border-b p-3">{{ index + 1 }}</td>
@@ -247,24 +274,19 @@
                             {{ teacherResearch.education_degree }}
                         </td>
                         <td class="border p-3">
-                            {{ teacherResearch.research_title }}
+                            {{ teacherResearch.title }}
                         </td>
 
                         <td class="border p-3">
-                            <ul>
-                                <li
-                                    class="text-left"
-                                    v-for="(
-                                        department, index
-                                    ) of teacherResearch.departments"
-                                    :key="index"
-                                >
-                                    <span>{{ index + 1 }}&nbsp;</span>
-                                    <span>
-                                        {{ department.name }}
-                                    </span>
-                                </li>
-                            </ul>
+                            {{ teacherResearch.faculty }}
+                        </td>
+
+                        <td class="border p-3">
+                            {{ teacherResearch.department }}
+                        </td>
+
+                        <td class="border p-3">
+                            {{ teacherResearch.uname }}
                         </td>
 
                         <td class="border p-2">
@@ -306,7 +328,7 @@
                                             <MenuItem v-slot="{ active }">
                                                 <router-link
                                                     :to="{
-                                                        name: 'app.research.curriculum.edit',
+                                                        name: 'app.research.tresearch.edit',
                                                         params: {
                                                             id: teacherResearch.id,
                                                         },
@@ -387,7 +409,8 @@
                 dir="ltr"
             >
                 <div v-if="teacherResearchs.data">
-                    نمایش از {{ teacherResearchs.from }} تا {{ teacherResearchs.to }}
+                    نمایش از {{ teacherResearchs.from }} تا
+                    {{ teacherResearchs.to }}
                 </div>
                 <nav
                     v-if="teacherResearchs.total > teacherResearchs.limit"
@@ -425,15 +448,17 @@
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
+import Select from "primevue/select";
 import Spinner from "../../../components/core/Spnnier.vue";
 import { USER_PER_PAGE } from "../../../constant";
 import TableHeaderCell from "../../../components/tableHeader/tableheader.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
-// import { PencilAltIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useRoute, useRouter } from "vue-router";
 import useTeacherResearchStore from "../../../stores/researchDepartment/teacherResearch";
+import useDepartmentStore from "../../../stores/department/deparmentStore";
 
 const teacherResearchStore = useTeacherResearchStore();
+const departmentStore = useDepartmentStore();
 const route = useRoute();
 const router = useRouter();
 const getCurrentPath = route.path;
@@ -450,10 +475,19 @@ const search = ref("");
 const teacherResearchs = computed(() => teacherResearchStore.teacherResearchs);
 const sortField = ref("updated_at");
 const sortDirection = ref("desc");
+const dep_id = ref("");
 
 onMounted(() => {
     getTeacherResearch();
+    departmentStore.getAllDepartment();
 });
+
+const departments = computed(() =>
+    departmentStore.all_department.map((department) => ({
+        id: department.id,
+        name: department.name,
+    }))
+);
 
 function getForPage(ev, link) {
     ev.preventDefault();
@@ -470,6 +504,7 @@ function getTeacherResearch(url = null) {
         per_page: perPage.value,
         sortField: sortField.value,
         sortDirection: sortDirection.value,
+        dep_id: dep_id.value.id,
     });
 }
 

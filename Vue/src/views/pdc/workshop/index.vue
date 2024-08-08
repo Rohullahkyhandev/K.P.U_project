@@ -138,7 +138,9 @@
                         <option value="100">100</option>
                     </select>
                     &nbsp;
-                    <span class="ml-3">پیداشد {{ workshops.total }} پلان</span>
+                    <span class="ml-3"
+                        >پیداشد {{ workshops.total }} ورکشاپ</span
+                    >
                 </div>
             </div>
 
@@ -240,11 +242,7 @@
                         <td class="border p-3">
                             <a
                                 class="bg-blue-600 block w-8 py-2 flex item-center justify-center rounded-lg text-white"
-                                :href="
-                                    workshop.document_path
-                                        ? workshop.document_path
-                                        : '#'
-                                "
+                                :href="workshop.attachment_path"
                             >
                                 <svg
                                     xmlns=" http://www.w3.org/2000/svg"
@@ -299,13 +297,13 @@
                                     leave-to-class="transform scale-95 opacity-0"
                                 >
                                     <MenuItems
-                                        class="absolute z-10 left-4 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                        class="absolute z-10 left-4 mt-2 w-40 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                     >
                                         <div class="px-1 py-1">
                                             <MenuItem v-slot="{ active }">
                                                 <router-link
                                                     :to="{
-                                                        name: 'app.pdc.plan.edit',
+                                                        name: 'app.pdc.workshop.edit',
                                                         params: {
                                                             id: workshop.id,
                                                         },

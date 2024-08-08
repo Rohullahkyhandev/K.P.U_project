@@ -28,7 +28,7 @@ class TeacherResource extends JsonResource
             'hire_date' => $this->hire_date,
             'education' => $this->education,
             'academic_rank' => $this->academic_rank,
-            'education' => $this->education,
+            // 'education' => $this->education,
             'last_rank' => $this->last_rank,
             'attachment_path' => is_array($this->attachment_path) ? $this->attachment_path : json_decode($this->attachment_path, true),
             'now_rank' => $this->now_rank,

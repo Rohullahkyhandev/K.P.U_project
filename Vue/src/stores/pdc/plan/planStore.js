@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axiosClient from '../../../axios'
+import router from "../../../routes";
 import { ref } from 'vue'
 
 export const usePlanStore = defineStore('plan', () => {
@@ -123,6 +124,7 @@ export const usePlanStore = defineStore('plan', () => {
                 loading.value = false
                 msg_success.value = res.data.message;
                 plan.value = ''
+                router.push({ name: "app.pdc.plan.list" });
             }).catch((err) => {
                 loading.value = false
                 msg_wrang.value = err.response.data.message

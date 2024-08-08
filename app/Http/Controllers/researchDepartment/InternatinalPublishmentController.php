@@ -99,16 +99,16 @@ class InternatinalPublishmentController extends Controller
             'author' => 'required',
             'author_assesstance' => 'required',
             'journal' => 'required',
-            'link' => 'required',
+            'journal_website_link' => 'required',
             'title' => 'required',
             'faculty_id' => 'required',
             'department_id' => 'required',
-            'attachment' => 'nullable|mimes:pdf,jpg,png,jpeg,gif|size:6000',
+            'attachment' => 'nullable|mimes:pdf,jpg,png,jpeg,gif|max:6000',
         ], [
             'author.required' => 'فلید نام الزامی می باشد',
             'author_assesstance.required' => 'فلید نام همکار نویسنده الزامی می باشد',
             'journal.required' => 'فلید نام مجله الزامی می باشد',
-            'link.required' => 'فلید لینک الزامی می باشد',
+            'journal_website_link.required' => 'فلید لینک الزامی می باشد',
             'title.required' => 'فلید عنوان الزامی می باشد',
             'faculty_id.required' => 'فلید دانشکده الزامی می باشد',
             'department_id.required' => 'فلید دیپارتمنت الزامی می باشد',
@@ -120,7 +120,7 @@ class InternatinalPublishmentController extends Controller
         $attachment = $internatinal_publishment->attachment;
         $attachment_path  = $internatinal_publishment->attachment_path;
 
-        if ($request->hasFile('attachments')) {
+        if ($request->attachment != '') {
             if (is_file(storage_path('app/public/research_department/teacher_research/' . $attachment))) {
                 Storage::delete('app/public/research_department/teacher_research/' . $attachment);
             }
@@ -132,7 +132,7 @@ class InternatinalPublishmentController extends Controller
         $internatinal_publishment->author = $request->author;
         $internatinal_publishment->author_assesstance = $request->author_assesstance;
         $internatinal_publishment->journal_name = $request->journal;
-        $internatinal_publishment->journal_link_website = $request->link;
+        $internatinal_publishment->journal_link_website = $request->journal_website_link;
         $internatinal_publishment->title = $request->title;
         $internatinal_publishment->attachment = $attachment;
         $internatinal_publishment->attachment_path = $attachment_path;
@@ -142,11 +142,11 @@ class InternatinalPublishmentController extends Controller
 
         if ($result) {
             return response([
-                'message' => ' اطلاعات موفقانه ذخیره شد '
+                'message' => ' اطلاعات موفقانه ویرایش شد '
             ], 200);
         } else {
             return response([
-                'message' => ' اطلاعات موفقانه ذخیره نشد دوباره تلاش نماید'
+                'message' => ' اطلاعات موفقانه ویرایش نشد دوباره تلاش نماید'
             ], 304);
         }
     }

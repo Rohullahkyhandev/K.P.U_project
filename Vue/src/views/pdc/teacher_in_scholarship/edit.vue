@@ -295,7 +295,6 @@
                                 (file) => (teacherInScholarship.document = file)
                             "
                             class="mb-2"
-
                             label=" اسناد"
                         />
                     </div>
@@ -335,7 +334,7 @@
                     <span v-else> ویرایش </span>
                 </button>
                 <router-link
-                    :to="{ name: 'app.dashboard' }"
+                    :to="{ name: 'app.pdc.teacher_in_scholarship.list' }"
                     class="footer--button--cancel cursor-pointer"
                     >لغو ویرایش</router-link
                 >

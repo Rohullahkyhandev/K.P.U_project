@@ -1,41 +1,45 @@
 <template>
-    <div class="form--padding--top">
-        <div class="flex items-center justify-between mb-4">
-            <div class="mb-2">
-                <button @click="openModal" class="header--button">
+    <div class="mt-10">
+        <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center gap-5">
+                <!-- <router-link
+                    :to="{ name: 'app.teacher.create' }"
+                    class="header--button"
+                >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke-width="1.5"
                         stroke="currentColor"
-                        class="w-5 h-5"
+                        class="w-6 h-6"
                     >
                         <path
                             stroke-linecap="round"
                             stroke-linejoin="round"
-                            d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
+                            d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3 19.235v-.11a6.375 6.375 0 0 1 12.75 0v.109A12.318 12.318 0 0 1 9.374 21c-2.331 0-4.512-.645-6.374-1.766Z"
                         />
                     </svg>
-                     ثبت پروژه تحقیق
-                </button>
-            </div>
+                    استاد جدید
+                </router-link> -->
 
-            <div class="text--header"> لیست پروژه های تحقیق</div>
+                <div class="inset-0 flex items-center justify-center"></div>
+            </div>
+            <div>
+                <h1 class="text--header">لیست استادان برنامه های فوق لیسانس</h1>
+            </div>
         </div>
-        <div class="table--wrapper--dev">
+
+        <div class="table--wrapper--dev bg-red-500 overflow-x-hidden">
             <!-- display message area -->
-            <div
-                class="bg-green-700 text-white rounded py-4 mb-2 text-center"
-                v-if="resProjectStore.msg_success"
-            >
-                <div class="flex items-center justify-between px-10">
+            <div class="msg--success" v-if="teacherStore.msg_success">
+                <div class="flex items-center justify-between px-10 ,mb-3">
                     <div
                         class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            @click="resProjectStore.msg_success = ''"
+                            @click="teacherStore.msg_success = ''"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
@@ -50,22 +54,19 @@
                         </svg>
                     </div>
                     <div>
-                        <span>{{ resProjectStore.msg_success }}</span>
+                        <span>{{ teacherStore.msg_success }}</span>
                     </div>
                 </div>
             </div>
 
-            <div
-                class="bg-red-500 text-white py-4 rounded mb-2 text-center"
-                v-if="resProjectStore.msg_wrang"
-            >
-                <div class="flex items-center justify-between px-10">
+            <div class="msg--warning" v-if="teacherStore.msg_wrang">
+                <div class="flex items-center justify-between px-10 mb-10">
                     <div
                         class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
                     >
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            @click="resProjectStore.msg_wrang = ''"
+                            @click="teacherStore.msg_wrang = ''"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
@@ -80,29 +81,39 @@
                         </svg>
                     </div>
                     <div>
-                        <span>{{ resProjectStore.msg_wrang }}</span>
+                        <span>{{ teacherStore.msg_wrang }}</span>
                     </div>
                 </div>
             </div>
             <!-- end of display message area -->
-
-            <div class="flex justify-between border-b-2 pb-3">
+            <div class="flex justify-between border-b-2 pb-3 relative">
                 <div>
                     <input
                         v-model="search"
-                        @change="getResProject(null)"
+                        @change="getTeacher(null)"
                         class="appearance-none relative block w-48 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="جستجوی بر اساس تمام فیلد ها"
+                        placeholder="جستجوی بر اساس تمام فلید ها"
+                    />
+                </div>
+
+                <div>
+                    <Select
+                        v-model="program"
+                        @change="getTeacher(null)"
+                        :options="programs"
+                        optionLabel="name"
+                        placeholder="فلیتر کردن استادان براساس برنامه"
+                        class="w-full md:w-80 py-1 rounded-lg"
                     />
                 </div>
                 <div class="flex items-center">
                     <span class="whitespace-nowrap mr-3">هر صفحه</span>
                     &nbsp;
                     <select
-                        @change="getResProject(null)"
-                        v-model="perPage"
                         dir="ltr"
-                        class="appearance-none relative block w-24 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        @change="getTeacher(null)"
+                        v-model="perPage"
+                        class="appearance-none relative block w-24 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                     >
                         <option value="5" selected>5</option>
                         <option value="10" selected>10</option>
@@ -111,83 +122,89 @@
                         <option value="100">100</option>
                     </select>
                     &nbsp;
-                    <span class="ml-3"
-                        >پیداشد {{ resProjects.total }} دیتا</span
-                    >
+                    <span class="ml-3">پیداشد {{ teachers.total }} دیتا</span>
                 </div>
             </div>
-
-            <table class="table-auto w-full border">
+            <table class="w-full table-auto border">
                 <thead>
                     <tr>
                         <TableHeaderCell
                             field="id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortResProject('id')"
+                            @click="sortTeacher('id')"
                         >
                             شماره.
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="lab_id"
+                            field="name"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortResProject('lab_id')"
+                            @click="sortTeacher('name')"
                         >
-                             آی دی لابراتوار
-                        </TableHeaderCell> 
-
-                        <TableHeaderCell
-                            field="project_name"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortResProject('project_name')"
-                        >
-                              نام پروژه
+                            نام
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="scope_of_project"
+                            field="lname"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortResProject('scope_of_project')"
+                            @click="sortTeacher('lname')"
                         >
-                             وسعت پروژه
+                            تخلص
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="related_images"
+                            field="fatherName"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortResProject('related_images')"
+                            @click="sortTeacher('fatherName')"
                         >
-                             تصاویر مرتبط
+                            نام پدر
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="description"
+                            field=""
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortResProject('description')"
+                            @click="sortTeacher('')"
                         >
-                             توضیحات
+                            سویه تحصلی
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="date"
+                            field="program_id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortResProject('date')"
+                            @click="sortTeacher('program_id')"
                         >
-                             تاریخ
-                        </TableHeaderCell>                                                
+                            برنامه فوق لیسانس
+                        </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="id"
+                            field="teaching_status"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortResProject('id')"
+                            @click="sortTeacher('teaching_status')"
+                        >
+                            شیفت تدریس
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
+                            field="hire_date"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortTeacher('hire_date')"
+                        >
+                            تاریخ استخدام
+                        </TableHeaderCell>
+                        
+                        <TableHeaderCell
+                            field="action"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortTeacher('acs')"
                         >
                             کابر
                         </TableHeaderCell>
@@ -196,52 +213,87 @@
                             field="action"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortResProject('acs')"
+                            @click="sortTeacher('acs')"
                         >
                             عملیات
                         </TableHeaderCell>
                     </tr>
                 </thead>
-                <tbody v-if="resProjects.loading || !resProjects.data.length">
+                <tbody v-if="teachers.loading || !teachers.data?.length">
                     <tr>
-                        <td colspan="10">
-                            <Spinner v-if="resProjects.loading" />
+                        <td colspan="15">
+                            <Spinner v-if="teachers.loading" />
                             <p v-else class="text-center py-8 text-gray-700">
                                 نتیجه ای پیدا نشد
                             </p>
                         </td>
                     </tr>
                 </tbody>
-                <tbody class="border" v-else>
-                    <tr
-                        v-for="(resProject, index) of resProjects.data"
-                        :key="index"
-                    >
-                        <td class="border-b p-3">{{ index + 1 }}</td>
+                <tbody v-else>
+                    <tr v-for="(teacher, index) of teachers.data" :key="index">
+                        <td class="border-b p-2 border">{{ index + 1 }}</td>
 
-                        <td class="border p-">
-                            {{ resProject.lab_id }}
+                        <td class="border-b p-2 border">
+                            {{ teacher.name }}
                         </td>
-                        <td class="border p-3">
-                            {{ resProject.project_name }}
+                        <td class="border-b p-2 border">
+                            {{ teacher.lname }}
                         </td>
-                        <td class="border p-3">
-                            {{ resProject.scope_of_project }}
+
+                        <td class="border-b p-2 border">
+                            {{ teacher.fname }}
                         </td>
-                        <td class="border p-">
-                            {{ resProject.related_images }}
+
+                        <td class="border-b p-2 border">
+                            <ul>
+                                <li
+                                    v-for="(
+                                        education_degree, index
+                                    ) in education_degrees"
+                                    :key="index"
+                                    :class="[
+                                        teacher.education ==
+                                        education_degree.text
+                                            ? 'bg-blue-500 text-white px-4  rounded-lg'
+                                            : '',
+                                    ]"
+                                >
+                                    {{ education_degree.text }}
+                                </li>
+                            </ul>
                         </td>
-                        <td class="border p-3">
-                            {{ resProject.description }}
+
+                        <td class="border-b p-2 border">
+                            {{ teacher.pname }}
                         </td>
-                        <td class="border p-3">
-                            {{ resProject.date }}
-                        </td> 
-                        <td class="border p-3">
-                            {{ resProject.uname }}
-                        </td>                        
-                        
-                        <td class="border p-2">
+                        <td class="border-b p-2 border">
+                            <span v-if="teacher.teaching_status == 'bachelor'"
+                                >برنامه های لیسانس</span
+                            >
+                            <span
+                                v-else-if="
+                                    teacher.teaching_status == 'post-graduated'
+                                "
+                                >برنامه ها فوق لیسانس</span
+                            >
+                            <span v-else-if="teacher.teaching_status == 'both'"
+                                >هر دو برنامه</span
+                            >
+                        </td>
+                        <!-- <td class="border-b p-2 border">
+                            {{ teacher.email }}
+                        </td>
+                        <td class="border-b p-2 border">
+                            {{ teacher.phone }}
+                        </td> -->
+                        <td class="border-b p-2 border">
+                            {{ teacher.hire_date }}
+                        </td>
+                        <td class="border-b p-2 border">
+                            {{ teacher.uname }}
+                        </td>
+
+                        <td class="border-b p-2 border">
                             <Menu
                                 as="div"
                                 class="relative inline-block text-left"
@@ -276,13 +328,50 @@
                                     <MenuItems
                                         class="absolute z-10 left-4 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                                     >
+                                        <div class="px-1 py-1"></div>
+
                                         <div class="px-1 py-1">
                                             <MenuItem v-slot="{ active }">
                                                 <router-link
                                                     :to="{
-                                                        name: 'app.research.resproject.edit',
+                                                        name: 'app.teacher.details',
                                                         params: {
-                                                            id: resProject.id,
+                                                            id: teacher.id,
+                                                        },
+                                                    }"
+                                                    :class="[
+                                                        active
+                                                            ? 'bg-blue-800 text-white'
+                                                            : 'text-gray-900',
+                                                        'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
+                                                    ]"
+                                                >
+                                                    <svg
+                                                        xmlns="http://www.w3.org/2000/svg"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke-width="1.5"
+                                                        stroke="currentColor"
+                                                        class="w-5 h-5 tex-blue-900"
+                                                    >
+                                                        <path
+                                                            stroke-linecap="round"
+                                                            stroke-linejoin="round"
+                                                            d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                                                        />
+                                                    </svg>
+                                                    جزئيات
+                                                </router-link>
+                                            </MenuItem>
+                                        </div>
+
+                                        <div class="px-1 py-1">
+                                            <MenuItem v-slot="{ active }">
+                                                <router-link
+                                                    :to="{
+                                                        name: 'app.teacher.edit',
+                                                        params: {
+                                                            id: teacher.id,
                                                         },
                                                     }"
                                                     :class="[
@@ -315,13 +404,10 @@
                                             <MenuItem v-slot="{ active }">
                                                 <button
                                                     @click="
-                                                        deleteResProject(
-                                                            resProject.id
+                                                        deleteTeacher(
+                                                            teacher.id
                                                         )
                                                     "
-                                                    :to="{
-                                                        name: 'app.research.resproject',
-                                                    }"
                                                     :class="[
                                                         active
                                                             ? 'bg-blue-800 text-white'
@@ -334,6 +420,7 @@
                                                         fill="none"
                                                         viewBox="0 0 24 24"
                                                         stroke-width="1.5"
+                                                        s
                                                         stroke="currentColor"
                                                         class="w-5 h-5 text-red-500"
                                                     >
@@ -356,21 +443,21 @@
                 </tbody>
             </table>
             <div
-                v-if="!resProjects.loading"
+                v-if="!teachers.loading"
                 class="flex justify-between items-center mt-5"
                 dir="ltr"
             >
-                <div v-if="resProjects.data">
-                    نمایش از {{ resProjects.from }} تا {{ resProjects.to }}
+                <div v-if="teachers.data">
+                    نمایش از {{ teachers.from }} تا {{ teachers.to }}
                 </div>
                 <nav
-                    v-if="resProjects.total > resProjects.limit"
+                    v-if="teachers.total > teachers.limit"
                     class="relative z-0 inline-flex justify-center rounded-md shadow-sm -space-x-px"
                     aria-label="Pagination"
                 >
                     <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
                     <a
-                        v-for="(link, i) of resProjects.links"
+                        v-for="(link, i) of teachers.links"
                         :key="i"
                         :disabled="!link.url"
                         href="#"
@@ -382,7 +469,7 @@
                                 ? 'z-10 bg-indigo-50 border-indigo-500 text-indigo-600'
                                 : 'bg-white border-gray-300 text-gray-500 hover:bg-gray-50',
                             i === 0 ? 'rounded-l-md' : '',
-                            i === resProjects.links.length - 1
+                            i === teachers.links.length - 1
                                 ? 'rounded-r-md'
                                 : '',
                             !link.url ? ' bg-gray-100 text-gray-700' : '',
@@ -394,60 +481,111 @@
             </div>
         </div>
         <br /><br />
+
+        <!-- Modal Box -->
+        <ModalBox
+            :is-pro-open="isProOpen"
+            :close-pro-modal="closeProModal"
+            :openProModal="openProModal"
+            :teacher_id="teacher_id"
+        />
+        <!-- end of Modal box -->
     </div>
 </template>
 
 <script setup>
+import {
+    TransitionRoot,
+    TransitionChild,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    Switch,
+} from "@headlessui/vue";
 import { computed, onMounted, ref } from "vue";
 import Spinner from "../../../components/core/Spnnier.vue";
 import { USER_PER_PAGE } from "../../../constant";
 import TableHeaderCell from "../../../components/tableHeader/tableheader.vue";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
+import Select from "primevue/select";
 // import { PencilAltIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
-import { useRoute, useRouter } from "vue-router";
-import useResprojectStore from "../../../stores/researchDepartment/researchProjectStore";
+import { useRoute } from "vue-router";
+import { useTeacherStore } from "../../../stores/teachers/teacherStore";
+import ModalBox from "../graduatedStudent/Modal.vue";
+import useDepartmentStore from "../../../stores/department/deparmentStore";
+import { useAuthStore } from "../../../stores/auth";
+import useProgramStore from "../../../stores/postgraduatedPrograms/programStore";
 
-const resProjectStore = useResprojectStore();
+const teacherStore = useTeacherStore();
+const departmentStore = useDepartmentStore();
+const authStore = useAuthStore();
+const programStore = useProgramStore();
 const route = useRoute();
-const router = useRouter();
-const getCurrentPath = route.path;
-
-const props = defineProps({
-    openModal: {
-        type: Function,
-        required: true,
-    },
-});
 
 const perPage = ref(USER_PER_PAGE);
 const search = ref("");
-const resProjects = computed(() => resProjectStore.resProjects);
+const teachers = computed(() => teacherStore.Teachers);
 const sortField = ref("updated_at");
 const sortDirection = ref("desc");
+const department = ref("");
+const program = ref("");
+
+const isOpen = ref(false);
+const teacher_id = ref("");
+const isProOpen = ref(false);
+function closeModal() {
+    isOpen.value = false;
+}
+function openModal() {
+    isOpen.value = true;
+}
+
+function closeProModal() {
+    isProOpen.value = false;
+}
+function openProModal(id) {
+    if (id) {
+        teacher_id.value = id;
+        isProOpen.value = true;
+    }
+}
 
 onMounted(() => {
-    getResProject();
+    getTeacher();
+    teacherStore.getAllDepartments();
+    departmentStore.getAllDepartment();
+    programStore.getAllPrograms();
+    authStore.getUser();
 });
+
+const departments = computed(() =>
+    departmentStore.all_department.map((c) => ({ id: c.id, name: c.name }))
+);
+const programs = computed(() =>
+    programStore.listProgram.map((c) => ({ id: c.id, name: c.program_name }))
+);
 
 function getForPage(ev, link) {
     ev.preventDefault();
     if (!link.url || link.active) {
         return;
     }
-    getResProject(link.url);
+    getTeacher(link.url);
 }
 
-function getResProject(url = null) {
-    resProjectStore.getResProject({
+function getTeacher(url = null) {
+    teacherStore.getTeachers({
         url,
         search: search.value,
         per_page: perPage.value,
         sortField: sortField.value,
         sortDirection: sortDirection.value,
+        department_id: department.value.id,
+        program: program.value.id,
     });
 }
 
-function sortResProject(field) {
+function sortTeacher(field) {
     if (field === sortField.value) {
         if (sortDirection.value === "desc") {
             sortDirection.value = "asc";
@@ -458,21 +596,35 @@ function sortResProject(field) {
         sortField.value = field;
         sortDirection.value = "asc";
     }
-    getResProject();
+    getTeacher();
 }
 
-function deleteResProject(id) {
-    if (!confirm(`آیا شما مطمین هستید این دیتا را حذف می نماید?`)) {
+function deleteTeacher(id) {
+    if (!confirm(`آیا شما می خواهد این اطلاعات را حذف نماید?`)) {
         return;
     }
-    resProjectStore.deleteResProject(id);
-    if (resProjectStore.msg_success != null) {
-    }
-    getResProject();
+    teacherStore.deleteTeacher(id);
+    getTeacher();
 }
 
-function msg_success_fun() {}
+// education degres
+const education_degrees = ref([
+    {
+        key: "لیسانس",
+        text: "لسیانس",
+    },
+    {
+        key: "ماستر",
+        text: "ماستر",
+    },
+    {
+        key: "داکتر",
+        text: "داکتر",
+    },
+]);
 
+const enabled = ref(false);
+function msg_success_fun() {}
 function msg_warning_fun() {}
 </script>
 

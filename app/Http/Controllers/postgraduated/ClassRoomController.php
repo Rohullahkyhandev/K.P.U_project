@@ -18,11 +18,13 @@ class ClassRoomController extends Controller
         $per_page = request('per_page', 10);
         $sortField  = request('sortField', 'id');
         $sortDirection = request('sortDirection', 'DESC');
-        $program_id = request('program_id');
+        $program_id = request('program_id', '');
 
         $data = ClassRoom::query()
-            ->where('class_rooms.program_id', '=', $program_id)
-            ->where('class_rooms.number', 'like', "%{$search}%")
+            ->where('class_rooms.program_id', 'like', "%{$program_id}%")
+            ->whereAny([
+                'class_rooms.number',
+            ], 'like', "%{$search}%")
             ->join('post_graduated_programs', 'class_rooms.program_id', 'post_graduated_programs.id')
             ->join('users', 'class_rooms.user_id', 'users.id')
             ->select('class_rooms.*', 'post_graduated_programs.program_name as program_name', 'users.name as uname')

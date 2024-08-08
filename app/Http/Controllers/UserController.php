@@ -107,6 +107,8 @@ class UserController extends Controller
             $user->department_id = $request->department_id;
             $user->part_name = $department->name;
         }
+
+        
         $user->password = $request->password;
         $result = $user->save();
         if ($result) {

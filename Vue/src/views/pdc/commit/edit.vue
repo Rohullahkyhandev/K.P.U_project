@@ -203,12 +203,12 @@
                             ></path>
                         </svg>
                     </span>
-                    <span v-else> ثبت </span>
+                    <span v-else> ویرایش </span>
                 </button>
                 <router-link
                     :to="{ name: 'app.dashboard' }"
                     class="footer--button--cancel"
-                    >لغو ثبت</router-link
+                    >لغو ویرایش</router-link
                 >
             </footer>
         </form>

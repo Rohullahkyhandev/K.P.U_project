@@ -96,7 +96,6 @@ return [
             'root' => storage_path('app/public/pdc/teacher_in_commit'),
         ],
 
-
         //   teacher in scholarship
         'pdc/teacher_in_scholarship' => [
             'driver' => 'local',
@@ -144,6 +143,11 @@ return [
         'quality_assurance/sub_document' => [
             'driver' => 'local',
             'root' => storage_path('app/public/quality_assurance/sub_document'),
+        ],
+
+        'quality_assurance/archive' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/quality_assurance/archive'),
         ],
 
         // Graduated program

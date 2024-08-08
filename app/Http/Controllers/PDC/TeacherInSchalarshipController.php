@@ -68,6 +68,34 @@ class TeacherInSchalarshipController extends Controller
     }
 
 
+    public function updateStatus(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $teacher_in_scholarship = Scholarship::find($request->id);
+            $teacher_in_scholarship->back_date = $request->back_date;
+            $teacher_in_scholarship->status = '2';
+            $teacher_in_scholarship->save();
+            $teacher = Teacher::find($teacher_in_scholarship->id);
+            $teacher->status = '1';
+            $result = $teacher->save();
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollBack();
+            $result = $e;
+        }
+        if ($result) {
+            return response([
+                'message' => 'موفقانه دیتا ویرایش گردید'
+            ], 200);
+        } else {
+            return response([
+                'error' => 'موفقانه دیتا ویرایش نشد دوباره تلاش نماید'
+            ], 403);
+        }
+    }
+
+
     public function store(Request $request)
     {
 
@@ -76,7 +104,7 @@ class TeacherInSchalarshipController extends Controller
             // "edu_degree" => 'required',
             "edu_maqta" => 'required',
             "sent_date" => 'required',
-            "back_date" => 'required',
+            "back_date" => 'nullable',
             "faculty_id" => 'nullable',
             "department_id" => 'required',
             "teacher_id" => 'required',
@@ -86,7 +114,7 @@ class TeacherInSchalarshipController extends Controller
             // 'edu_degree.required' => 'فلید درجه تحصیل الزامی می باشد',
             'edu_maqta.required' => 'فلید مقطع تحصیلی  الزامی می باشد',
             'sent_date.required' => 'فلید درجه تحصیل الزامی می باشد',
-            'back_date.required' => 'فلید  تاریخ برگشت الزامی می باشد',
+            'back_date.nullable' => 'فلید  تاریخ برگشت الزامی می باشد',
             'faculty_id.required' => 'فلید درجه فاکولته الزامی می باشد',
             'department_id.required' => 'فلید درجه دیپارتمنت الزامی می باشد',
             'teacher_id.required' => 'فلید نام استاد  الزامی می باشد',
@@ -105,7 +133,6 @@ class TeacherInSchalarshipController extends Controller
                 $attachment = $request->document->store('', 'pdc/teacher_in_scholarship' . $attachment);
                 $attachment_path = asset(Storage::url('/pdc/teacher_in_scholarship/' . $attachment));
             }
-
             // change the teacher status
             $teacher =  Teacher::find($request->teacher_id);
             $teacher->status = '2';

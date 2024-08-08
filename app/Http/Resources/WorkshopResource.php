@@ -20,7 +20,7 @@ class WorkshopResource extends JsonResource
             'start_time' => $this->start_time,
             'end_time' => $this->end_time,
             'description' => $this->description,
-            'attachment_path' => $this->attachment_path,
+            'attachment_path' => $this->document_path,
             'uname' => $this->uname,
         ];
     }

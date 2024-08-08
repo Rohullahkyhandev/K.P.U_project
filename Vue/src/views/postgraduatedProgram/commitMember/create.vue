@@ -191,11 +191,9 @@
                         </span>
                         <span v-else> ثبت </span>
                     </button>
-                    <router-link
-                        :to="{ name: 'app.dashboard' }"
-                        class="footer--button--cancel"
-                        >لغو ثبت</router-link
-                    >
+                    <button @click="closeModel" class="footer--button--cancel">
+                        لغو ثبت
+                    </button>
                 </footer>
             </div>
         </form>
@@ -209,8 +207,16 @@ import useCommitMemberStore from "../../../stores/postgraduatedPrograms/commitMe
 
 const commitMemberStore = useCommitMemberStore();
 
+const props = defineProps({
+    closeModel: {
+        type: Function,
+        required: true,
+    },
+});
+
 onMounted(() => {
     commitMemberStore.getAllCommit();
+    commitMemberStore.getCommitMember();
 });
 
 const commitMember = computed(() => commitMemberStore.commitMember);
@@ -220,10 +226,6 @@ const commits = computed(() =>
         text: commit.name,
     }))
 );
-
-onMounted(() => {
-    commitMemberStore.getCommitMember();
-});
 
 function onSubmit() {
     commitMemberStore.createCommitMember(commitMember.value);

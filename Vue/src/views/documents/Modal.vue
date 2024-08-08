@@ -61,6 +61,26 @@
                 <div>
                     <div class="wrapper--dev--input">
                         <div class="label--dev--width">
+                            <label for="" class="form--label">
+                                شماره مکتوب<span class="label--prefix"
+                                    >*</span
+                                ></label
+                            >
+                        </div>
+                        <div class="input--dev--width">
+                            <CustomInput
+                                type="number"
+                                v-model="document.number"
+                                class="mb-2"
+                                required="required"
+                                placeholder="0044339988"
+                            />
+
+                        </div>
+                    </div>
+
+                    <div class="wrapper--dev--input">
+                        <div class="label--dev--width">
                             <label for="" class="form--label"
                                 >تاریخ ثبت<span class="label--prefix"
                                     >*</span
@@ -179,6 +199,7 @@ const documentStore = useDocumentStore();
 const document = ref({
     d_id: props.document_id,
     farward_id: props.farward_id,
+    number: "",
     date: "",
     remark: "",
     description: "",

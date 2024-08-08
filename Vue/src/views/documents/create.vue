@@ -212,7 +212,7 @@
                                 تکثر<span class="label--prefix">*</span></label
                             >
                         </div>
-                        <div class="input--dev--width mb-3">
+                        <div class="input--dev--width mb-2">
                             <span> می شود</span>
                             <span
                                 @click="checkbox = true"
@@ -260,26 +260,21 @@
                     >
                         <div class="label--dev--width">
                             <label for="" class="form--label">
-                                فاکولته ها<span class="label--prefix"
+                                پوهنځی ها<span class="label--prefix"
                                     >*</span
                                 ></label
                             >
                         </div>
                         <div class="input--dev--width">
-                            <select
+                            <MultiSelect
                                 v-model="document.farwarded_parts"
-                                multiple
-                                class="block w-full rounded-lg shadow px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mb-2"
-                            >
-                                <option
-                                    class="mb-2 bg-gray-200 flex items-center justify-between border border-b-1 px-3 rounded py-2 select:bg-blue-400 select:text-white"
-                                    v-for="(faculty, index) in faculties"
-                                    :value="faculty.id"
-                                    :key="index"
-                                >
-                                    <div>{{ faculty.name }}</div>
-                                </option>
-                            </select>
+                                :options="faculties"
+                                optionLabel="name"
+                                filter
+                                placeholder=" انتخاب پوهنځی"
+                                :maxSelectedLabels="5"
+                                class="w-full mb-2 shadow-sm border-gray-300 focus:ring focus:ring-indigo-500"
+                            />
                         </div>
                     </div>
 
@@ -299,7 +294,7 @@
                             >
                         </div>
                         <div class="input--dev--width">
-                            <select
+                            <!-- <select
                                 v-model="document.farwarded_parts"
                                 multiple
                                 class="block w-full rounded shadow px-3 py-2.5 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm mb-2"
@@ -313,7 +308,16 @@
                                 >
                                     {{ chanceDepartment.display_name }}
                                 </option>
-                            </select>
+                            </select> -->
+                            <MultiSelect
+                                v-model="document.farwarded_parts"
+                                :options="chanceDepartments"
+                                optionLabel="name"
+                                filter
+                                placeholder=" انتخاب آمریت"
+                                :maxSelectedLabels="5"
+                                class="w-full mb-2 shadow-sm border-gray-300 focus:ring focus:ring-indigo-500"
+                            />
                         </div>
                     </div>
 
@@ -337,9 +341,9 @@
                                 :options="departments"
                                 optionLabel="name"
                                 filter
-                                placeholder="Select Cities"
+                                placeholder=" انتخاب دیپارتمنت"
                                 :maxSelectedLabels="5"
-                                class="w-full md:w-80"
+                                class="w-full mb-2 shadow-sm border-gray-300 focus:ring focus:ring-indigo-500"
                             />
                         </div>
                     </div>
@@ -472,7 +476,7 @@ const parts = ref([
     },
     {
         key: "faculty",
-        text: "فاکولته ها",
+        text: "پوهنځی ها",
     },
 
     {
@@ -507,7 +511,12 @@ const faculties = computed(() =>
     }))
 );
 
-const chanceDepartments = computed(() => userStore.chanceDepartments);
+const chanceDepartments = computed(() =>
+    userStore.chanceDepartments.map((chanceDepartment) => ({
+        id: chanceDepartment.id,
+        name: chanceDepartment.name,
+    }))
+);
 
 const document = computed(() => documentStore.document);
 

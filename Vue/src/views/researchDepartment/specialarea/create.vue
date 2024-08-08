@@ -66,7 +66,7 @@
                     </div>
                     <div class="input--dev--width">
                         <CustomInput
-                            type="text"
+                            type="textarea"
                             v-model="specialArea.related_part"
                             class="mb-2"
                             required="required"
@@ -82,7 +82,7 @@
                     </div>
                     <div class="input--dev--width">
                         <CustomInput
-                            type="text"
+                            type="textarea"
                             v-model="specialArea.related_field"
                             class="mb-2"
                             required="required"
@@ -135,7 +135,7 @@
 import { computed, onMounted, ref, useSlots } from "vue";
 import CustomInput from "../../../components/core/CustomInput.vue";
 import useSpecialAreaStore from "../../../stores/researchDepartment/specialAreaStore";
-import MultiSelect from "primevue/multiselect";
+
 
 const specialAreaStore = useSpecialAreaStore();
 
@@ -152,7 +152,7 @@ const props = defineProps({
 
 
 function onSubmit() {
-    specialAreaStore.createSpecialArea(lab.value);
+    specialAreaStore.createSpecialArea(specialArea.value);
 
     // for refreshing the lab
     specialAreaStore.getSpecialArea();

@@ -258,7 +258,7 @@
                         <span v-else> ثبت </span>
                     </button>
                     <router-link
-                        :to="{ name: 'app.dashboard' }"
+                        :to="{ name: 'app.post-graduated.commit.list' }"
                         class="footer--button--cancel"
                         >لغو ثبت</router-link
                     >

@@ -409,7 +409,9 @@
             :close-modal="closeModal"
             :title="title"
         >
-            <createCommitMember />
+            <createCommitMember
+            :close-model="closeModal"
+            />
         </WrapperModal>
     </div>
 </template>
