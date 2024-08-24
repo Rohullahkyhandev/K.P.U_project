@@ -79,6 +79,7 @@ export const useTeacherStore = defineStore("teacher", () => {
         id: "",
         name: "",
         code_bast: "",
+        code_bast_in_letter: "",
         lname: "",
         fatherName: "",
         grandFathername: "",
@@ -99,6 +100,7 @@ export const useTeacherStore = defineStore("teacher", () => {
         teaching_status: "",
         program_id: "",
         related_part: "",
+        foreign_languages: [],
     });
 
     // teacher document
@@ -114,7 +116,9 @@ export const useTeacherStore = defineStore("teacher", () => {
     let qualification = ref({
         id: "",
         education_: "",
+        education_field: "",
         graduated_year: "",
+        admission_year: "",
         university: "",
         country: "",
         description: "",
@@ -152,9 +156,9 @@ export const useTeacherStore = defineStore("teacher", () => {
         }
 
         let form = new FormData();
-
         form.append("name", data.name);
         form.append("code_bast", data.code_bast);
+        form.append("code_bast_in_letter", data.code_bast_in_letter);
         form.append("lname", data.lname);
         form.append("fatherName", data.fatherName);
         form.append("grandFathername", data.grandFathername);
@@ -175,6 +179,10 @@ export const useTeacherStore = defineStore("teacher", () => {
         form.append("faculty_id", data.faculty_id);
         form.append("department_id", data.department_id);
         form.append("program_id", data.program_id);
+        teacher.value.foreign_languages.forEach((part, index) => {
+            form.append(`foreign_languages[${index}]`, part.key);
+        });
+        // form.append("foreign_languages", data.foreign_languages);
 
         data = form;
         axiosClient
@@ -186,6 +194,7 @@ export const useTeacherStore = defineStore("teacher", () => {
                     stepOne.value = true;
                     (teacher.value.name = ""),
                         (teacher.value.code_bast = ""),
+                        (teacher.value.code_bast_in_letter = ""),
                         (teacher.value.lname = ""),
                         (teacher.value.fatherName = ""),
                         (teacher.value.grandFathername = ""),
@@ -248,7 +257,8 @@ export const useTeacherStore = defineStore("teacher", () => {
         search = "",
         sortDirection,
         sortField,
-        department_id,
+        department_id = "",
+        program_id = "",
     } = {}) {
         Teachers.value.loading = true;
         url = url || "/teacher";
@@ -265,6 +275,7 @@ export const useTeacherStore = defineStore("teacher", () => {
                     sortDirection,
                     sortField,
                     department_id,
+                    program_id,
                 },
             })
             .then((response) => {
@@ -339,6 +350,7 @@ export const useTeacherStore = defineStore("teacher", () => {
         form.append("id", data.id);
         form.append("name", data.name);
         form.append("code_bast", data.code_bast);
+        form.append("code_bast_in_letter", data.code_bast_in_letter);
         form.append("lname", data.lname);
         form.append("fatherName", data.fatherName);
         form.append("grandFathername", data.grandFathername);
@@ -417,7 +429,9 @@ export const useTeacherStore = defineStore("teacher", () => {
                 msg_qsuccess.value = res.data.message;
                 teacher_qualification.value.date = "";
                 teacher_qualification.value.graduated_year = "";
+                teacher_qualification.value.admission_year = "";
                 teacher_qualification.value.education_ = "";
+                teacher_qualification.value.education_field = "";
                 teacher_qualification.value.country = "";
                 teacher_qualification.value.university = "";
                 setTimeout(() => {

@@ -4,12 +4,7 @@
             <div class="w-full font-bold text-xl border-b py-3 px-4">
                 نمایش گرافیکی تعداد استادان بر اساس درجه تحصیل
             </div>
-            <Chart
-                type="bar"
-                class="h-[30rem]"
-                :data="chartTeacher"
-                :options="chartOptions"
-            />
+            <Chart type="bar" class="h-[30rem]" :data="chartTeacher" :options="chartOptions" />
         </div>
     </div>
 </template>
@@ -59,23 +54,22 @@ const fetchChartTeacherData = async () => {
         teachers.push(data.total_master_teacher);
         teachers.push(data.total_doctor_teacher);
         teachers.push(data.total_bachelor_teacher);
-        const colors=["#3b82f6","#757575","#757575"]
+        const colors = ["#3b82f6", "#52CD81", "#F97316"];
 
         chartTeacher.value = {
-            labels: ["ماستر", "داکتر", "لسانس"],
+            labels: ["ماستر", "داکتر", "لیسانس"],
             datasets: [
                 {
-                    label: "استادان تعداد",
+                    label: "تعدا استادان",
                     backgroundColor: colors,
                     data: teachers,
-                }
+                },
             ],
         };
     } catch (error) {
         console.error("Error fetching data:", error);
     }
 };
-
 
 onMounted(() => {
     fetchChartTeacherData();

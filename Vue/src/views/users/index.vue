@@ -144,44 +144,44 @@
                             field="email"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('id')"
+                            @click="sortUsers('email')"
                         >
-                            ادرس ایمل
+                            ادرس ایمیل
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="id"
+                            field="photo"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('id')"
+                            @click="sortUsers('photo')"
                         >
                             عکس
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="id"
+                            field="position"
                             :sortDirection="sortDirection"
-                            @click="sortUsers('id')"
+                            @click="sortUsers('position')"
                         >
                             مقام
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="id"
+                            field="part_type"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('id')"
+                            @click="sortUsers('part_type')"
                         >
                             بخش مربوط
                         </TableHeaderCell>
 
                         <TableHeaderCell
-                            field="id"
+                            field="faculty_id"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
-                            @click="sortUsers('id')"
+                            @click="sortUsers('faculty_id')"
                         >
-                            فاکولته مربوط
+                        پوهنځی مربوط
                         </TableHeaderCell>
 
                         <TableHeaderCell

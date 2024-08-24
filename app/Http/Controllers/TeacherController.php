@@ -35,7 +35,8 @@ class TeacherController extends Controller
     public function validation()
     {
         $rules = [
-            'code_bast' => 'required:string:max:10',
+            'code_bast' => 'required:string:max:13',
+            'code_bast_in_letter' => 'nullable',
             'name' => 'required:string:max:100',
             'lname' => 'required:string:max:100',
             'fatherName' => 'required:string:max:100',
@@ -61,14 +62,25 @@ class TeacherController extends Controller
     {
         $per_page = request('per_page', 10);
         $department_id = request('department_id', '');
-        $program_id = request('program_id', '');
+        $program_id = request('program_id');
         $search = request('search', '');
         $sortField = request('sortField', 'id');
         $sortDirection = request('sortDirection', 'DESC');
-
         $currentUser = Auth::user();
 
-        if ($currentUser->user_type == 'fifth_department' && $currentUser->dep_id == 4) {
+        $view_postgraduated = false;
+        $administrator = false;
+
+        foreach (Auth::user()->permissions as $permission) {
+            if ($permission->permission_name == 'view_postgraduated') {
+                $view_postgraduated = true;
+            } else if ($permission->permission_name == 'administrator') {
+                $administrator = true;
+            }
+        }
+
+        if ($view_postgraduated == true || $administrator == true) {
+
             $data = Teacher::query()
                 ->distinct()
                 ->where('teachers.program_id', 'like', "%{$program_id}%")
@@ -79,47 +91,59 @@ class TeacherController extends Controller
                     'teachers.code_bast',
                     'teachers.nic',
                 ], 'LIKE',  "%{$search}%")
-                ->leftJoin('departments', 'teachers.department_id', 'departments.id')
-                ->leftJoin('post_graduated_programs', 'teachers.program_id', 'post_graduated_programs.id')
-                ->leftJoin('users', 'teachers.user_id', 'users.id')
-                ->leftJoin(DB::raw('(SELECT teacher_id, MAX(id) as promotion_id FROM promotions GROUP BY teacher_id) as latest_promotions'), function ($join) {
-                    $join->on('teachers.id', '=', 'promotions.teacher_id');
-                })
-                ->leftJoin('teacher_qualifications', 'teachers.id', 'teacher_qualifications.teacher_id')
+                ->join('departments', 'teachers.department_id', 'departments.id')
+                ->join('post_graduated_programs', 'teachers.program_id', 'post_graduated_programs.id')
+                ->join('users', 'teachers.user_id', 'users.id')
+                ->join('teacher_qualifications', 'teachers.id', 'teacher_qualifications.teacher_id')
                 ->leftJoin('faculties', 'teachers.faculty_id', 'faculties.id')
-                ->select('teachers.*', 'promotions.date as date', 'post_graduated_programs.program_name as pname',  'post_graduated_programs.degree_type as degree_type', 'promotions.attachment_path as attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department', 'teacher_qualifications.education_ as education', 'users.name as uname')
+                ->select('teachers.*', 'post_graduated_programs.program_name as pname',  'post_graduated_programs.degree_type as degree_type',   'faculties.name as faculty', 'departments.name as department', 'teacher_qualifications.education_ as education', 'users.name as uname')
                 ->whereIn('teachers.teaching_status',  ['post-graduated', 'both'])
                 ->orderBy("teachers.$sortField", $sortDirection)
                 ->paginate($per_page);
-            return TeacherResource::collection($data);
-        }
+        } else {
 
-        $data = DB::table('teachers')
-            ->where('teachers.department_id', 'like', "%{$department_id}%")
-            ->whereAny([
-                'teachers.name',
-                'teachers.lname',
-                'teachers.fatherName',
-                'teachers.code_bast',
-                'teachers.nic',
-            ], 'LIKE',  "%{$search}%")
-            ->leftJoin('departments', 'teachers.department_id', 'departments.id')
-            ->leftJoin('post_graduated_programs', 'teachers.program_id', 'post_graduated_programs.id')
-            ->leftJoin('users', 'teachers.user_id', 'users.id')
-            ->leftJoin('promotions', function ($join) {
-                $join->on('teachers.id', '=', 'promotions.teacher_id')
-                    ->whereIn('promotions.id', function ($query) {
-                        $query->select(DB::raw('MAX(id)'))
-                            ->from('promotions')
-                            ->groupBy('teacher_id');
-                    });
-            })
-            ->leftJoin('teacher_qualifications', 'teachers.id', '=', 'teacher_qualifications.teacher_id')
-            ->leftJoin('faculties', 'teachers.faculty_id', 'faculties.id')
-            ->select('teachers.*', 'promotions.date as date', 'post_graduated_programs.program_name as pname', 'teacher_qualifications.education_ as education', 'post_graduated_programs.degree_type as degree_type', 'promotions.attachment_path as attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department',  'users.name as uname')
+            $data = DB::table('teachers')
+                ->where('teachers.department_id', 'like', "%{$department_id}%")
+                ->whereAny([
+                    'teachers.name',
+                    'teachers.lname',
+                    'teachers.fatherName',
+                    'teachers.code_bast',
+                    'teachers.nic',
+                ], 'LIKE',  "%{$search}%")
+                ->leftJoin('departments', 'teachers.department_id', 'departments.id')
+                ->leftJoin('post_graduated_programs', 'teachers.program_id', 'post_graduated_programs.id')
+                ->leftJoin('users', 'teachers.user_id', 'users.id')
+                ->leftJoin('promotions', function ($join) {
+                    $join->on('teachers.id', '=', 'promotions.teacher_id')
+                        ->whereIn('promotions.id', function ($query) {
+                            $query->select(DB::raw('MAX(id)'))
+                                ->from('promotions')
+                                ->groupBy('teacher_id');
+                        });
+                })
+                ->leftJoin('scholarships', function ($join) {
+                    $join->on('teachers.id', '=', 'scholarships.teacher_id')
+                        ->whereIn('scholarships.id', function ($query) {
+                            $query->select(DB::raw('MAX(id)'))
+                                ->from('scholarships')
+                                ->groupBy('teacher_id');
+                        });
+                })
+                ->leftJoin('teacher_qualifications', function ($join) {
+                    $join->on('teachers.id', '=', 'teacher_qualifications.teacher_id')
+                        ->whereIn('teacher_qualifications.id', function ($query) {
+                            $query->select(DB::raw('MAX(id)'))
+                                ->from('teacher_qualifications')
+                                ->groupBy('teacher_id');
+                        });
+                })
+                ->leftJoin('faculties', 'teachers.faculty_id', 'faculties.id')
+                ->select('teachers.*', 'scholarships.country_name as country', 'scholarships.edu_maqta as edu_maqta', 'scholarships.sent_date as sent_date', 'scholarships.back_date as back_date', 'promotions.date as date', 'post_graduated_programs.program_name as pname', 'teacher_qualifications.education_ as education', 'post_graduated_programs.degree_type as degree_type', 'promotions.attachment_path as attachment_path', 'promotions.last_academic_rank as last_rank', 'promotions.now_academic_rank as now_rank', 'faculties.name as faculty', 'departments.name as department',  'users.name as uname')
             ->orderBy("teachers.$sortField", $sortDirection)
-            ->distinct()
-            ->paginate($per_page);
+                ->distinct()
+                ->paginate($per_page);
+        }
         return TeacherResource::collection($data);
     }
 
@@ -134,15 +158,18 @@ class TeacherController extends Controller
 
     public function store(Request $request)
     {
-        $validate_date_of_birth = (date('Y') - substr($request->birth_date, 0, 3));
+
+        $year = (date('Y') - 621);
+        $validate_date_of_birth = ($year - substr($request->birth_date, 0, 3));
         if ($validate_date_of_birth < 25) {
             return response([
-                'error' => 'سن شما کوچکتر از حد قابل قبول است'
+                'error' => 'سن  کوچکتر از حد قابل قبول است'
             ], 304);
         }
 
         $request->validate([
             'code_bast' => 'required|string|max:10|unique:teachers,code_bast',
+            'code_bast_in_letter' => 'nullable',
             'name' => 'required|string|max:100',
             'lname' => 'required|string|max:100',
             'fatherName' => 'required|string|max:100',
@@ -160,9 +187,11 @@ class TeacherController extends Controller
             // 'related_part' => 'required',
             // 'program_id' => 'required',
             // 'department_id' => 'required',
-            // 'faculty_id' => 'required',
+            'foreign_languages.*' => 'required',
             'education_field' => 'required|string|max:100',
         ], [
+            'code_bast.unique' => 'این کود بست از قبل در سیستم ثبت شده است',
+            'email.unique' => 'این ایمیل  از قبل در سیستم ثبت شده است',
             'name.required' => 'وارد کردن نام الزامی میباشد',
             'lname.required' => 'وارد کردن تخلص الزامی میباشد',
             'fatherName.required' => 'وارد کردن نام پدر الزامی میباشد',
@@ -188,6 +217,7 @@ class TeacherController extends Controller
             $user_id = Auth::id();
             $teacher = new Teacher();
             $teacher->code_bast  = $request->code_bast;
+            $teacher->code_bast_in_letter  = $request->code_bast_in_letter;
             $teacher->name  = $request->name;
             $teacher->lname = $request->lname;
             $teacher->fatherName = $request->fatherName;
@@ -203,6 +233,7 @@ class TeacherController extends Controller
             $teacher->teaching_status = $request->teaching_status;
             $teacher->related_part = $request->related_part;
             $teacher->nic = $request->nic;
+            $teacher->languages = json_encode($request->foreign_languages);
             $teacher->education_field = $request->education_field;
             $teacher->photo = $photo;
             $teacher->photo_path = $photo_path;
@@ -242,13 +273,15 @@ class TeacherController extends Controller
 
     public function update(Request $request)
     {
+
         $request->validate([
-            'code_bast' => 'required|string|max:10',
+            'code_bast' => 'required|string|max:10|unique:teachers,code_bast',
+            'code_bast_in_letter' => 'nullable',
             'name' => 'required|string|max:100',
             'lname' => 'required|string|max:100',
             'fatherName' => 'required|string|max:100',
             'grandFathername' => 'required|string|max:100',
-            'email' => 'email|string|max:100',
+            'email' => 'email|string|max:100|unique:teachers',
             'phone' => 'required|string|max:14',
             'gender' => 'required|string',
             'main_address'  => 'required|string|max:100',
@@ -258,9 +291,32 @@ class TeacherController extends Controller
             'hire_date' => 'required|date|max:100',
             'nic' => 'required|string|max:13',
             'teaching_status' => 'required',
-            'related_part' => 'required',
+            // 'related_part' => 'required',
+            // 'program_id' => 'required',
+            // 'department_id' => 'required',
+            'foreign_languages.*' => 'required',
             'education_field' => 'required|string|max:100',
-        ], []);
+            'photo' => 'required|mimes:jpg,png,jpeg,gif,pdf|max:6000'
+        ], [
+            'code_bast.unique' => 'این کود بست از قبل در سیستم ثبت شده است',
+            'email.unique' => 'این ایمیل  از قبل در سیستم ثبت شده است',
+            'name.required' => 'وارد کردن نام الزامی میباشد',
+            'lname.required' => 'وارد کردن تخلص الزامی میباشد',
+            'fatherName.required' => 'وارد کردن نام پدر الزامی میباشد',
+            'grandFatherName.required' => 'وارد کردن نام پدرکلان الزامی میباشد',
+            'email.required' => 'وارد کردن ایمیل الزامی میباشد',
+            'main_address.required' => 'وارد کردن آدرس اصلی الزامی میباشد',
+            'current_address.required' => 'وارد کردن آدرس فعلی الزامی میباشد',
+            'birth_date.required' => 'وارد کردن تاریخ تولد الزامی میباشد',
+            'academic_rank.required' => 'وارد کردن رتبه علمی الزامی میباشد',
+            'hire_date.required' => 'وارد کردن تاریخ استخدام الزامی میباشد',
+            'nic.required' => 'وارد کردن نمبر تذکزه الزامی میباشد',
+            'teaching_status.required' => 'وارد کردن وضعیت استاد الزامی میباشد',
+            'photo.required' => ' عکس الزامی میباشد',
+            'photo.mimes' => ' عکس باید یکی از این فارمت راjpg,png,jpeg,gif,pdf  داشته باشد میباشد',
+            'photo.max' => 'حجم عکس نباید بیشتر از 6 مگابایت باشد',
+            'foreign_languages.*.required' => 'وارد کردن لسان های خارجی الزامی میباشد',
+        ]);
 
         DB::beginTransaction();
         try {
@@ -277,6 +333,7 @@ class TeacherController extends Controller
             }
             //$user_id = Auth::id();
             $teacher->code_bast  = $request->code_bast;
+            $teacher->code_bast_in_letter  = $request->code_bast_in_letter;
             $teacher->name  = $request->name;
             $teacher->lname = $request->lname;
             $teacher->fatherName = $request->fatherName;
@@ -293,6 +350,7 @@ class TeacherController extends Controller
             $teacher->related_part = $request->related_part;
             $teacher->nic = $request->nic;
             $teacher->education_field = $request->education_field;
+            $teacher->languages = $request->forign_languages;
             $teacher->photo = $photo;
             $teacher->photo_path = $photo_path;
             if ($request->teaching_status == 'bachelor' || $request->teaching_status == 'both' || $request->teaching_status == 'post-graduated' || $request->related_part == 'common_department') {
@@ -345,9 +403,22 @@ class TeacherController extends Controller
         $request->validate([
             'country' => 'required|string',
             'education_' => 'required|string',
-            'graduated_year' => 'required|string',
+            'education_field' => 'required|string',
+            'admission_year' => 'required',
+            'graduated_year' => 'required',
             'university' => 'required|string',
             'description' => 'nullable|string'
+        ], [
+            'country.required' => 'وارد نمودن نام کشور الزامی میباشد.',
+            'education_.required' => 'وارد نمودن  مقطع تحصیلی الزامی میباشد.',
+            'admission_year.required' => 'وارد نمودن سال شولیت الزامی میباشد.',
+            'graduated_year.required' => 'وارد نمودن سال فراغت الزامی میباشد.',
+            'education_field.required' => 'وارد نمودن ریشته تحصیلی الزامی میباشد.',
+            'uuniversity.required' => 'وارد نمودن نام پوهنتون الزامی میباشد.',
+            'country.string' => '  کشور باید حرف  میباشد.',
+            'education_.string' => '  مقطع تحصیلی باید حرف  میباشد.',
+            'university.string' => ' نام پوهنتون باید حرف  میباشد.',
+            'description.string' => '  توضیحات باید حرف  میباشد.',
         ]);
 
         DB::beginTransaction();
@@ -356,7 +427,9 @@ class TeacherController extends Controller
             $user_id = Auth::id();
             $teacher_qualification = new Teacher_qualification();
             $teacher_qualification->country = $request->country;
+            $teacher_qualification->edu_field = $request->education_field;
             $teacher_qualification->education_ = $request->education_;
+            $teacher_qualification->admission_year = $request->admission_year;
             $teacher_qualification->graduated_year = $request->graduated_year;
             $teacher_qualification->university = $request->university;
             $teacher_qualification->description = $request->description;
@@ -412,10 +485,22 @@ class TeacherController extends Controller
 
         $request->validate([
             'country' => 'required|string',
-            'education_' => 'required|string',
-            'graduated_year' => 'required|string',
+            'education_' => 'required|string','education_field' => 'required|string',
+            'admission_year' => 'required|date',
+            'graduated_year' => 'required|‌date',
             'university' => 'required|string',
-            'description' => 'nullable|string '
+            'description' => 'nullable|string'
+        ], [
+            'country.required' => 'وارد نمودن نام کشور الزامی میباشد.',
+            'education_.required' => 'وارد نمودن  مقطع تحصیلی الزامی میباشد.',
+            'admission_year.required' => 'وارد نمودن سال شولیت الزامی میباشد.',
+            'graduated_year.required' => 'وارد نمودن سال فراغت الزامی میباشد.',
+            'education_field.required' => 'وارد نمودن ریشته تحصیلی الزامی میباشد.',
+            'uuniversity.required' => 'وارد نمودن نام پوهنتون الزامی میباشد.',
+            'country.string' => '  کشور باید حرف  میباشد.',
+            'education_.string' => '  مقطع تحصیلی باید حرف  میباشد.',
+            'university.string' => ' نام پوهنتون باید حرف  میباشد.',
+            'description.string' => '  توضیحات باید حرف  میباشد.',
         ]);
 
         DB::beginTransaction();
@@ -425,7 +510,9 @@ class TeacherController extends Controller
             $user_id = Auth::id();
             $teacher_qualification = Teacher_qualification::find($id);
             $teacher_qualification->country = $request->country;
+            $teacher_qualification->edu_field = $request->education_field;
             $teacher_qualification->education_ = $request->education_;
+            $teacher_qualification->admission_year = $request->admission_year;
             $teacher_qualification->graduated_year = $request->graduated_year;
             $teacher_qualification->university = $request->university;
             $teacher_qualification->description = $request->description;
@@ -462,9 +549,14 @@ class TeacherController extends Controller
     {
 
         $request->validate([
-            'type' => 'required|string',
-            'document' => 'required|mimes:pdf,jpg,png',
-            'description' => 'required|string',
+            'type' => 'required|string','document' => 'required|mimes:pdf,jpg,png|max:8000',
+            'description' => 'nullable|string',
+        ], [
+            'type.required' => ' وارد نمودن نوع سند الزامی میباشد',
+            'document.required' => ' وارد نمودن  سند الزامی میباشد',
+            'description' => 'وارد نمودن توضیحات لزامی میباشد',
+            'document.mimes' => 'سند باید در یکی از این فارمت ها jpg,png,jpg,jpeg,gif,pdf باشد.',
+            'document.max' => 'حجم سند نمیتواند بیشتر ا�� 8 مگابایت نباشد.',
         ]);
 
         $user_id = Auth::id();
@@ -521,9 +613,14 @@ class TeacherController extends Controller
     {
         $result = 0;
         $request->validate([
-            'type' => 'required|string',
-            'document' => 'nullable',
-            'description' => 'required|string',
+            'type' => 'required|string','document' => 'required|mimes:pdf,jpg,png|max:8000',
+            'description' => 'nullable|string',
+        ], [
+            'type.required' => ' وارد نمودن نوع سند الزامی میباشد',
+            'document.required' => ' وارد نمودن  سند الزامی میباشد',
+            'description' => 'وارد نمودن توضیحات لزامی میباشد',
+            'document.mimes' => 'سند باید در یکی از این فارمت ها jpg,png,jpg,jpeg,gif,pdf باشد.',
+            'document.max' => 'حجم سند نمیتواند بیشتر ا�� 8 مگابایت نباشد.',
         ]);
 
         $user_id = Auth::id();
@@ -571,9 +668,15 @@ class TeacherController extends Controller
     public function storeArticle(Request $request, $id = '')
     {
         $request->validate([
-            'title' => 'required',
+            'title' => 'required:string',
             'date' => 'required|max:100',
-            'publisher' => 'required'
+            'publisher' => 'required|string'
+        ], [
+            'title.required' => ' وارد نمودن  عنوان الزامی میباشد',
+            'title.string' => 'عنوان باید حروف باشد',
+            'publisher.required' => ' وارد نمودن ناشرالزامی میباشد',
+            'publisher.required' => 'ناشر باید حروف باشد',
+
         ]);
 
         $user_id = Auth::id();
@@ -625,6 +728,12 @@ class TeacherController extends Controller
             'title' => 'required',
             'date' => 'required|max:100',
             'publisher' => 'required'
+        ], [
+            'title.required' => ' وارد نمودن  عنوان الزامی میباشد',
+            'title.string' => 'عنوان باید حروف باشد',
+            'publisher.required' => ' وارد نمودن ناشرالزامی میباشد',
+            'publisher.required' => 'ناشر باید حروف باشد',
+
         ]);
 
         $user_id = Auth::id();
@@ -659,10 +768,15 @@ class TeacherController extends Controller
     public function storeLiterature(Request $request, $id = '')
     {
         $request->validate([
-            'name' => 'required',
-            'type' => 'required|max:100',
-            'publisher' => 'required',
-            'date' => 'required',
+            'name' => 'required|string',
+            'type' => 'required|max:100|string',
+            'publisher' => 'required|string',
+            'date' => 'required|date',
+        ], [
+            'type.required' => ' وارد نمودن  نوع اثر الزامی میباشد',
+            'type.string' => 'نوع اثر باید حروف باشد',
+            'publisher.required' => ' وارد نمودن ناشرالزامی میباشد',
+            'publisher.required' => 'ناشر باید حروف باشد',
 
         ]);
 
@@ -746,10 +860,7 @@ class TeacherController extends Controller
         return $result;
     }
 
-
-    public function generateReport()
-    {
-    }
+    public function generateReport() {}
 
     public function downloadTeacher()
     {

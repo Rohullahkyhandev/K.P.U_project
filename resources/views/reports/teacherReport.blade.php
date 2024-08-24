@@ -7,95 +7,63 @@
     <title>Faculty Data</title>
 </head>
 
-<body style="font-family: Arial, sans-serif; margin: 20px;">
+<body style="font-family: Arial, sans-serif; margin: 20px; direction: rtl">
 
-    <table>
+    <table style="direction: rtl !important">
         <tr>
-            <td colspan="14">
-                <h2 style="text-align: center;">جدول معلومات احصایه وی استادان پوهنتون پولی تخنیک کابل</h2>
-            </td>
+            @if ($type == 'all')
+                <th colspan="14">
+                    <h2 style="text-align: center; font: bolder; font-size: 30px">جدول معلومات احصایوی استادان پوهنتون
+                        پولی
+                        تخنیک کابل</h2>
+                </th>
+            @endif
         </tr>
     </table>
     @foreach ($teachers_data as $teacher_data)
-        <h2 style="text-align: center;">پوهنځی: {{ $teacher_data->faculty_name }}</h2>
+        <table>
+            <tr>
+                <th style="font-weight: bolder" colspan="14">اسم پوهنځی:
+                    {{ $teacher_data->faculty_name }}</th>
+            </tr>
+        </table>
         <table style="width: 100%; border-collapse: collapse; margin: 10px 0;">
             <thead>
                 <tr>
-                    <td colspan="14">
-                        <h2 style="text-align: center;">جدول معلومات احصایه وی استادان پوهنتون پولی تخنیک کابل</h2>
-                    </td>
+                    <th colspan="3">مجموع</th>
+                    <th colspan="2">نامزاد پوهنیار</th>
+                    <th colspan="2">پوهیالی</th>
+                    <th colspan="2">پوهنیار</th>
+                    <th colspan="2">پوهنمل</th>
+                    <th colspan="2">پوهندوی</th>
+                    <th colspan="2">پوهنوال</th>
+                    <th colspan="2">پوهاند</th>
+                    <th colspan="3">مجموع</th>
+                    <th colspan="2">لیسانس</th>
+                    <th colspan="2">ماستر</th>
+                    <th colspan="2">داکتر</th>
+                    <th colspan="3" rowspan="3">اسم دیپارتمنت</th>
+                    {{-- <th>اسم پوهنځی</th> --}}
+                    <th>شماره</th>
                 </tr>
                 <tr>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;"
-                        rowspan="2">دیپارمنت</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;"
-                        rowspan="2">مجموعه (ذکور)</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;"
-                        rowspan="2">مجموعه (اناث)</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;"
-                        colspan="2">داکتر</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;"
-                        colspan="2">ماستر</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;"
-                        colspan="2">لیسانس</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;"
-                        colspan="2">پوهاند</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;"
-                        colspan="2">پوهیالی</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;"
-                        colspan="2">پوهنمل</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;"
-                        colspan="2">پوهنیار</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;"
-                        colspan="2">نامزاد پوهنیار</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;"
-                        colspan="2">مصروف تدریس</th>
-                </tr>
-                <tr>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        مرد</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        زن</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        مرد</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        زن</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        مرد</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        زن</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        مرد</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        زن</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        مرد</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        زن</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        مرد</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        زن</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        مرد</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        زن</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        مرد</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        زن</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        مرد</th>
-                    <th style="border: 1px solid #ddd; padding: 8px; background-color: #f4f4f4; text-align: center;">
-                        زن</th>
+                    <th>اناث</th>
+                    <th>ذکور</th>
+                    <th>اناث</th>
+                    <th>ذکور</th>
+                    <th>اناث</th>
+                    <th>ذکور</th>
+                    <th>اناث</th>
+                    <th>ذکور</th>
                 </tr>
             </thead>
+
             <tbody>
+
                 @foreach ($teacher_data->departments as $department)
                     <tr>
+
                         <td style="border: 1px solid #ddd; padding: 8px;">{{ $department->department_name }}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px;">{{ $department->total_teacher_in_department }}
-                        </td>
                         <td style="border: 1px solid #ddd; padding: 8px;">
                             {{ $department->total_male_teacher_in_department }}</td>
                         <td style="border: 1px solid #ddd; padding: 8px;">
@@ -128,10 +96,6 @@
                             {{ $department->total_namzadpohanyar_male_teacher_in_department }}</td>
                         <td style="border: 1px solid #ddd; padding: 8px;">
                             {{ $department->total_namzadpohanyar_female_teacher_in_department }}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px;">
-                            {{ $department->total_male_teacher_scholarship }}</td>
-                        <td style="border: 1px solid #ddd; padding: 8px;">
-                            {{ $department->total_female_teacher_scholarship }}</td>
                     </tr>
                 @endforeach
             </tbody>

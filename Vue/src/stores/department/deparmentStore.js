@@ -181,10 +181,8 @@ const useDepartmentStore = defineStore("department", () => {
             .post(`/department/update`, data)
             .then((res) => {
                 loading.value = false;
-                if (res.status === 200) {
-                    msg_success.value = res.data.message;
-                    router.push({ name: "app.department.list" });
-                }
+                msg_success.value = res.data.message;
+                router.push({ name: "app.department.list" });
             })
             .catch((err) => {
                 loading.value = false;
@@ -197,11 +195,11 @@ const useDepartmentStore = defineStore("department", () => {
             .get(`/department/delete/${id}`)
             .then((res) => {
                 if (res.status == 200) {
-                    msg_success.value = "موفقانه حذف شد";
+                    msg_success.value = "دیپارتمنت موفقانه حذف شد";
                 }
             })
             .catch((err) => {
-                msg_wrang.value = "فاکولته موفقانه حذف نشد";
+                msg_wrang.value = "دیپارتمنت موفقانه حذف نشد";
             });
     }
 

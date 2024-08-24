@@ -36,7 +36,7 @@ class CriteriaController extends Controller
             'year' => 'required',
             'number' => 'required',
             'description' => 'required',
-            'relate_part' => 'required',
+            'related_part' => 'required',
             'attachment' => 'nullable|mimes:png,jpg,mp3,mp4,pdf,docx'
         ], [
             'year.required' => "فیلد سال  الزامی می باشد",

@@ -28,6 +28,7 @@ const useCriteriaStore = defineStore("main_criteria", () => {
 
     function createCriteria(data) {
         loading.value = true;
+        criterias.value.loading = true;
         let attachment = "";
         if (data.attachment instanceof File) {
             attachment = data.attachment;
@@ -48,6 +49,7 @@ const useCriteriaStore = defineStore("main_criteria", () => {
             .post("/criteria/create", data)
             .then((res) => {
                 loading.value = false;
+                criterias.value.loading = false;
                 msg_success.value = res.data.message;
                 criteria.value.number = "";
                 criteria.value.description = "";
@@ -56,6 +58,7 @@ const useCriteriaStore = defineStore("main_criteria", () => {
             })
             .catch((err) => {
                 loading.value = false;
+                criterias.value.loading = false;
                 msg_wrang.value = err.response.data.message;
             });
     }
@@ -105,13 +108,19 @@ const useCriteriaStore = defineStore("main_criteria", () => {
         }
     }
     function editCriteria(id) {
-        axiosClient.get(`/criteria/edit/${id}`).then((res) => {
-            criteria.value = res.data;
-        });
+        axiosClient
+            .get(`/criteria/edit/${id}`)
+            .then((res) => {
+                criteria.value = res.data;
+            })
+            .catch((err) => {
+                msg_wrang.value = err.response.data.message;
+            });
     }
 
     function updateCriteria(data, id) {
         loading.value = true;
+        criterias.value.loading = true;
         let attachment = "";
         if (data.attachment instanceof File) {
             attachment = data.attachment;
@@ -133,6 +142,7 @@ const useCriteriaStore = defineStore("main_criteria", () => {
             .post("/criteria/update", data)
             .then((res) => {
                 loading.value = false;
+                criterias.value.loading = false;
                 msg_success.value = res.data.message;
                 router.push({ name: "app.pdc.workshop.list" });
                 criteria.value.number = "";
@@ -142,6 +152,7 @@ const useCriteriaStore = defineStore("main_criteria", () => {
             })
             .catch((err) => {
                 loading.value = false;
+                criterias.value.loading = false;
                 msg_wrang.value = err.response.data.message;
             });
     }

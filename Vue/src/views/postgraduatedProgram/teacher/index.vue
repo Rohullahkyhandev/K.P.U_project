@@ -1,6 +1,6 @@
 <template>
     <div class="mt-10">
-        <div class="flex items-center justify-between mb-8">
+        <div class="flex items-center start mb-8">
             <div class="flex items-center gap-5">
                 <!-- <router-link
                     :to="{ name: 'app.teacher.create' }"
@@ -35,22 +35,10 @@
             <div class="msg--success" v-if="teacherStore.msg_success">
                 <div class="flex items-center justify-between px-10 ,mb-3">
                     <div
-                        class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            @click="teacherStore.msg_success = ''"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-6 h-6"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M6 18 18 6M6 6l12 12"
-                            />
+                        class="hover:bg-green-400 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" @click="teacherStore.msg_success = ''" fill="none"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                         </svg>
                     </div>
                     <div>
@@ -62,22 +50,10 @@
             <div class="msg--warning" v-if="teacherStore.msg_wrang">
                 <div class="flex items-center justify-between px-10 mb-10">
                     <div
-                        class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            @click="teacherStore.msg_wrang = ''"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-6 h-6"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M6 18 18 6M6 6l12 12"
-                            />
+                        class="hover:bg-red-300 text-white rounded-full h-8 w-8 cursor-pointer flex items-center justify-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" @click="teacherStore.msg_wrang = ''" fill="none"
+                            viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                         </svg>
                     </div>
                     <div>
@@ -88,33 +64,20 @@
             <!-- end of display message area -->
             <div class="flex justify-between border-b-2 pb-3 relative">
                 <div>
-                    <input
-                        v-model="search"
-                        @change="getTeacher(null)"
+                    <input v-model="search" @change="getTeacher(null)"
                         class="appearance-none relative block w-48 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                        placeholder="جستجوی بر اساس تمام فلید ها"
-                    />
+                        placeholder="جستجوی بر اساس تمام فلید ها" />
                 </div>
 
                 <div>
-                    <Select
-                        v-model="program"
-                        @change="getTeacher(null)"
-                        :options="programs"
-                        optionLabel="name"
-                        placeholder="فلیتر کردن استادان براساس برنامه"
-                        class="w-full md:w-80 py-1 rounded-lg"
-                    />
+                    <Select v-model="program" @change="getTeacher(null)" :options="programs" optionLabel="name"
+                        placeholder="فلیتر کردن استادان براساس برنامه" class="w-full md:w-80 py-1 rounded-lg" />
                 </div>
                 <div class="flex items-center">
                     <span class="whitespace-nowrap mr-3">هر صفحه</span>
                     &nbsp;
-                    <select
-                        dir="ltr"
-                        @change="getTeacher(null)"
-                        v-model="perPage"
-                        class="appearance-none relative block w-24 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                    >
+                    <select dir="ltr" @change="getTeacher(null)" v-model="perPage"
+                        class="appearance-none relative block w-24 px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm">
                         <option value="5" selected>5</option>
                         <option value="10" selected>10</option>
                         <option value="20">20</option>
@@ -128,93 +91,53 @@
             <table class="w-full table-auto border">
                 <thead>
                     <tr>
-                        <TableHeaderCell
-                            field="id"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortTeacher('id')"
-                        >
+                        <TableHeaderCell field="id" :sortDirection="sortDirection" :sortField="sortField"
+                            @click="sortTeacher('id')">
                             شماره.
                         </TableHeaderCell>
 
-                        <TableHeaderCell
-                            field="name"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortTeacher('name')"
-                        >
+                        <TableHeaderCell field="name" :sortDirection="sortDirection" :sortField="sortField"
+                            @click="sortTeacher('name')">
                             نام
                         </TableHeaderCell>
 
-                        <TableHeaderCell
-                            field="lname"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortTeacher('lname')"
-                        >
+                        <TableHeaderCell field="lname" :sortDirection="sortDirection" :sortField="sortField"
+                            @click="sortTeacher('lname')">
                             تخلص
                         </TableHeaderCell>
 
-                        <TableHeaderCell
-                            field="fatherName"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortTeacher('fatherName')"
-                        >
+                        <TableHeaderCell field="fatherName" :sortDirection="sortDirection" :sortField="sortField"
+                            @click="sortTeacher('fatherName')">
                             نام پدر
                         </TableHeaderCell>
 
-                        <TableHeaderCell
-                            field=""
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortTeacher('')"
-                        >
+                        <TableHeaderCell field="" :sortDirection="sortDirection" :sortField="sortField"
+                            @click="sortTeacher('')">
                             سویه تحصلی
                         </TableHeaderCell>
 
-                        <TableHeaderCell
-                            field="program_id"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortTeacher('program_id')"
-                        >
+                        <!-- <TableHeaderCell field="program_id" :sortDirection="sortDirection" :sortField="sortField"
+                            @click="sortTeacher('program_id')">
                             برنامه فوق لیسانس
-                        </TableHeaderCell>
+                        </TableHeaderCell> -->
 
-                        <TableHeaderCell
-                            field="teaching_status"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortTeacher('teaching_status')"
-                        >
+                        <!-- <TableHeaderCell field="teaching_status" :sortDirection="sortDirection" :sortField="sortField"
+                            @click="sortTeacher('teaching_status')">
                             شیفت تدریس
-                        </TableHeaderCell>
+                        </TableHeaderCell> -->
 
-                        <TableHeaderCell
-                            field="hire_date"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortTeacher('hire_date')"
-                        >
+                        <TableHeaderCell field="hire_date" :sortDirection="sortDirection" :sortField="sortField"
+                            @click="sortTeacher('hire_date')">
                             تاریخ استخدام
                         </TableHeaderCell>
-                        
-                        <TableHeaderCell
-                            field="action"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortTeacher('acs')"
-                        >
+
+                        <TableHeaderCell field="action" :sortDirection="sortDirection" :sortField="sortField"
+                            @click="sortTeacher('acs')">
                             کابر
                         </TableHeaderCell>
 
-                        <TableHeaderCell
-                            field="action"
-                            :sortDirection="sortDirection"
-                            :sortField="sortField"
-                            @click="sortTeacher('acs')"
-                        >
+                        <TableHeaderCell field="action" :sortDirection="sortDirection" :sortField="sortField"
+                            @click="sortTeacher('acs')">
                             عملیات
                         </TableHeaderCell>
                     </tr>
@@ -246,40 +169,29 @@
 
                         <td class="border-b p-2 border">
                             <ul>
-                                <li
-                                    v-for="(
+                                <li v-for="(
                                         education_degree, index
-                                    ) in education_degrees"
-                                    :key="index"
-                                    :class="[
+                                    ) in education_degrees" :key="index" :class="[
                                         teacher.education ==
                                         education_degree.text
                                             ? 'bg-blue-500 text-white px-4  rounded-lg'
                                             : '',
-                                    ]"
-                                >
+]">
                                     {{ education_degree.text }}
                                 </li>
                             </ul>
                         </td>
 
-                        <td class="border-b p-2 border">
+                        <!-- <td class="border-b p-2 border">
                             {{ teacher.pname }}
-                        </td>
-                        <td class="border-b p-2 border">
-                            <span v-if="teacher.teaching_status == 'bachelor'"
-                                >برنامه های لیسانس</span
-                            >
-                            <span
-                                v-else-if="
-                                    teacher.teaching_status == 'post-graduated'
-                                "
-                                >برنامه ها فوق لیسانس</span
-                            >
-                            <span v-else-if="teacher.teaching_status == 'both'"
-                                >هر دو برنامه</span
-                            >
-                        </td>
+                        </td> -->
+                        <!-- <td class="border-b p-2 border">
+                            <span v-if="teacher.teaching_status == 'bachelor'">برنامه های لیسانس</span>
+                            <span v-else-if="
+                                teacher.teaching_status == 'post-graduated'
+                            ">برنامه ها فوق لیسانس</span>
+                            <span v-else-if="teacher.teaching_status == 'both'">هر دو برنامه</span>
+                        </td> -->
                         <!-- <td class="border-b p-2 border">
                             {{ teacher.email }}
                         </td>
@@ -294,145 +206,97 @@
                         </td>
 
                         <td class="border-b p-2 border">
-                            <Menu
-                                as="div"
-                                class="relative inline-block text-left"
-                            >
+                            <Menu as="div" class="relative inline-block text-left">
                                 <div>
                                     <MenuButton
-                                        class="inline-flex items-center justify-center w-full justify-center rounded-full w-10 h-10 bg-black bg-opacity-0 text-sm font-medium text-blue-800 hover:bg-opacity-5 focus:bg-opacity-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-                                    >
-                                        <svg
-                                            class="text-red"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            width="20"
-                                            height="20"
-                                            viewBox="0 0 20 20"
-                                        >
-                                            <path
-                                                fill="currentColor"
-                                                d="M10 6a2 2 0 1 1 0-4a2 2 0 0 1 0 4Zm0 6a2 2 0 1 1 0-4a2 2 0 0 1 0 4Zm0 6a2 2 0 1 1 0-4a2 2 0 0 1 0 4Z"
-                                            />
+                                        class="inline-flex items-center justify-center w-full justify-center rounded-full w-10 h-10 bg-black bg-opacity-0 text-sm font-medium text-blue-800 hover:bg-opacity-5 focus:bg-opacity-5 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+                                        <svg class="text-red" xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 20 20">
+                                            <path fill="currentColor"
+                                                d="M10 6a2 2 0 1 1 0-4a2 2 0 0 1 0 4Zm0 6a2 2 0 1 1 0-4a2 2 0 0 1 0 4Zm0 6a2 2 0 1 1 0-4a2 2 0 0 1 0 4Z" />
                                         </svg>
                                     </MenuButton>
                                 </div>
 
-                                <transition
-                                    enter-active-class="transition duration-100 ease-out"
+                                <transition enter-active-class="transition duration-100 ease-out"
                                     enter-from-class="transform scale-95 opacity-0"
                                     enter-to-class="transform scale-100 opacity-100"
                                     leave-active-class="transition duration-75 ease-in"
                                     leave-from-class="transform scale-100 opacity-100"
-                                    leave-to-class="transform scale-95 opacity-0"
-                                >
+                                    leave-to-class="transform scale-95 opacity-0">
                                     <MenuItems
-                                        class="absolute z-10 left-4 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                                    >
+                                        class="absolute z-10 left-4 mt-2 w-32 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                         <div class="px-1 py-1"></div>
 
                                         <div class="px-1 py-1">
                                             <MenuItem v-slot="{ active }">
-                                                <router-link
-                                                    :to="{
-                                                        name: 'app.teacher.details',
-                                                        params: {
-                                                            id: teacher.id,
-                                                        },
-                                                    }"
-                                                    :class="[
-                                                        active
-                                                            ? 'bg-blue-800 text-white'
-                                                            : 'text-gray-900',
-                                                        'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
-                                                    ]"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke-width="1.5"
-                                                        stroke="currentColor"
-                                                        class="w-5 h-5 tex-blue-900"
-                                                    >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
-                                                        />
-                                                    </svg>
-                                                    جزئيات
-                                                </router-link>
+                                            <router-link :to="{
+                                                name: 'app.teacher.details',
+                                                params: {
+                                                    id: teacher.id,
+                                                },
+}" :class="[
+                                                active
+                                                    ? 'bg-blue-800 text-white'
+                                                    : 'text-gray-900',
+                                                'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
+                                            ]">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor"
+                                                    class="w-5 h-5 tex-blue-900">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M8.25 6.75h12M8.25 12h12m-12 5.25h12M3.75 6.75h.007v.008H3.75V6.75Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM3.75 12h.007v.008H3.75V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm-.375 5.25h.007v.008H3.75v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                                                </svg>
+                                                جزئيات
+                                            </router-link>
                                             </MenuItem>
                                         </div>
 
                                         <div class="px-1 py-1">
                                             <MenuItem v-slot="{ active }">
-                                                <router-link
-                                                    :to="{
-                                                        name: 'app.teacher.edit',
-                                                        params: {
-                                                            id: teacher.id,
-                                                        },
-                                                    }"
-                                                    :class="[
-                                                        active
-                                                            ? 'bg-blue-800 text-white'
-                                                            : 'text-gray-900',
-                                                        'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
-                                                    ]"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke-width="1.5"
-                                                        stroke="currentColor"
-                                                        class="w-5 h-5 text-indigo-500"
-                                                    >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                                                        />
-                                                    </svg>
-                                                    ویراش
-                                                </router-link>
+                                            <router-link :to="{
+                                                name: 'app.teacher.edit',
+                                                params: {
+                                                    id: teacher.id,
+                                                },
+                                            }" :class="[
+                                                active
+                                                    ? 'bg-blue-800 text-white'
+                                                    : 'text-gray-900',
+                                                'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
+                                            ]">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor"
+                                                    class="w-5 h-5 text-indigo-500">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                                </svg>
+                                                ویراش
+                                            </router-link>
                                             </MenuItem>
                                         </div>
 
                                         <div class="px-1 py-1">
                                             <MenuItem v-slot="{ active }">
-                                                <button
-                                                    @click="
-                                                        deleteTeacher(
-                                                            teacher.id
-                                                        )
-                                                    "
-                                                    :class="[
-                                                        active
-                                                            ? 'bg-blue-800 text-white'
-                                                            : 'text-gray-900',
-                                                        'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
-                                                    ]"
-                                                >
-                                                    <svg
-                                                        xmlns="http://www.w3.org/2000/svg"
-                                                        fill="none"
-                                                        viewBox="0 0 24 24"
-                                                        stroke-width="1.5"
-                                                        s
-                                                        stroke="currentColor"
-                                                        class="w-5 h-5 text-red-500"
-                                                    >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                                                        />
-                                                    </svg>
+                                            <button @click="
+                                                deleteTeacher(
+                                                    teacher.id
+                                                )
+                                                " :class="[
+                                                    active
+                                                        ? 'bg-blue-800 text-white'
+                                                        : 'text-gray-900',
+                                                    'group flex w-full items-center rounded-md gap-3 px-2 py-2 text-sm',
+                                                ]">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" s stroke="currentColor"
+                                                    class="w-5 h-5 text-red-500">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                </svg>
 
-                                                    حذف
-                                                </button>
+                                                حذف
+                                            </button>
                                             </MenuItem>
                                         </div>
                                     </MenuItems>
@@ -442,27 +306,16 @@
                     </tr>
                 </tbody>
             </table>
-            <div
-                v-if="!teachers.loading"
-                class="flex justify-between items-center mt-5"
-                dir="ltr"
-            >
+            <div v-if="!teachers.loading" class="flex justify-between items-center mt-5" dir="ltr">
                 <div v-if="teachers.data">
                     نمایش از {{ teachers.from }} تا {{ teachers.to }}
                 </div>
-                <nav
-                    v-if="teachers.total > teachers.limit"
+                <nav v-if="teachers.total > teachers.limit"
                     class="relative z-0 inline-flex justify-center rounded-md shadow-sm -space-x-px"
-                    aria-label="Pagination"
-                >
+                    aria-label="Pagination">
                     <!-- Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50" -->
-                    <a
-                        v-for="(link, i) of teachers.links"
-                        :key="i"
-                        :disabled="!link.url"
-                        href="#"
-                        @click="getForPage($event, link)"
-                        aria-current="page"
+                    <a v-for="(link, i) of teachers.links" :key="i" :disabled="!link.url" href="#"
+                        @click="getForPage($event, link)" aria-current="page"
                         class="relative inline-flex items-center px-4 py-2 border text-sm font-medium whitespace-nowrap"
                         :class="[
                             link.active
@@ -473,9 +326,7 @@
                                 ? 'rounded-r-md'
                                 : '',
                             !link.url ? ' bg-gray-100 text-gray-700' : '',
-                        ]"
-                        v-html="link.label"
-                    >
+                        ]" v-html="link.label">
                     </a>
                 </nav>
             </div>
@@ -483,12 +334,8 @@
         <br /><br />
 
         <!-- Modal Box -->
-        <ModalBox
-            :is-pro-open="isProOpen"
-            :close-pro-modal="closeProModal"
-            :openProModal="openProModal"
-            :teacher_id="teacher_id"
-        />
+        <ModalBox :is-pro-open="isProOpen" :close-pro-modal="closeProModal" :openProModal="openProModal"
+            :teacher_id="teacher_id" />
         <!-- end of Modal box -->
     </div>
 </template>

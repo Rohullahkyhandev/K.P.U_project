@@ -17,6 +17,6 @@ class Promotion extends Model
     // teacher
     public function teacher()
     {
-        return $this->belongsTo(Teacher::class, 'id');
+        return $this->belongsTo(Teacher::class);
     }
 }

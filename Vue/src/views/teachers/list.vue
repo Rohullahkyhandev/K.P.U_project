@@ -1,13 +1,9 @@
 <template>
-    <div class="form--padding--top">
+    <div class="px-8">
         <!-- post teacher  -->
-        <teacherInPostGraduatedProgram
-            v-if="post_graduated_view == true || administrator == true"
-        />
+        <teacherInPostGraduatedProgram v-if="post_graduated_view == true" />
         <!-- all teacher  -->
-        <allTeachers
-            v-if="teacher_department_view == true || administrator == true"
-        />
+        <allTeachers v-if="teacher_department_view == true || administrator == true" />
     </div>
 </template>
 <script setup>
@@ -24,7 +20,7 @@ onMounted(() => {
 });
 
 const post_graduated_view = computed(
-    () => userStore.permission_current.post_graduated_view
+    () => userStore.permission_current.view_post_graduated
 );
 const teacher_department_view = computed(
     () => userStore.permission_current.view_teacher_department

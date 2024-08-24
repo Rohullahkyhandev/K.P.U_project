@@ -182,9 +182,7 @@ export const useFacultyStore = defineStore("faculty", () => {
     function getAllFaculty() {
         axiosClient
             .get("/get_all_faculty")
-            .then((response) =>
-                listFaculty.value = response.data
-        );
+            .then((response) => (listFaculty.value = response.data));
     }
 
     function editFaculty(id) {
@@ -198,7 +196,7 @@ export const useFacultyStore = defineStore("faculty", () => {
             });
     }
 
-    function updateFaculty(data) {
+    function updateFaculty(data, id) {
         loading.value = true;
         let photo = "";
         if (data.photo instanceof File) {
@@ -206,6 +204,7 @@ export const useFacultyStore = defineStore("faculty", () => {
         }
 
         let formData = new FormData();
+        formData.append("id", id);
         formData.append("photo", photo);
         formData.append("name", data.name);
         formData.append("director_name", data.director_name);

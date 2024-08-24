@@ -404,6 +404,7 @@
             </div>
             <footer class="bg-gray-100 py-4 md:flex gap-5">
                 <button
+                    :disabled="documentStore.loading === true"
                     type="submit"
                     :class="[
                         documentStore.loading === true
@@ -479,10 +480,10 @@ const parts = ref([
         text: "پوهنځی ها",
     },
 
-    {
-        key: "department",
-        text: " دیپارتمنت های عمومی",
-    },
+    // {
+    //     key: "department",
+    //     text: " دیپارتمنت های عمومی",
+    // },
 
     {
         key: "chanceDepartments",

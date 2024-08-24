@@ -3,25 +3,13 @@
         <div class="m-2">
             <h1 class="text-3xl font-bold mb-4 text-gray-700">داشبورد</h1>
         </div>
-        <div
-            v-if="msg_welcome"
-            class="min-w-96 items-center bg-blue-800 text-white rounded-sm shadow-lg flex justify-between gap-4 mb-4 font-bold py-10 px-8"
-        >
+        <div v-if="msg_welcome"
+            class="min-w-96 items-center bg-blue-800 text-white rounded-sm shadow-lg flex justify-between gap-4 mb-4 font-bold py-10 px-8">
             <div>
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    @click="msg_welcome = false"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="w-8 h-8 cursor-pointer hover:bg-gray-100 rounded-full"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M6 18 18 6M6 6l12 12"
-                    />
+                <svg xmlns="http://www.w3.org/2000/svg" @click="msg_welcome = false" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor"
+                    class="w-8 h-8 cursor-pointer hover:bg-gray-100 rounded-full">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                 </svg>
             </div>
             <div>
@@ -31,16 +19,14 @@
             </div>
             <div class="text-2xl">🙌</div>
         </div>
-        <div
-            v-if="
+        <div v-if="
                 (view_pdc &&
                     view_post_graduated &&
                     view_research_department &&
                     view_teacher_department &&
                     view_quality_assurance) ||
                 administrator
-            "
-        >
+">
             <DashboardTabs />
         </div>
         <div v-if="view_pdc == true">
@@ -53,7 +39,7 @@
         </div>
         <!-- TEACHER DEPARTMENT DASHBOARD -->
         <div>
-            <TeacherDashboard v-if="teacher_department_view == true" />
+            <TeacherDashboard v-if="view_teacher_department" />
         </div>
         <!-- POSTGRADUATED DEPARTMENT DASHBOARD -->
         <div v-if="view_post_graduated">
@@ -70,20 +56,15 @@
         </div>
 
         <!-- faculty -->
-        <div
-            class="mb-3"
-            v-if="
-                authStore.user.data.user_type == 'faculty_user'
-            "
-        >
+        <div class="mb-3" v-if="
+            authStore.user.data.user_type == 'faculty_user'
+        ">
             <facultyDashboard />
         </div>
 
         <!-- departments  -->
 
-        <div
-            class="mb-3"
-        >
+        <div class="mb-3">
             <QualityInhancment v-if="view_quality_assurance" />
         </div>
     </div>

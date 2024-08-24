@@ -21,6 +21,7 @@ import CreatePermission from "../views/users/createPermission.vue";
 import farwardedDocumentList from "../views/documents/fawardedList.vue";
 import DocumentCreate from "../views/documents/create.vue";
 import DocumentList from "../views/documents/index.vue";
+import DocumentEdit from "../views/documents/edit.vue";
 
 // pdc plan
 import CreatePlan from "../views/pdc/plan/create.vue";
@@ -119,7 +120,6 @@ import detailsTeacher from "../views/teachers/details.vue";
 import editTeacher from "../views/teachers/edit.vue";
 
 // teacher report
-import teacherReport from "../views/teachers/report.vue";
 
 import createQualification from "../views/teachers/qualification.vue";
 import editQualification from "../views/teachers/editQualification.vue";
@@ -187,6 +187,11 @@ import studentReport from "../views/reports/student_report.vue";
 import boardReport from "../views/reports/boardMember.vue";
 import commitMember from "../views/reports/commitMember.vue";
 import teacherResearchReport from "../views/reports/teacher_research.vue";
+import teacherReport from "../views/reports/teacher.vue";
+import teacherPersonalInfoReport from "../views/teachers/teaherPersonalDetails.vue";
+
+// testing
+import testReport from "../views/teachers/report.vue";
 
 const routes = [
     {
@@ -252,7 +257,13 @@ const routes = [
             },
 
             {
-                path: "document/list ",
+                path: "document/edit/:id",
+                name: "app.document.edit",
+                component: DocumentEdit,
+            },
+
+            {
+                path: "document/list",
                 name: "app.document.list",
                 component: DocumentList,
             },
@@ -819,14 +830,26 @@ const routes = [
                 name: "app.teacher_research.report",
                 component: teacherResearchReport,
             },
+
+            // teacher report
+            {
+                path: "/teacher/report",
+                name: "app.teacher.report",
+                component: teacherReport,
+            },
         ],
     },
 
-    // teacher report
     {
-        path: "/teacher/report",
-        name: "teacher.report",
-        component: teacherReport,
+        path: "/teacher/test",
+        name: "app.teacher.test",
+        component: testReport,
+    },
+
+    {
+        path: "/teacher/personal_info",
+        name: "app.teacher.personal_info",
+        component: teacherPersonalInfoReport,
     },
 
     {

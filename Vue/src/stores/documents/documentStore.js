@@ -94,11 +94,9 @@ const useDocumentStore = defineStore("document", () => {
         // for (let i = 0; i < data.farwarded_parts.length; i++) {
         //     form.append(`farwarded_parts[${i}]`, data.farwarded_parts[i]);
         // }
-
         document.value.farwarded_parts.forEach((part, index) => {
             form.append(`farwarded_parts[${index}]`, part.id);
         });
-
         form.append("description", data.description);
         form.append("remark", data.remark);
         data = form;
@@ -109,7 +107,7 @@ const useDocumentStore = defineStore("document", () => {
                 type.value = "success";
                 loading.value = false;
                 // msg_success.value = response.data.message;
-                notify(response.data.message, type.value);
+                msg_success.value = response.data.message;
                 if (response.status == 200) {
                     document.value.source = "";
                     document.value.number = "";
@@ -216,7 +214,7 @@ const useDocumentStore = defineStore("document", () => {
                 loading.value = false;
                 if (response.status === 200) {
                     type.value = "success";
-                    notify("مکتوب موفقانه ذخیره گردید", type.value);
+                    msg_success.value = "مکتوب موفقانه ذخیره گردید";
                     getFarwardedDocument();
                 }
             })
@@ -300,12 +298,12 @@ const useDocumentStore = defineStore("document", () => {
             .then((response) => {
                 type.value = "success";
                 loading.value = false;
-                notify("مکتوب موفقانه حذف گردید", type.value);
+                msg_success.value = "مکتوب موفقانه حذف گردید";
             })
             .catch((err) => {
                 loading.value = false;
                 type.value = "error";
-                notify(err.response.data.message, type.value);
+                (msg_wrang.value = err.response.data.message), type.value;
             });
     }
 
@@ -317,14 +315,14 @@ const useDocumentStore = defineStore("document", () => {
                 if (response.status == 200) {
                     loading.value = false;
                     type.value = "success";
-                    notify("مکتوب موفقانه حذف گردید", type.value);
+                    msg_success.value = "مکتوب موفقانه حذف گردید";
                     getFarwardedDocument();
                 }
             })
             .catch((err) => {
                 loading.value = false;
                 type.value = "error";
-                notify(err.response.data.message, type.value);
+                msg_wrang.value = err.response.data.message;
             });
     }
 
