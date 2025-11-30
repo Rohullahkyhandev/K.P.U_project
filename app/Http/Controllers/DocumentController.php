@@ -21,7 +21,7 @@ class DocumentController extends Controller
 {
 
 
-
+    // list of maktobs
     public function index()
     {
         $search = request('search', '');
@@ -124,8 +124,7 @@ class DocumentController extends Controller
     }
 
 
-    // farwared the documentation
-
+    // farward  maktobats
     public function farwardParts()
     {
         $search = request('search', '');
@@ -314,6 +313,8 @@ class DocumentController extends Controller
         }
     }
 
+
+    // save the documents as entered
     public function SaveAsEnterDocument(Request $request)
     {
 
@@ -381,12 +382,13 @@ class DocumentController extends Controller
         }
     }
 
+    public function  edit($id)
+    {
+        $document = Document::find($id);
+        return $document;
+    }
 
-
-
-
-
-
+    // delete the documents
     public function destroy($id)
     {
         $document = Document::find($id);

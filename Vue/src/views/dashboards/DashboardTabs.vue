@@ -7,14 +7,13 @@
                 <Tab value="2">آمریت برنامه ها فوق لیسانس</Tab>
                 <Tab value="3">آمریت تحقیقات </Tab>
                 <Tab value="4">آمریت ازتقاع کیفیت </Tab>
-
             </TabList>
             <TabPanels>
                 <TabPanel value="0">
                     <PDCDashboard />
-                    <br>
+                    <br />
                     <PDCchart />
-                    <br>
+                    <br />
                     <PdcTableview />
                 </TabPanel>
                 <TabPanel value="1">
@@ -49,7 +48,6 @@ import TeacherDashboard from "./TeacherDashboard.vue";
 import PostDashboard from "./PostGraduatedDashboard.vue";
 import ResearchDashboard from "./ResearchDepartmentDashboard.vue";
 import QualityInhancment from "./QualityInhancment.vue";
-
 </script>
 <style scoped>
 .p-tabpanels {

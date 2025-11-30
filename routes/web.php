@@ -15,12 +15,14 @@ use App\Http\Controllers\TeacherReportController;
 use App\Models\Department;
 use App\Models\Faculty;
 use App\Models\Teacher;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Maatwebsite\Excel\Facades\Excel;
 use Spatie\FlareClient\View;
 use Symfony\Component\CssSelector\Node\FunctionNode;
 use Symfony\Component\Routing\Route as RoutingRoute;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -35,7 +37,19 @@ use Symfony\Component\Routing\Route as RoutingRoute;
 
 
 
-Route::get("/report", [TeacherReportController::class, 'generateReport']);
+// test generate pdf file
+Route::get('/test/pdf', function () {
+    $pdf = Pdf::loadView('reports.teacher_personal_details');
+    return $pdf->download('test.pdf');
+});
+
+Route::get('/teacher/info', [TeacherReportController::class, 'generateTeacherInformationReport']);
+
+// teacher route
+
+// teacher report
+// Route::get("/teacher/report/{type?}", [TeacherReportController::class, 'generateReport']);
+Route::get("/teacher/report", [TeacherReportController::class, 'test']);
 
 // pdc all report route*
 Route::get('/pdc/report/teacher_in_commit/{type?}/{report_data?}', [TeacherInCommitController::class, 'generateReport']);

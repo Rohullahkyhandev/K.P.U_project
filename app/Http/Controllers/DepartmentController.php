@@ -38,8 +38,9 @@ class DepartmentController extends Controller
         }
 
         $data =  Department::query()
-            ->orWhere('departments.name', 'like', "%{$search}%")
-            ->select('departments.*')
+            ->where('departments.name', 'like', "%{$search}%")
+            ->join('faculties', 'departments.faculty_id', 'faculties.id')
+            ->select('departments.*', 'faculties.name as fname')
             ->orderBy("departments.$sortField", $sortDirection)
             ->paginate($per_page);
         return DepartmentResource::collection($data);
@@ -68,7 +69,7 @@ class DepartmentController extends Controller
 
         $department = new Department();
         $department->name = $request->name;
-        $department->manger_name = $request->manager_name;
+        $department->manager_name = $request->manager_name;
         $department->manager_lname = $request->manager_lname;
         $department->photo = $photo;
         $department->photo_path = $photo_path;
@@ -128,7 +129,7 @@ class DepartmentController extends Controller
         }
 
         $department->name = $request->name;
-        $department->manger_name = $request->manager_name;
+        $department->manager_name = $request->manager_name;
         $department->manager_lname = $request->manager_lname;
         $department->photo = $photo;
         $department->photo_path = $photo_path;

@@ -45,16 +45,20 @@ return array(
          * Times-Roman, Times-Bold, Times-BoldItalic, Times-Italic,
          * Symbol, ZapfDingbats.
          */
-        'font_dir' => base_path('public/fonts/'), // the directory to store fonts
+        'font_dir' => storage_path('public/fonts/'), // the directory to store fonts
         'font_cache' => storage_path('fonts/'), // the directory to store font cache
-        'default_font' => 'XB Niloofar',
+        'default_font' => 'Vazirmatn',
         'font_family' => [
-            'XB Niloofar' => [
-                'R' => 'XB Niloofar.ttf', // Regular font file
-                'B' => 'XB Niloofar-Bold.ttf', // Bold font file
-                // Add other styles if needed
+            'persian' => [
+                'R'  => 'Vazir-Regular.ttf', // Regular font
+                'B'  => 'Vazir-Bold.ttf',    // Bold font (optional)
+                'I'  => 'Vazir-Italic.ttf',  // Italic font (optional)
+                'BI' => 'Vazir-BoldItalic.ttf', // Bold Italic font (optional)
             ],
+            // You can register additional fonts if needed.
         ],
+
+
         // advised by dompdf (https://github.com/dompdf/dompdf/pull/782)
 
         /**

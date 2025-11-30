@@ -123,6 +123,15 @@
                         </TableHeaderCell>
 
                         <TableHeaderCell
+                            field="related_part"
+                            :sortDirection="sortDirection"
+                            :sortField="sortField"
+                            @click="sortCriteria('related_part')"
+                        >
+                            بخش مربوط
+                        </TableHeaderCell>
+
+                        <TableHeaderCell
                             field="description"
                             :sortDirection="sortDirection"
                             :sortField="sortField"
@@ -196,7 +205,11 @@
                         </td>
 
                         <td class="border p-2">
-                            {{ criteria.descripton }}
+                            {{ criteria.related_part }}
+                        </td>
+
+                        <td class="border p-2">
+                            {{ criteria.description }}
                         </td>
 
                         <td class="border p-3">
@@ -298,7 +311,10 @@
                                             </MenuItem>
                                         </div>
                                         <div class="px-1 py-1">
-                                            <MenuItem v-slot="{ active }">
+                                            <MenuItem
+                                                v-slot="{ active }"
+                                                v-if="edit_quality_assurance"
+                                            >
                                                 <router-link
                                                     :to="{
                                                         name: 'app.pdc.plan.edit',
@@ -332,7 +348,10 @@
                                             </MenuItem>
                                         </div>
 
-                                        <div class="px-1 py-1">
+                                        <div
+                                            class="px-1 py-1"
+                                            v-if="delete_quality_assurance"
+                                        >
                                             <MenuItem v-slot="{ active }">
                                                 <button
                                                     @click="
@@ -427,8 +446,10 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/vue";
 // import { PencilAltIcon, PencilIcon, TrashIcon } from '@heroicons/vue/24/outline'
 import { useRoute } from "vue-router";
 import useCriteriaStore from "../../stores/pdc/quality_assurance/qualityAssuranceStore";
+import { useUserStore } from "../../stores/user/userStore";
 
 const criteriaStore = useCriteriaStore();
+const userStore = useUserStore();
 const route = useRoute();
 
 const props = defineProps({
@@ -446,7 +467,19 @@ const sortDirection = ref("desc");
 
 onMounted(() => {
     getCriteria();
+    userStore.getCurrentPermission();
 });
+
+// permissions
+const create_quality_assurance = computed(
+    () => userStore.permission_current.create_quality_assurance
+);
+const edit_quality_assurance = computed(
+    () => userStore.permission_current.edit_quality_assurance
+);
+const delete_quality_assurance = computed(
+    () => userStore.permission_current.delete_quality_assurance
+);
 
 function getForPage(ev, link) {
     ev.preventDefault();

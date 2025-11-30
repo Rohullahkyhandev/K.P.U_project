@@ -30,10 +30,10 @@ class Teacher extends Model
     }
 
     // promotins
-    public function teacher_promotion()
-    {
-        return $this->hasMany(Promotion::class, 'teacher_id');
-    }
+    // public function teacher_promotion()
+    // {
+    //     return $this->hasMany(Promotion::class, 'teacher_id');
+    // }
 
     // user relation ship
     public function user()
@@ -46,8 +46,14 @@ class Teacher extends Model
         return $this->hasMany(Promotion::class);
     }
 
-    public function latestPromotion()
+    // public function latestPromotion()
+    // {
+    //     return $this->hasOne(Promotion::class)->latestOfMany();
+    // }
+
+    // teachar in scholarships
+    public function scholarship()
     {
-        return $this->hasOne(Promotion::class)->latestOfMany();
+        return $this->hasOne(Scholarship::class)->latestOfMany();
     }
 }

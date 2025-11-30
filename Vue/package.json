@@ -21,6 +21,7 @@
         "axios": "^1.6.4",
         "chart.js": "^4.4.3",
         "echarts": "^5.4.3",
+        "jalaali-js": "^1.2.7",
         "pdf-viewer-vue": "^0.2.7",
         "pinia": "^2.1.7",
         "postcss-loader": "^4.3.0",

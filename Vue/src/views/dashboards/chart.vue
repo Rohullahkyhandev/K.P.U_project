@@ -1,15 +1,10 @@
 <template>
-    <div class="grid grid-cols-2 gap-3 mb-3">
+    <div class="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-3 mb-3">
         <div class="bg-white shadow-lg rounded-lg">
             <div class="w-full font-bold text-xl border-b py-3 px-4">
                 نمایش گرافیکی تعداد استادان که مصروف تحصیل هستند
             </div>
-            <Chart
-                type="bar"
-                class="h-[30rem]"
-                :data="chartTeacher"
-                :options="chartOptions"
-            />
+            <Chart type="bar" class="h-[30rem]" :data="chartTeacher" :options="chartOptions" />
         </div>
 
         <div class="bg-white shadow-lg rounded-lg">

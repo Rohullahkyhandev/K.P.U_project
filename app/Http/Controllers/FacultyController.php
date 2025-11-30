@@ -52,8 +52,28 @@ class FacultyController extends Controller
     {
 
         $result = 0;
-        $rules =  $this->validation();
-        Validator::make($request->all(), $rules)->validate();
+        $request->validate([
+            'director_name' => 'required|string|min:3|max:100',
+            'director_lname' => 'required|string|min:3|max:100',
+            'photo' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:8000',
+            'name' => 'required|string|min:3|max:100',
+            'date' => 'required|date|max:100',
+            'description' => 'required',
+        ], [
+            'director_name.required' => 'نام ریس الزامی می باشد',
+            'director_name.string' => 'نام ریس باید حروف باشد',
+            'director_name.min' => 'نام ریس حداقل باید سه حرف باشد',
+            'name.required' => 'نام دیپارتمنت  الزامی می باشد',
+            'name.string' => 'نام دیپارتمنت  باید حروف باشد',
+            'name.min' => 'نام دیپارتمنت  حداقل باید سه حرف باشد',
+            'director_lname.required' => 'تخلص ریس الزامی می باشد',
+            'director_lname.string' => 'تخلص ریس باید حروف باشد',
+            'director_name.min' => 'تخلص ریس حداقل باید سه حرف باشد',
+            'photo.mimes' => 'تصویر باید شامل این فارمت باشد:png,jpg,jpeg,gif',
+            'photo.max' => 'سایز تصویر باید از 8 mb زیاد نباشد',
+            'director_name.min' => 'نام ریس حداقل باید سه حرف باشد',
+            'description.required' => 'توضیحات در باره دیپارتمنت الزامی می باشد',
+        ]);
 
         $photo = null;
         $photo_path = null;
@@ -89,11 +109,30 @@ class FacultyController extends Controller
     {
 
         $result = 0;
-        $rules =  $this->validation();
-        Validator::make($request->all(), $rules)->validate();
-        $id = $request->id;
+        $request->validate([
+            'director_name' => 'required|string|min:3|max:100',
+            'director_lname' => 'required|string|min:3|max:100',
+            'photo' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:8000',
+            'name' => 'required|string|min:3|max:100',
+            'date' => 'required|date|max:100',
+            'description' => 'required',
+        ], [
+            'director_name.required' => 'نام ریس الزامی می باشد',
+            'director_name.string' => 'نام ریس باید حروف باشد',
+            'director_name.min' => 'نام ریس حداقل باید سه حرف باشد',
+            'name.required' => 'نام دیپارتمنت  الزامی می باشد',
+            'name.string' => 'نام دیپارتمنت  باید حروف باشد',
+            'name.min' => 'نام دیپارتمنت  حداقل باید سه حرف باشد',
+            'director_lname.required' => 'تخلص ریس الزامی می باشد',
+            'director_lname.string' => 'تخلص ریس باید حروف باشد',
+            'director_name.min' => 'تخلص ریس حداقل باید سه حرف باشد',
+            'photo.mimes' => 'تصویر باید شامل این فارمت باشد:png,jpg,jpeg,gif',
+            'photo.max' => 'سایز تصویر باید از 8 mb زیاد نباشد',
+            'director_name.min' => 'نام ریس حداقل باید سه حرف باشد',
+            'description.required' => 'توضیحات در باره دیپارتمنت الزامی می باشد',
+        ]);
 
-        $faculty = Faculty::find($id);
+        $faculty = Faculty::find($request->id);
         $photo = $faculty->photo;
         $photo_path = $faculty->photo_path;
         if ($request->photo != '') {
@@ -104,24 +143,20 @@ class FacultyController extends Controller
             $photo_path = asset(Storage::url('faculty/photo/' . $photo));
         }
 
-        $user_id = Auth::user()->id;
         $faculty->director_name = $request->director_name;
         $faculty->director_lname = $request->director_lname;
         $faculty->photo = $photo;
-        $faculty->$photo_path = $photo_path;
+        $faculty->photo_path = $photo_path;
         $faculty->name = $request->name;
         $faculty->date = $request->date;
         $faculty->description = $request->description;
-        $faculty->user_id = $user_id;
         $result = $faculty->save();
 
         if ($result) {
-            return response([
-                'message' => 'موفقانه ذخیره شد'
+            return response(['message' => 'موفقانه ویرایش  شد'
             ], 200);
         } else {
-            return response([
-                'message' => 'دیتا ذخیره نشد دوباره تلاش نماید'
+            return response(['message' => 'دیتا ویرایش نشد دوباره تلاش نماید'
             ], 403);
         }
     }

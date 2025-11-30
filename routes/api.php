@@ -75,8 +75,6 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/permission/delete/{id}', [UserController::class, 'deletePermission']);
     });
 
-    // });
-
 
     // documents view routes
     Route::middleware(['auth:sanctum', 'view_document'])->group(function () {
@@ -85,6 +83,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/notifications', [NotificationController::class, 'notify']);
         Route::get('/count_notification', [NotificationController::class, 'countNotification']);
     });
+
     // document create routes
     Route::middleware(['auth:sanctum', 'create_document'])->group(function () {
         Route::post('/document/create', [DocumentController::class, 'store']);
@@ -92,11 +91,15 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/update_notification/{id}', [NotificationController::class, 'updateNotification']);
     });
 
+    Route::middleware(['auth:sanctum', 'edit_document'])->group(function () {
+        Route::get('/document/edit/{id}', [DocumentController::class, 'edit']);
+        Route::post('/document/post', [DocumentController::class, 'update']);
+    });
+
     Route::middleware(['auth:sanctum', 'delete_document'])->group(function () {
         Route::get('/document/delete/{id}', [DocumentController::class, 'destroy']);
         Route::get('/farwarded_document/delete/{id}', [FarwardDocumentController::class, 'destroy']);
     });
-
 
 
     // get all the department
@@ -129,7 +132,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
     // edit and update routes
     Route::middleware([
-        'auth:sanctum', 'edit_pdc'
+        'auth:sanctum',
+        'edit_pdc'
     ])->group(function () {
         // update and edit plan
         Route::get('/pdc/plan/edit/{id}', [PlanController::class, 'edit']);
@@ -198,6 +202,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
         Route::get('/teacher/document', [TeacherController::class, 'getDocument']);
         Route::get('/teacher/details/{id}', [TeacherController::class, 'getTeacher']);
         Route::get('/teacher/literature', [TeacherController::class, 'getLiterature']);
+        // get teacher information for reporting
+        Route::get('/teacher/personal_info', [TeacherReportController::class, 'generateTeacherInformationReport']);
     });
 
     // create routes in teacher department
@@ -214,7 +220,7 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     });
 
     // update and edit routes teacher department
-    Route::middleware(['auth:sanctum', 'create_teacher'])->group(function () {
+    Route::middleware(['auth:sanctum', 'edit_teacher'])->group(function () {
 
         // faculty and department update edit routes
         Route::post('/faculty/update', [FacultyController::class, 'update']);
@@ -242,14 +248,15 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     });
 
     // delete route in teacher department
-    Route::middleware(['auth:sanctum',])->group(function () {
+    Route::middleware(['auth:sanctum', 'delete_teacher'])->group(function () {
         Route::get('/faculty/delete/{id}', [FacultyController::class, 'destroy']);
         // teacher delete routes
         Route::get('/teacher/delete/{id}', [TeacherController::class, 'destroy']);
         Route::get('/teacher/qualification/delete/{id}', [TeacherController::class, 'destroyQualification']);
         Route::get('/teacher/document/delete/{id}', [TeacherController::class, 'destroyDocument']);
         Route::get('/teacher/article/delete/{id}', [
-            TeacherController::class, 'destroyArticle'
+            TeacherController::class,
+            'destroyArticle'
         ]);
         Route::get('/teacher/literature/delete/{id}', [TeacherController::class, 'destroyLiterature']);
         Route::get('/teacher/promotion/delete/{id}', [TeacherPromotionController::class, 'destroy']);
@@ -268,7 +275,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     });
     // quality assurance create routes
     Route::middleware([
-        'auth:sanctum', 'create_quality'
+        'auth:sanctum',
+        'create_quality'
     ])->group(function () {
         Route::post('/criteria/create', [CriteriaController::class, 'store']);
         Route::post('/sub_criteria/create', [SubCriteriaController::class, 'store']);
@@ -408,7 +416,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
 
     // research department view routes
     Route::middleware([
-        'auth:sanctum', 'view_research_department'
+        'auth:sanctum',
+        'view_research_department'
     ])->group(function () {
         Route::get('/international_publisher', [InternatinalPublishmentController::class, 'index']);
         Route::get('/teacher_research', [TeacherResearchController::class, 'index']);
@@ -487,6 +496,8 @@ Route::middleware(['auth:sanctum', 'admin'])->group(function () {
     // Route::middleware(['auth:sanctum', 'edit_teacher'])->group(function () {
     //     Route::post('/teacher/update', [TeacherController::class, 'update']);
     // });
+
+    Route::get("/teacher/test", [TeacherReportController::class, 'test']);
     // Route::middleware(['auth:sanctum', 'delete_teacher'])->group(function () {
     //     Route::post('/teacher/delete/{id}', [TeacherController::class, 'destroy']);
     // });
